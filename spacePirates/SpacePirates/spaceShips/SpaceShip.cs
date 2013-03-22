@@ -7,7 +7,20 @@ namespace SpacePirates.spaceShips
 {
     interface SpaceShip
     {
-        void Fly();
+        void Turn(double turnRate);
 
+        void Thrust(double thrust);
+
+        void Fire();
+
+        void NextWeapon();
+
+        void PreviousWeapon();
+
+        void UseAbility();
+
+        void NextAbility();
+
+        void PreviousAbility();
     }
 }
