@@ -8,14 +8,14 @@ namespace SpacePirates.Player
 {
     class Ownership
     {
-        Player owner;
-        SpaceShip spaceShip;
+        IPlayer owner;
+        ISpaceShip spaceShip;
 
-        public SpaceShip GetShip() {
+        public ISpaceShip GetShip() {
             return spaceShip;
         }
 
-        public Player GetOwner()
+        public IPlayer GetOwner()
         {
             return owner;
         }

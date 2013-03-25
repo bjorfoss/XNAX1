@@ -2,12 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SpacePirates.spaceShips;
 
 namespace SpacePirates.Player
 {
-    class Ai : Player
+    class Ai : IPlayer
     {
         Ownership ownerLink;
+        String name;
+
+        public String GetName()
+        {
+            return name;
+        }
+
+        public ISpaceShip GetShip()
+        {
+            return ownerLink.GetShip();
+        }
+
+        public void SetOwnerShip(Ownership ownerLink)
+        {
+            this.ownerLink = ownerLink;
+        }
 
         /// <summary>
         /// Determine general goal/strategy
