@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpacePirates.Obstacle
+namespace SpacePirates.spaceShips
 {
-    interface Obstacle
+    interface IAbility
     {
-        
+        void Use();
     }
 }

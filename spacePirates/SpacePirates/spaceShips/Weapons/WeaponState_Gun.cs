@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    class WeaponState_Gun : Weapon
+    class WeaponState_Gun : IWeapon
     {
     }
 }

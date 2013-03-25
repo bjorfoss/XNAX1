@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    class ConcreteShip_Fighter : SpaceShip, Unit
+    class ConcreteShip_Fighter : ISpaceShip, Unit
     {
     }
 }

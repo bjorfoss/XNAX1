@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    interface SpaceShip
+    interface ISpaceShip
     {
         void Turn(double turnRate);
 

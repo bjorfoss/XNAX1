@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    class AbilityState_Shield : Ability
+    class AbilityState_Shield : IAbility
     {
     }
 }

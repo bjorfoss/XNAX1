@@ -7,7 +7,7 @@ namespace SpacePirates.Obstacle
 {
     public class Factory_Asteroid : ObstacleFactory
     { // Executes third if OS:OSX
-        Obstacle ObstacleFactory.CreateObstacle()
+        IObstacle ObstacleFactory.CreateObstacle()
         {
             return new ConcreteObstacle_Asteroid();
         }

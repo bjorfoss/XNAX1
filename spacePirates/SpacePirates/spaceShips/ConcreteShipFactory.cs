@@ -7,7 +7,7 @@ namespace SpacePirates.spaceShips
 {
     public class Factory_Fighter : ShipFactory
     { 
-        SpaceShip ShipFactory.BuildSpaceship()
+        ISpaceShip ShipFactory.BuildSpaceship()
         {
             return new ConcreteShip_Fighter();
         }
