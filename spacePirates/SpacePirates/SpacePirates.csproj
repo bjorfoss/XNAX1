@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Level.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Obstacle\ConcreteObstacleFactory.cs" />
     <Compile Include="Obstacle\ConcreteObstacle.cs" />
     <Compile Include="Obstacle\Obstacle.cs" />
@@ -120,11 +121,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="spaceShips\Abilities\Ability.cs" />
+    <Compile Include="spaceShips\Abilities\AbilityFactory.cs" />
     <Compile Include="spaceShips\Abilities\AbilityState_Shield.cs" />
+    <Compile Include="spaceShips\Abilities\ConcreteAbilityFactory.cs" />
     <Compile Include="spaceShips\ConcreteShipFactory.cs" />
     <Compile Include="spaceShips\ConcreteShip.cs" />
     <Compile Include="spaceShips\ShipFactory.cs" />
     <Compile Include="spaceShips\SpaceShip.cs" />
+    <Compile Include="spaceShips\Weapons\ConcreteWeaponFactory.cs" />
+    <Compile Include="spaceShips\Weapons\WeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\Weapon.cs" />
     <Compile Include="spaceShips\Weapons\WeaponState_Gun.cs" />
     <Compile Include="Unit.cs" />

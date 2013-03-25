@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpacePirates.spaceShips
+namespace SpacePirates.spaceShips.Weapons
 {
-    interface Ability
+    interface WeaponFactory
     {
-        void Activate();
-
-        void Update();
+        Weapon createWeapon();
     }
 }
