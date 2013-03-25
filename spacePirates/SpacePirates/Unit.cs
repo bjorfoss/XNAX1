@@ -31,18 +31,18 @@ namespace SpacePirates
 
         //add getters and setters
 
-        void CalculateDirectionAndSpeed();
+        void CalculateDirectionAndSpeed() {}
 
-        void UpdatePosition();
+        void UpdatePosition() { }
 
         /// <summary>
         /// Calculate own collision damage, check if colliding with an explosion
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        void HandleCollision(Unit unit);
+        void HandleCollision(Unit unit) { }
 
-        void OnDestroy();
+        void OnDestroy() { }
 
 
     }

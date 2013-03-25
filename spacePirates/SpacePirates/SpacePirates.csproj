@@ -107,11 +107,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameObject.cs" />
+    <Compile Include="GameStates.cs" />
     <Compile Include="Level.cs" />
-    <Compile Include="Obstacle\ConcreteObstacleFactory.cs" />
-    <Compile Include="Obstacle\ConcreteObstacle.cs" />
-    <Compile Include="Obstacle\Obstacle.cs" />
-    <Compile Include="Obstacle\ObstacleFactory.cs" />
+    <Compile Include="MenuObject.cs" />
+    <Compile Include="Obstacles\ConcreteObstacleFactory.cs" />
+    <Compile Include="Obstacles\ConcreteObstacle.cs" />
+    <Compile Include="Obstacles\Obstacle.cs" />
+    <Compile Include="Obstacles\ObstacleFactory.cs" />
     <Compile Include="Player\Ai.cs" />
     <Compile Include="Player\Human.cs" />
     <Compile Include="Player\Ownership.cs" />

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpacePirates.Obstacle
+namespace SpacePirates.Obstacles
 {
-    interface ObstacleFactory
+    interface Obstacle
     {
-        Obstacle CreateObstacle();
+        
     }
 }

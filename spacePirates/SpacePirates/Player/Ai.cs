@@ -7,5 +7,6 @@ namespace SpacePirates.Player
 {
     class Ai : Player
     {
+        public void setOwnerShip(Ownership owner) { }
     }
 }

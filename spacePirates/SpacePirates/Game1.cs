@@ -19,6 +19,11 @@ namespace SpacePirates
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        GameObject gameObject;
+        MenuObject menuObject;
+
+        GameStates currentState;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -47,6 +52,11 @@ namespace SpacePirates
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            gameObject = GameObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
+            menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
+
+            currentState = menuObject;
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -70,7 +80,7 @@ namespace SpacePirates
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            currentState.executeGameLogic((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -81,9 +91,15 @@ namespace SpacePirates
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+           
+
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+
+            currentState.executeDraw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
