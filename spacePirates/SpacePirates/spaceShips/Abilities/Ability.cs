@@ -7,5 +7,6 @@ namespace SpacePirates.spaceShips
 {
     interface Ability
     {
+        void Use();
     }
 }

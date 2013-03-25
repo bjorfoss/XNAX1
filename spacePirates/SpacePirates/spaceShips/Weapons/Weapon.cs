@@ -7,5 +7,6 @@ namespace SpacePirates.spaceShips
 {
     interface Weapon
     {
+        void Fire();
     }
 }
