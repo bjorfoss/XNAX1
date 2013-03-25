@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpacePirates.spaceShips
+namespace SpacePirates.Obstacles
 {
-    class AbilityState_Shield : IAbility
+    interface IObstacle
     {
+        
     }
 }

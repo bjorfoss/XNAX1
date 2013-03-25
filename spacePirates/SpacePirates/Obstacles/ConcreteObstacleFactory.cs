@@ -7,7 +7,7 @@ namespace SpacePirates.Obstacles
 {
     public class Factory_Asteroid : ObstacleFactory
     { 
-        Obstacle ObstacleFactory.CreateObstacle()
+        IObstacle ObstacleFactory.CreateObstacle()
         {
             return new ConcreteObstacle_Asteroid();
         }

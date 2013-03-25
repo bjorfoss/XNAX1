@@ -5,7 +5,8 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    interface Weapon
+    interface IAbility
     {
+        void Use();
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SpacePirates.Obstacles
+namespace SpacePirates.Obstacle
 {
-    interface Obstacle
+    interface IObstacle
     {
         
     }

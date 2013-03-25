@@ -7,6 +7,6 @@ namespace SpacePirates.spaceShips
 {
     interface ShipFactory
     {
-        SpaceShip BuildSpaceship();
+        ISpaceShip BuildSpaceship();
     }
 }

@@ -7,6 +7,6 @@ namespace SpacePirates.Obstacles
 {
     interface ObstacleFactory
     {
-        Obstacle CreateObstacle();
+        IObstacle CreateObstacle();
     }
 }

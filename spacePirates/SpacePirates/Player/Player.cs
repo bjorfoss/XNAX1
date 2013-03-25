@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.Player
 {
-    interface Player
+    interface IPlayer
     {
         void setOwnerShip(Ownership owner);
     }

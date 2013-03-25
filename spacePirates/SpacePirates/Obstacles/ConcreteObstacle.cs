@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace SpacePirates.Obstacles
 {
-    class ConcreteObstacle_Asteroid : Unit, Obstacle
+    class ConcreteObstacle_Asteroid : IObstacle, Unit
     {
 
     }

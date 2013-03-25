@@ -23,11 +23,11 @@ namespace SpacePirates
         private Level level;
 
         // Holds the spaceShips belonging to each team
-        private List<SpaceShip> redTeam;
-        private List<SpaceShip> blueTeam;
+        private List<ISpaceShip> redTeam;
+        private List<ISpaceShip> blueTeam;
 
         // Holds a collection of obstacles: asteroids, fired obstacles ...
-        private List<Obstacle> obstacles;
+        private List<IObstacle> obstacles;
 
         private GameObject(int w, int h, ContentManager Content)
         {
@@ -39,11 +39,11 @@ namespace SpacePirates
             self.level = new Level();
 
             // Holds the spaceShips belonging to each team
-            self.redTeam = new List<SpaceShip>();
-            self.blueTeam = new List<SpaceShip>();
+            self.redTeam = new List<ISpaceShip>();
+            self.blueTeam = new List<ISpaceShip>();
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
-            self.obstacles = new List<Obstacle>();
+            self.obstacles = new List<IObstacle>();
         }
     
 
