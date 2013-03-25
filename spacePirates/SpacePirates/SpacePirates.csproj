@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{0561E9E9-81FB-4DC6-8735-2BD9D64B828D}</ProjectGuid>
@@ -113,22 +113,26 @@
     <Compile Include="MenuObject.cs" />
     <Compile Include="Obstacles\ConcreteObstacleFactory.cs" />
     <Compile Include="Obstacles\ConcreteObstacle.cs" />
-    <Compile Include="Obstacles\Obstacle.cs" />
+    <Compile Include="Obstacles\IObstacle.cs" />
     <Compile Include="Obstacles\ObstacleFactory.cs" />
     <Compile Include="Player\Ai.cs" />
     <Compile Include="Player\Human.cs" />
+    <Compile Include="Player\IPlayer.cs" />
     <Compile Include="Player\Ownership.cs" />
-    <Compile Include="Player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="spaceShips\Abilities\Ability.cs" />
+    <Compile Include="spaceShips\Abilities\AbilityFactory.cs" />
     <Compile Include="spaceShips\Abilities\AbilityState_Shield.cs" />
+    <Compile Include="spaceShips\Abilities\ConcreteAbilityFactory.cs" />
+    <Compile Include="spaceShips\Abilities\IAbility.cs" />
     <Compile Include="spaceShips\ConcreteShipFactory.cs" />
     <Compile Include="spaceShips\ConcreteShip.cs" />
+    <Compile Include="spaceShips\ISpaceShip.cs" />
     <Compile Include="spaceShips\ShipFactory.cs" />
-    <Compile Include="spaceShips\SpaceShip.cs" />
-    <Compile Include="spaceShips\Weapons\Weapon.cs" />
+    <Compile Include="spaceShips\Weapons\ConcreteWeaponFactory.cs" />
+    <Compile Include="spaceShips\Weapons\IWeapon.cs" />
+    <Compile Include="spaceShips\Weapons\WeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\WeaponState_Gun.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
