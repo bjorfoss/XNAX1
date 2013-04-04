@@ -8,7 +8,8 @@ namespace SpacePirates.spaceShips
 {
     class ConcreteShip_Fighter : Unit, ISpaceShip
     {
-        double maxTurnSpeed = 100; //the maximum turn speed the ship itself can generate (degrees per second)
+        double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
+        double maxThrust = 100000; //maximum force in Newtons output by the ship's engine(s)
 
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
@@ -58,12 +59,30 @@ namespace SpacePirates.spaceShips
 
         public void Turn(double turnRate)
         {
-            throw new NotImplementedException();
+            //Check direction of turning
+            if (turnRate > 0)
+            {
+                //Don't exceed turn speed capability
+                turnRate = Math.Min(turnRate, maxTurnSpeed);
+            }
+            else
+            {
+                //Don't exceed turn speed capability
+                turnRate = Math.Max(turnRate, maxTurnSpeed * -1);
+            }
+            rotationSpeed = turnRate;
         }
 
         public void Thrust(double thrust)
         {
-            throw new NotImplementedException();
+            //ensure the ship doesn't thrust more than its capabilities
+            thrust = Math.Min(thrust, maxThrust);
+            //we regard thrust as Force when passed, divide by mass to get acceleration
+            double acceleration = thrust / mass;
+
+            //decompose acceleration into vectors:
+            this.acceleration.X = (float) (Math.Sin(rotation) * acceleration);
+            this.acceleration.Y = (float)(Math.Cos(rotation) * acceleration);
         }
 
         public void Fire()
