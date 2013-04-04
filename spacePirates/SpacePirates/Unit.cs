@@ -10,23 +10,23 @@ namespace SpacePirates
     class Unit
     {
         //todo make protected
-        Vector2 velocity;
-        Vector2 acceleration;
-        double mass;
-        Vector2 position;
-        double rotation;
-        double rotationSpeed;
+        protected Vector2 velocity;
+        protected Vector2 acceleration;
+        protected double mass;
+        protected Vector2 position;
+        protected double rotation;
+        protected double rotationSpeed;
 
-        Texture2D graphics;
-        
-        double health;
-        double maxHealth;
+        protected Texture2D graphics;
 
-        double armorThreshold; //how many hitpoints an attack needs to bypass armor - also reduces armor effectiveness
-        double armorEffectiveness; //at 100% the full armor threshold is used, otherwise this percentage of it
-        
-        double blastRadius;
-        double blastDamage;
+        protected double health;
+        protected double maxHealth;
+
+        protected double armorThreshold; //how many hitpoints an attack needs to bypass armor - also reduces armor effectiveness
+        protected double armorEffectiveness; //at 100% the full armor threshold is used, otherwise this percentage of it
+
+        protected double blastRadius;
+        protected double blastDamage;
         //Rectangle hitbox;
 
         //add getters and setters
