@@ -9,9 +9,12 @@ namespace SpacePirates.spaceShips.Abilities
     {
         public class Factory_Shield : AbilityFactory
         {
-            Ability AbilityFactory.createAbility()
+            IAbility AbilityFactory.createAbility()
             {
-                return new AbilityState_Shield();
+                double duration = 5000;
+                double cooldown = 15000;
+                double health = 20000;
+                return new AbilityState_Shield(cooldown, duration, health);
             }
         }
     }

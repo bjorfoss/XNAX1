@@ -12,6 +12,8 @@ namespace SpacePirates
         Texture2D background;
         HashSet<Rectangle> foreground;
 
-        public void Draw(SpriteBatch sb);
+        public void Draw(SpriteBatch sb)
+        {
+        }
     }
 }

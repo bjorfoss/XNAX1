@@ -9,7 +9,8 @@ namespace SpacePirates.spaceShips.Weapons
     {
         public class Factory_Gun : WeaponFactory
         { // Executes third if OS:OSX
-            Weapon WeaponFactory.CreateWeapon()
+
+            IWeapon WeaponFactory.CreateWeapon()
             {
                 return new WeaponState_Gun();
             }

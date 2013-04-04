@@ -10,8 +10,6 @@ namespace SpacePirates.Player
     class Human : IPlayer
     {
         Ownership ownerLink;
-        Keyboard keyboard;
-        GamePad gamepad;
 
         String name;
 
@@ -33,10 +31,17 @@ namespace SpacePirates.Player
         /// <summary>
         /// Handle input logic and call Spaceship interface methods.
         /// </summary>
-        public void HandleInput();
+        public void HandleInput()
+        {
+        }
 
-        void HandleKeyboardInput();
-        void HandleGamepadInput();
+        void HandleKeyboardInput()
+        {
+        }
+
+        void HandleGamepadInput()
+        {
+        }
 
     }
 }

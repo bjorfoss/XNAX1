@@ -8,10 +8,10 @@ namespace SpacePirates.Player
 {
     interface IPlayer
     {
-        public void SetOwnerShip(Ownership registration);
+        void SetOwnerShip(Ownership registration);
 
-        public ISpaceShip GetShip();
+        ISpaceShip GetShip();
 
-        public String GetName();
+        String GetName();
     }
 }

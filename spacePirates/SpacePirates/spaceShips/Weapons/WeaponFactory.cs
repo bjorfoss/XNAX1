@@ -7,6 +7,6 @@ namespace SpacePirates.spaceShips.Weapons
 {
     interface WeaponFactory
     {
-        Weapon createWeapon();
+        IWeapon CreateWeapon();
     }
 }

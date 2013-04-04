@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SpacePirates.Obstacles
 {
-    class ConcreteObstacle_Asteroid : IObstacle, Unit
+    class ConcreteObstacle_Asteroid : Unit, IObstacle
     {
 
     }

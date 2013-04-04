@@ -29,12 +29,17 @@ namespace SpacePirates.Player
         /// <summary>
         /// Determine general goal/strategy
         /// </summary>
-        void MakeGeneralPlan();
+        void MakeGeneralPlan()
+        {
+        }
 
         /// <summary>
         /// Make local decisions supporting the strategy
         /// </summary>
-        void MakeLocalPlan();
+        void MakeLocalPlan()
+        {
+        }
+
 
     }
 }
