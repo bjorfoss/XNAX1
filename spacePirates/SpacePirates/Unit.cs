@@ -31,19 +31,71 @@ namespace SpacePirates
 
         //add getters and setters
 
+        /// <summary>
+        /// 
+        /// </summary>
         void CalculateDirectionAndSpeed() {}
 
-        void UpdatePosition() { }
+        /// <summary>
+        /// calculate the next position of the unit
+        /// </summary>
+        void UpdatePosition() {
+            position = position + velocity;
+        }
 
         /// <summary>
         /// Calculate own collision damage, check if colliding with an explosion
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        void HandleCollision(Unit unit) { }
+        void HandleCollision(Unit unit) {
 
+
+
+
+            // TODO: calulate ratio based on a fixed number and armor:
+            double ratio = 1;
+
+
+
+            Vector2 velocityUnit = unit.getVelocity();
+
+            double xforce = ( (velocity.X * mass) - (velocityUnit.X * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
+            double yforce = ( (velocity.Y * mass) - (velocityUnit.Y * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
+
+            acceleration.X += (float) xforce;
+            acceleration.Y += (float) yforce;
+
+
+            double force = Math.Sqrt(xforce * xforce + yforce * yforce) * ratio;
+
+            health = health - force;
+
+
+            if (health < 0)
+            {
+                OnDestroy();
+            }
+
+        
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         void OnDestroy() { }
 
+
+
+
+        public Vector2 getVelocity()
+        {
+            return velocity;
+        }
+        public double getMass()
+        {
+            return mass;
+        }
 
     }
 }
