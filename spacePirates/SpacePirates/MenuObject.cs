@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 
@@ -48,7 +49,10 @@ namespace SpacePirates
             new Button(normal, normal, normal, normal, position);
         }
 
-        
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(currentState, position, Color.White);
+        }
     }
 
     class MenuObject : Microsoft.Xna.Framework.Game, GameStates
@@ -60,7 +64,31 @@ namespace SpacePirates
         private int windowWidth;
         private int windowHeight;
 
+        //Placeholders for keeping track of menu positions.
+        private int mainmenu = 0;
+        private int createdlobby = 1;
+        private int joinedlobby = 2;
+
+        private int currentMenu = 0; //Main menu.
+
+        //Displayed game banner
         Texture2D banner;
+
+        //"Buttons" for the main menu. Could likely get converted into true buttons but I've so far been unable to draw them properly.
+        Texture2D newSession;
+        Vector2 newSessionPos;
+        Texture2D joinSession;
+        Vector2 joinSessionPos;
+        Texture2D quitSession;
+        Vector2 quitSessionPos;
+        Texture2D backButton;
+        Vector2 backButtonPos;
+        Texture2D startGame;
+        Vector2 startGamePos;
+        Texture2D readyButton;
+        Vector2 readyButtonPos;
+
+        Button newGame;
 
         Vector2 bannerPosition;
 
@@ -74,6 +102,20 @@ namespace SpacePirates
             self.bannerPosition = new Vector2(0, 0);
 
             self.banner = Content.Load<Texture2D>("banner");
+
+            self.newSession = Content.Load<Texture2D>("MenuButtons/NewSession");
+            self.newSessionPos = new Vector2(10, banner.Height + 10);
+            self.joinSession = Content.Load<Texture2D>("MenuButtons/JoinSession");
+            self.joinSessionPos = new Vector2(10, newSessionPos.Y + newSession.Height + 10);
+            self.quitSession = Content.Load<Texture2D>("MenuButtons/QuitSession");
+            self.quitSessionPos = new Vector2(10, joinSessionPos.Y + joinSession.Height + 10);
+            self.startGame = Content.Load<Texture2D>("MenuButtons/StartGame");
+            self.startGamePos = new Vector2(10, banner.Height + 10);
+            self.readyButton = Content.Load<Texture2D>("MenuButtons/Ready");
+            self.readyButtonPos = new Vector2(10, banner.Height + 10);
+            self.backButton = Content.Load<Texture2D>("MenuButtons/BackButton");
+            self.backButtonPos = new Vector2(10, windowHeight - 10 - backButton.Height);
+            self.newGame = new Button(newSession, new Vector2(10, quitSessionPos.Y + quitSession.Height + 10));
            
         }
 
@@ -90,11 +132,68 @@ namespace SpacePirates
 
         public void executeGameLogic(float elapsed)
         {
+            if(currentMenu == mainmenu)
+            {
+                if(Keyboard.GetState().IsKeyDown(Keys.N))//New Session.
+                {
+                    currentMenu = createdlobby;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.J))//Join Session.
+                {
+                    currentMenu = joinedlobby;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Q))//Quit game.
+                {
+                    Environment.Exit(0);
+                }
+            }
+            else if (currentMenu == createdlobby)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
+                {
+                    currentMenu = mainmenu;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.S))//Start the game?
+                {
+                        
+                }
+            }
+            else if (currentMenu == joinedlobby)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
+                {
+                    currentMenu = mainmenu;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.R))//Indicate ready.
+                {
+
+                }
+            }
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(banner, bannerPosition, Color.White);
+            if (currentMenu == mainmenu)
+            {
+                spriteBatch.Draw(banner, bannerPosition, Color.White);
+                spriteBatch.Draw(newSession, newSessionPos, Color.White);
+                spriteBatch.Draw(joinSession, joinSessionPos, Color.White);
+                spriteBatch.Draw(quitSession, quitSessionPos, Color.White);
+                newGame.Draw(spriteBatch);
+                //spriteBatch.Draw(self.newGame.currentState, self.newGame.position, Color.White);
+            }
+            else if (currentMenu == createdlobby)
+            {
+                spriteBatch.Draw(banner, bannerPosition, Color.White);
+                spriteBatch.Draw(startGame, startGamePos, Color.White);
+                spriteBatch.Draw(backButton, backButtonPos, Color.White);
+            }
+            else if (currentMenu == joinedlobby)
+            {
+                spriteBatch.Draw(banner, bannerPosition, Color.White);
+                spriteBatch.Draw(readyButton, readyButtonPos, Color.White);
+                spriteBatch.Draw(backButton, backButtonPos, Color.White);
+            }
         }
     }
 }
