@@ -179,7 +179,7 @@ namespace SpacePirates
                 spriteBatch.Draw(newSession, newSessionPos, Color.White);
                 spriteBatch.Draw(joinSession, joinSessionPos, Color.White);
                 spriteBatch.Draw(quitSession, quitSessionPos, Color.White);
-                newGame.Draw(spriteBatch);
+                //newGame.Draw(spriteBatch);
                 //spriteBatch.Draw(self.newGame.currentState, self.newGame.position, Color.White);
             }
             else if (currentMenu == createdlobby)
