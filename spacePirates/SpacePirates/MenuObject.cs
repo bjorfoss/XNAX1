@@ -107,7 +107,7 @@ namespace SpacePirates
             self.newSessionPos = new Vector2(10, banner.Height + 10);
             self.joinSession = Content.Load<Texture2D>("MenuButtons/JoinSession");
             self.joinSessionPos = new Vector2(10, newSessionPos.Y + newSession.Height + 10);
-            self.quitSession = Content.Load<Texture2D>("MenuButtons/QuitSession");
+            self.quitSession = Content.Load<Texture2D>("MenuButtons/Quit");
             self.quitSessionPos = new Vector2(10, joinSessionPos.Y + joinSession.Height + 10);
             self.startGame = Content.Load<Texture2D>("MenuButtons/StartGame");
             self.startGamePos = new Vector2(10, banner.Height + 10);
