@@ -10,6 +10,15 @@ namespace SpacePirates.spaceShips
     {
         double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
         double maxThrust = 100000; //maximum force in Newtons output by the ship's engine(s)
+        
+        IWeapon currentWeapon; //the currently selected weapon used by fire()
+        IWeapon[] weapons; //the weapons installed on the ship
+        
+        IAbility currentAbility; //the ability used by useAbility()
+        IAbility[] abilities; //the abilities installed on the ship
+
+
+
 
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
@@ -87,32 +96,68 @@ namespace SpacePirates.spaceShips
 
         public void Fire()
         {
-            throw new NotImplementedException();
+            currentWeapon.Fire();
         }
 
         public void NextWeapon()
         {
-            throw new NotImplementedException();
+            int index = Array.IndexOf(weapons, currentWeapon);
+            //increment weapon or go to start of weapons array
+            if (index + 1 < weapons.Length)
+            {
+                currentWeapon = weapons[index + 1];
+            }
+            else
+            {
+                currentWeapon = weapons[0];
+            }
         }
 
         public void PreviousWeapon()
         {
-            throw new NotImplementedException();
+            int index = Array.IndexOf(weapons, currentWeapon);
+            //decrement weapon or go to end of weapons array
+            if (index != 0)
+            {
+                currentWeapon = weapons[index - 1];
+            }
+            else
+            {
+                currentWeapon = weapons[weapons.Length - 1];
+            }
         }
 
         public void UseAbility()
         {
-            throw new NotImplementedException();
+            currentAbility.Activate();
         }
 
         public void NextAbility()
         {
-            throw new NotImplementedException();
+            int index = Array.IndexOf(abilities, currentAbility);
+            //increment ability or go to start of abilities array
+            if (index + 1 < abilities.Length)
+            {
+                currentAbility = abilities[index + 1];
+            }
+            else
+            {
+                currentAbility = abilities[0];
+            }
         }
 
         public void PreviousAbility()
         {
-            throw new NotImplementedException();
+            int index = Array.IndexOf(abilities, currentAbility);
+            //decrement ability or go to end of abilities array
+            if (index != 0)
+            {
+                currentAbility = abilities[index - 1];
+            }
+            else
+            {
+                currentAbility = abilities[abilities.Length - 1];
+            }
         }
     }
 }
