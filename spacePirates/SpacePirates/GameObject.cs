@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
-using System.Collections;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
 using SpacePirates.Obstacles;
 using Microsoft.Xna.Framework.Graphics;
+using SpacePirates.Player;
 
 namespace SpacePirates
 {
+    
+
     class GameObject : Microsoft.Xna.Framework.Game, GameStates
     {
         private static GameObject instance;
         static readonly object padlock = new Object();
+
+        public static int numberOfShips = 10;
+
+        ISpaceShip[] spaceShips = new ISpaceShip[10];
 
         // Holds the with and the height of the viewport
         private int windowWidth;
@@ -21,6 +29,15 @@ namespace SpacePirates
 
         // Holds the level object
         private Level level;
+
+        // Holds the player unit : spaceship
+        private Unit cameraTarget;
+        
+        //Hashtable with all spaceships
+        Dictionary<String, ShipFactory> shipFactoryCollection = new Dictionary<String, ShipFactory>();
+        //shipFactoryCollection.Add("fighter", new Factory_Fighter());
+
+        private bool gameSetup;
 
         public bool active = false; // Is true if this is the currentObject in Game1.cs
 
@@ -40,6 +57,8 @@ namespace SpacePirates
 
             self.windowWidth = w;
             self.windowHeight = h;
+
+            self.gameSetup = true;
 
             self.level = new Level(Content);
 
@@ -76,8 +95,55 @@ namespace SpacePirates
             }
         }
 
+        private ISpaceShip setUpShip()
+        {
+            String shipType = "make random ship appear";
+            return setUpShip(Ai.createController(), shipType);
+        }
+
+        private ISpaceShip setUpShip(IPlayer controller, String shipType)
+        {
+            Ownership registration = new Ownership();
+            registration.setOwner(controller);
+
+            ISpaceShip ship = shipFactoryColletion(shipType).BuildSpaceship(registration, new Vector2(0, 0), 0);
+
+            registration.setShip(ship);
+
+            return ship;
+        }
+
+        public void setUpGame()
+        {
+            gameSetup = false;
+
+          
+            IPlayer player = Human.createController();
+         
+            cameraTarget = setUpShip(player, "Type of ship");
+
+           
+
+            for (int i = 0; i < numberOfShips; i++) 
+            {
+                spaceShips[i] = setUpShip();
+            }
+           
+        }
+
         public void executeGameLogic(float elapsed)
         {
+            if (gameSetup)
+            {
+                setUpGame();
+                
+
+            }
+            //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
+
+            //foreach
+            //UnitARRAY.UpdatePosition(playerPosition);
+
         }
 
         public void executeDraw(SpriteBatch spriteBatch)

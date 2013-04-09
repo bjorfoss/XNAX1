@@ -50,8 +50,9 @@ namespace SpacePirates
         /// <summary>
         /// calculate the next position of the unit
         /// </summary>
-        void UpdatePosition() {
-            position = position + velocity;
+        public Vector2 UpdatePosition(Vector2 relativePosition) {
+            position = position + velocity - relativePosition;
+            return position;
         }
         /// <summary>
         /// Handle collision with a obstacle
