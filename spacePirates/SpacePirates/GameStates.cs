@@ -14,5 +14,7 @@ namespace SpacePirates
 
         void executeDraw(SpriteBatch spriteBatch);
 
+        bool isActive();
+
     }
 }

@@ -71,6 +71,13 @@ namespace SpacePirates
 
         private int currentMenu = 0; //Main menu.
 
+        public bool active = false; // Is true if this is the currentObject in Game1.cs
+
+        public bool isActive()
+        {
+            return active;
+        }
+
         //Displayed game banner
         Texture2D banner;
 
@@ -155,7 +162,7 @@ namespace SpacePirates
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.S))//Start the game?
                 {
-                        
+                    active = false;
                 }
             }
             else if (currentMenu == joinedlobby)

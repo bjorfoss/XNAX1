@@ -14,6 +14,7 @@ namespace SpacePirates
     {
         private static GameObject instance;
         static readonly object padlock = new Object();
+        private ContentManager Content;
 
         // Holds the with and the height of the viewport
         private int windowWidth;
@@ -21,6 +22,8 @@ namespace SpacePirates
 
         // Holds the level object
         private Level level;
+
+        public bool active = false; // Is true if this is the currentObject in Game1.cs
 
         // Holds the spaceShips belonging to each team
         private List<ISpaceShip> redTeam;
@@ -35,11 +38,11 @@ namespace SpacePirates
         private GameObject(int w, int h, ContentManager Content)
         {
             GameObject self = this;
-
+            this.Content = Content;
             self.windowWidth = w;
             self.windowHeight = h;
 
-            self.level = new Level();
+            self.level = new Level(Content);
 
             // Holds the spaceShips belonging to each team
             self.redTeam = new List<ISpaceShip>();
@@ -50,8 +53,17 @@ namespace SpacePirates
 
             maxSpeed = 25;
         }
-    
 
+        public static ContentManager GetContentManager()
+        {
+            return GameObject.instance.Content;
+        }
+
+        public bool isActive()
+        {
+            return active;
+        }
+    
         public static GameObject Instance(int w, int h, ContentManager Content)
         {
             lock (padlock) {
@@ -76,6 +88,8 @@ namespace SpacePirates
 
         public void executeDraw(SpriteBatch spriteBatch)
         {
+            level.executeDraw(spriteBatch);
+
         }
 
         public double getMaxSpeed()
