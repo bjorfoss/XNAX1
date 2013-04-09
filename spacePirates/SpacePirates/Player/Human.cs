@@ -33,10 +33,68 @@ namespace SpacePirates.Player
         /// </summary>
         public void HandleInput()
         {
+            KeyboardState newState = Keyboard.GetState();
+
+            // Accelerate
+
+            if (newState.IsKeyDown(Keys.W))
+            {
+
+            }
+
+            // Deaccelerate
+
+            if (newState.IsKeyDown(Keys.S))
+            {
+
+            }
+
+            // Turn
+
+            if (newState.IsKeyDown(Keys.D))
+            {
+
+            } else if (newState.IsKeyDown(Keys.A))
+            {
+
+            }
+
+            // Browse features
+            if (newState.IsKeyDown(Keys.I))
+            {
+
+            } else if (newState.IsKeyDown(Keys.J))
+            {
+
+            }
+
+            // Browse weapons
+            if (newState.IsKeyDown(Keys.O))
+            {
+
+            }
+            else if (newState.IsKeyDown(Keys.K))
+            {
+
+            }
+
+            // Execute feature
+            if (newState.IsKeyDown(Keys.E))
+            {
+
+            }
+
+            // Fire weapon
+            if (newState.IsKeyDown(Keys.F))
+            {
+
+            }
         }
 
         void HandleKeyboardInput()
         {
+
+
         }
 
         void HandleGamepadInput()
