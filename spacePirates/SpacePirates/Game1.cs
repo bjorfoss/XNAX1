@@ -24,6 +24,8 @@ namespace SpacePirates
 
         GameStates currentState;
 
+        Song song;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -60,6 +62,10 @@ namespace SpacePirates
             currentState = menuObject;
 
             // TODO: use this.Content to load your game content here
+
+            song = Content.Load<Song>("Sound/Stratospheres");
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
         }
 
         /// <summary>
