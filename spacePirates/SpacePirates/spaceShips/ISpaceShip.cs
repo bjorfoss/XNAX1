@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using SpacePirates.Player;
+
 
 namespace SpacePirates.spaceShips
 {
@@ -25,5 +27,6 @@ namespace SpacePirates.spaceShips
         void PreviousAbility();
 
         IPlayer GetOwner();
+
     }
 }

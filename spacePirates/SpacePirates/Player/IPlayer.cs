@@ -13,5 +13,7 @@ namespace SpacePirates.Player
         ISpaceShip GetShip();
 
         String GetName();
+
+        IPlayer createController();
     }
 }

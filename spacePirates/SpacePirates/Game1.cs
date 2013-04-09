@@ -93,6 +93,7 @@ namespace SpacePirates
             {
                 currentState = gameObject;
                 gameObject.active = true;
+               
             }
 
            
