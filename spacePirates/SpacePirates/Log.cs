@@ -13,6 +13,8 @@ namespace SpacePirates
 
         ArrayList eventLog;
 
+        static readonly object padlock = new Object();
+
         //Constructor
         private Log()
         {
@@ -26,11 +28,14 @@ namespace SpacePirates
         /// <returns></returns>
         public Log getLog()
         {
-            if (log == null)
+            lock (padlock)
             {
-                log = new Log();
+                if (log == null)
+                {
+                    log = new Log();
+                }
+                return log;
             }
-            return log;
         }
 
         /// <summary>
