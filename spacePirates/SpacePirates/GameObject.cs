@@ -29,6 +29,9 @@ namespace SpacePirates
         // Holds a collection of obstacles: asteroids, fired obstacles ...
         private List<IObstacle> obstacles;
 
+        //Holds the global maximum speed of any object
+        private double maxSpeed;
+
         private GameObject(int w, int h, ContentManager Content)
         {
             GameObject self = this;
@@ -44,6 +47,8 @@ namespace SpacePirates
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
+
+            maxSpeed = 25;
         }
     
 
@@ -57,12 +62,25 @@ namespace SpacePirates
             }
         }
 
+        public static GameObject Instance()
+        {
+            lock (padlock)
+            {
+                return instance;
+            }
+        }
+
         public void executeGameLogic(float elapsed)
         {
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
         {
+        }
+
+        public double getMaxSpeed()
+        {
+            return maxSpeed;
         }
     }
 }

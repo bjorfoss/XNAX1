@@ -34,7 +34,18 @@ namespace SpacePirates
         /// <summary>
         /// 
         /// </summary>
-        void CalculateDirectionAndSpeed() {}
+        void CalculateDirectionAndSpeed() 
+        {
+            double max = GameObject.Instance().getMaxSpeed();
+            Vector2 newVelocity = new Vector2(velocity.X + acceleration.X, velocity.Y + acceleration.Y);
+            if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
+            {
+                float multiplier = (float)(max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
+                newVelocity.X *= multiplier;
+                newVelocity.Y *= multiplier;
+            }
+
+        }
 
         /// <summary>
         /// calculate the next position of the unit
