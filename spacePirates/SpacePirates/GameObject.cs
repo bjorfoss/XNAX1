@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
 using SpacePirates.Obstacles;
@@ -35,8 +34,7 @@ namespace SpacePirates
         private Unit cameraTarget;
         
         //Hashtable with all spaceships
-        Dictionary<String, ShipFactory> shipFactoryCollection = new Dictionary<String, ShipFactory>();
-        //shipFactoryCollection.Add("fighter", new Factory_Fighter());
+        private Dictionary<String, IShipFactory> shipFactoryCollection;
 
         private bool gameSetup;
 
@@ -71,6 +69,9 @@ namespace SpacePirates
             self.obstacles = new List<IObstacle>();
 
             maxSpeed = 25;
+
+            shipFactoryCollection = new Dictionary<String, IShipFactory>();
+            shipFactoryCollection.Add("fighter", new Factory_Fighter());
         }
 
         public static ContentManager GetContentManager()
@@ -110,11 +111,11 @@ namespace SpacePirates
         private ISpaceShip setUpShip(IPlayer controller, String shipType)
         {
             Ownership registration = new Ownership();
-            registration.setOwner(controller);
+            registration.SetOwner(controller);
 
-            ISpaceShip ship = shipFactoryColletion(shipType).BuildSpaceship(registration, new Vector2(0, 0), 0);
+            ISpaceShip ship = shipFactoryCollection(shipType).BuildSpaceship(registration, new Vector2(0, 0), 0);
 
-            registration.setShip(ship);
+            registration.SetShip(ship);
 
             return ship;
         }

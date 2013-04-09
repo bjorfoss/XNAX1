@@ -6,7 +6,7 @@ using SpacePirates.spaceShips;
 
 namespace SpacePirates.Player
 {
-    interface IPlayer
+    public interface IPlayer
     {
         void SetOwnerShip(Ownership registration);
 

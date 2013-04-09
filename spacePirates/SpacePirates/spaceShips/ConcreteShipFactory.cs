@@ -8,8 +8,10 @@ using SpacePirates.Player;
 namespace SpacePirates.spaceShips
 {
     public class Factory_Fighter : IShipFactory
-    { 
-        ISpaceShip IShipFactory.BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
+    {
+        public Factory_Fighter() { }
+
+        public ISpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
         {
             return new ConcreteShip_Fighter(ownership, position, rotation);
         }

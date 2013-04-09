@@ -101,5 +101,11 @@ namespace SpacePirates.Player
         {
         }
 
+
+
+        public IPlayer createController()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

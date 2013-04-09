@@ -8,7 +8,7 @@ using SpacePirates.Player;
 
 namespace SpacePirates.spaceShips
 {
-    interface ISpaceShip
+    public interface ISpaceShip
     {
         void Turn(double turnRate);
 

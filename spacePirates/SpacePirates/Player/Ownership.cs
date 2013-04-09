@@ -10,10 +10,10 @@ namespace SpacePirates.Player
     /// A link between a spaceship and its owner.
     /// Consider it to be like a vehicle registration.
     /// </summary>
-    class Ownership
+    public class Ownership
     {
-        IPlayer owner;
-        ISpaceShip spaceShip;
+        private IPlayer owner;
+        private ISpaceShip spaceShip;
 
         public Ownership() {}
 
