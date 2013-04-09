@@ -23,12 +23,17 @@ namespace SpacePirates
         // Holds the level object
         private Level level;
 
+        public bool active = false; // Is true if this is the currentObject in Game1.cs
+
         // Holds the spaceShips belonging to each team
         private List<ISpaceShip> redTeam;
         private List<ISpaceShip> blueTeam;
 
         // Holds a collection of obstacles: asteroids, fired obstacles ...
         private List<IObstacle> obstacles;
+
+        //Holds the global maximum speed of any object
+        private double maxSpeed;
 
         private GameObject(int w, int h, ContentManager Content)
         {
@@ -37,7 +42,7 @@ namespace SpacePirates
             self.windowWidth = w;
             self.windowHeight = h;
 
-            self.level = new Level();
+            self.level = new Level(Content);
 
             // Holds the spaceShips belonging to each team
             self.redTeam = new List<ISpaceShip>();
@@ -45,14 +50,20 @@ namespace SpacePirates
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
+
+            maxSpeed = 25;
         }
 
         public static ContentManager GetContentManager()
         {
             return GameObject.instance.Content;
         }
-    
 
+        public bool isActive()
+        {
+            return active;
+        }
+    
         public static GameObject Instance(int w, int h, ContentManager Content)
         {
             lock (padlock) {
@@ -63,12 +74,27 @@ namespace SpacePirates
             }
         }
 
+        public static GameObject Instance()
+        {
+            lock (padlock)
+            {
+                return instance;
+            }
+        }
+
         public void executeGameLogic(float elapsed)
         {
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
         {
+            level.executeDraw(spriteBatch);
+
+        }
+
+        public double getMaxSpeed()
+        {
+            return maxSpeed;
         }
     }
 }
