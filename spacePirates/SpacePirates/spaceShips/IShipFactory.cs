@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace SpacePirates.spaceShips
 {
-    interface ShipFactory
+    interface IShipFactory
     {
         ISpaceShip BuildSpaceship(Vector2 position, double rotation);
     }
