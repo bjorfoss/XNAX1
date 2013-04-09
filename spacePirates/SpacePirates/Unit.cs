@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpacePirates.Obstacles;
 
 namespace SpacePirates
 {
@@ -32,9 +33,9 @@ namespace SpacePirates
         //add getters and setters
 
         /// <summary>
-        /// 
+        /// Same as UpdatePosition()
         /// </summary>
-        void CalculateDirectionAndSpeed() 
+        void CalculateDirectionAndSpeed()
         {
             double max = GameObject.Instance().getMaxSpeed();
             Vector2 newVelocity = new Vector2(velocity.X + acceleration.X, velocity.Y + acceleration.Y);
@@ -44,7 +45,6 @@ namespace SpacePirates
                 newVelocity.X *= multiplier;
                 newVelocity.Y *= multiplier;
             }
-
         }
 
         /// <summary>
@@ -52,6 +52,15 @@ namespace SpacePirates
         /// </summary>
         void UpdatePosition() {
             position = position + velocity;
+        }
+        /// <summary>
+        /// Handle collision with a obstacle
+        /// if it will be needed
+        /// </summary>
+        /// <param name="Obstacle"></param>
+        void HandleCollision(Object Obstacle)
+        {
+
         }
 
         /// <summary>
@@ -92,9 +101,18 @@ namespace SpacePirates
         }
 
         /// <summary>
-        /// 
+        /// TODO: create a blast if there should be one
+        /// TODO: position the blast according to blastradius, shipsize and shipposition.
         /// </summary>
-        void OnDestroy() { }
+        void OnDestroy() 
+        {
+
+            if (blastDamage > 0)
+            {
+                //something.CreateBlast(position, blastradius, blastdamage);
+            }
+        
+        }
 
 
 
@@ -106,6 +124,24 @@ namespace SpacePirates
         public double getMass()
         {
             return mass;
+        }
+        public double getMaxHealth()
+        {
+            return maxHealth;
+        }
+        public double getHealth()
+        {
+            return health;
+        }
+
+
+        /// <summary>
+        /// Overwrite this in underclasses or make it here?
+        /// </summary>
+        /// <param name="bach"></param>
+        public void draw(SpriteBatch bach)
+        {
+
         }
 
     }
