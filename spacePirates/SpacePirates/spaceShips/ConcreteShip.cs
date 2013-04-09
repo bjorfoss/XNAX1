@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using SpacePirates.Player;
 
 namespace SpacePirates.spaceShips
 {
@@ -19,13 +20,15 @@ namespace SpacePirates.spaceShips
         IAbility currentAbility; //the ability used by useAbility()
         IAbility[] abilities; //the abilities installed on the ship
 
+        Ownership registration; //vehicle registration. The player can be retrieved from this
+
 
 
 
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
         /// </summary>
-        public ConcreteShip_Fighter(Vector2 position, double rotation)
+        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation)
         {
             /*
              *  Vector2 velocity;
@@ -65,7 +68,8 @@ namespace SpacePirates.spaceShips
             blastRadius = 30;
             blastDamage = 40;
 
-            //TODO: graphics;
+            this.registration = registration;
+
             graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
         }
 
@@ -161,6 +165,12 @@ namespace SpacePirates.spaceShips
             {
                 currentAbility = abilities[abilities.Length - 1];
             }
+        }
+
+
+        public IPlayer GetOwner()
+        {
+            return registration.GetOwner();
         }
     }
 }

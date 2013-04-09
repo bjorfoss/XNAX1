@@ -11,6 +11,12 @@ namespace SpacePirates.Player
         IPlayer owner;
         ISpaceShip spaceShip;
 
+        public Ownership(IPlayer owner, ISpaceShip spaceShip)
+        {
+            this.owner = owner;
+            this.spaceShip = spaceShip;
+        }
+
         public ISpaceShip GetShip() {
             return spaceShip;
         }
