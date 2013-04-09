@@ -14,6 +14,7 @@ namespace SpacePirates
     {
         private static GameObject instance;
         static readonly object padlock = new Object();
+        private ContentManager Content;
 
         // Holds the with and the height of the viewport
         private int windowWidth;
@@ -32,7 +33,7 @@ namespace SpacePirates
         private GameObject(int w, int h, ContentManager Content)
         {
             GameObject self = this;
-
+            this.Content = Content;
             self.windowWidth = w;
             self.windowHeight = h;
 
@@ -44,6 +45,11 @@ namespace SpacePirates
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
+        }
+
+        public static ContentManager GetContentManager()
+        {
+            return GameObject.instance.Content;
         }
     
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SpacePirates.spaceShips
 {
@@ -64,6 +66,7 @@ namespace SpacePirates.spaceShips
             blastDamage = 40;
 
             //TODO: graphics;
+            graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
         }
 
         public void Turn(double turnRate)

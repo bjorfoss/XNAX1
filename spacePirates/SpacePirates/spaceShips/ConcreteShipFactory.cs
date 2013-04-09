@@ -14,5 +14,12 @@ namespace SpacePirates.spaceShips
         }
     }
 
+    //public class Factory_Bomber : IShipFactory
+    //{
+    //    ISpaceShip IShipFactory.BuildSpaceship(Vector2 position, double rotation)
+    //    {
+    //        return new ConcreteShip_Bomber(position, rotation);
+    //    }
+    //}
    
 }
