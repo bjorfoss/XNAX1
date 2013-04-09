@@ -6,13 +6,20 @@ using Microsoft.Xna.Framework;
 
 namespace SpacePirates.spaceShips
 {
-    public class Factory_Fighter : ShipFactory
+    public class Factory_Fighter : IShipFactory
     { 
-        ISpaceShip ShipFactory.BuildSpaceship(Vector2 position, double rotation)
+        ISpaceShip IShipFactory.BuildSpaceship(Vector2 position, double rotation)
         {
             return new ConcreteShip_Fighter(position, rotation);
         }
     }
 
+    //public class Factory_Bomber : IShipFactory
+    //{
+    //    ISpaceShip IShipFactory.BuildSpaceship(Vector2 position, double rotation)
+    //    {
+    //        return new ConcreteShip_Bomber(position, rotation);
+    //    }
+    //}
    
 }
