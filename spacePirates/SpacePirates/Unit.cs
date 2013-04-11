@@ -141,12 +141,12 @@ namespace SpacePirates
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="bach"></param>
-        public void draw(SpriteBatch bach)
+        /// <param name="batch"></param>
+        public void Draw(SpriteBatch batch)
         {
 
 
-            bach.Draw(graphics, position, animationFrame, Color.White, (float)rotation, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0f);
+            batch.Draw(graphics, position, animationFrame, Color.White, (float)rotation, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0f);
           //  bach.Draw(texture, position, Color.White);
             
           

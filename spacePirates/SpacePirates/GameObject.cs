@@ -177,11 +177,11 @@ namespace SpacePirates
 
             foreach (ISpaceShip ship in redTeam )
             {
-                ship.draw(spriteBatch);
+                ((Unit) ship).Draw(spriteBatch);
             }
             foreach (ISpaceShip ship in blueTeam)
             {
-                ship.draw(spriteBatch);
+                ((Unit)ship).Draw(spriteBatch);
             }
 
         }
