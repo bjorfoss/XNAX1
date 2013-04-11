@@ -33,6 +33,7 @@ namespace SpacePirates.Player
 
         public void SetOwner(IPlayer owner) {
             this.owner = owner;
+            this.owner.SetOwnerShip(this);
         }
 
         /// <summary>

@@ -25,6 +25,8 @@ namespace SpacePirates.spaceShips
 
 
 
+
+
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
         /// </summary>
@@ -69,6 +71,7 @@ namespace SpacePirates.spaceShips
             blastDamage = 40;
 
             this.registration = registration;
+            animationFrame = new Rectangle(0, 0, 128, 128);
 
             graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
         }
@@ -167,6 +170,11 @@ namespace SpacePirates.spaceShips
             }
         }
 
+        /*public void draw(SpriteBatch batch)
+        {
+
+            this.draw(batch, graphics);
+        }*/
 
         public IPlayer GetOwner()
         {

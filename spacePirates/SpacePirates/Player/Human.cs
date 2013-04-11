@@ -12,6 +12,11 @@ namespace SpacePirates.Player
         Ownership ownerLink;
 
         String name;
+        public Human(string name)
+        {
+            this.name = name;
+
+        }
 
         public String GetName()
         {
@@ -103,9 +108,10 @@ namespace SpacePirates.Player
 
 
 
-        public IPlayer createController()
+        public static IPlayer createController()
         {
-            throw new NotImplementedException();
+            return new Human("nobody");
+            //throw new NotImplementedException();
         }
     }
 }

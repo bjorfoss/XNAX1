@@ -19,6 +19,7 @@ namespace SpacePirates
         protected double rotationSpeed;
 
         protected Texture2D graphics;
+        protected Rectangle animationFrame;
 
         protected double health;
         protected double maxHealth;
@@ -32,6 +33,7 @@ namespace SpacePirates
 
         //add getters and setters
 
+        
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
@@ -137,11 +139,25 @@ namespace SpacePirates
 
 
         /// <summary>
-        /// Overwrite this in underclasses or make it here?
+        /// 
         /// </summary>
         /// <param name="bach"></param>
         public void draw(SpriteBatch bach)
         {
+
+
+            bach.Draw(graphics, position, animationFrame, Color.White, (float)rotation, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0f);
+          //  bach.Draw(texture, position, Color.White);
+            
+          
+            
+        }
+        public void draw(SpriteBatch bach, Texture2D texture, Rectangle rectangle)
+        {
+            rectangle.Width = 128;
+            rectangle.Height = 128;
+
+            bach.Draw(texture, position, new Rectangle(0,0,128,128), Color.White, (float)rotation, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.1f);
 
         }
 

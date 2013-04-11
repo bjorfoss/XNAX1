@@ -6,8 +6,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
 using SpacePirates.Obstacles;
-using Microsoft.Xna.Framework.Graphics;
 using SpacePirates.Player;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace SpacePirates
 {
@@ -15,9 +16,10 @@ namespace SpacePirates
 
     class GameObject : Microsoft.Xna.Framework.Game, GameStates
     {
+        private Boolean test = true;
         private static GameObject instance;
         static readonly object padlock = new Object();
-        private ContentManager Content;
+        // private ContentManager Content;
 
         public static int numberOfShips = 10;
 
@@ -31,7 +33,7 @@ namespace SpacePirates
         private Level level;
 
         // Holds the player unit : spaceship
-        private Unit cameraTarget;
+        private ISpaceShip cameraTarget;
         
         //Hashtable with all spaceships
         private Dictionary<String, IShipFactory> shipFactoryCollection;
@@ -49,6 +51,9 @@ namespace SpacePirates
 
         //Holds the global maximum speed of any object
         private double maxSpeed;
+
+
+        
 
         private GameObject(int w, int h, ContentManager Content)
         {
@@ -70,8 +75,12 @@ namespace SpacePirates
 
             maxSpeed = 25;
 
+
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
+
+            
+
         }
 
         public static ContentManager GetContentManager()
@@ -102,9 +111,12 @@ namespace SpacePirates
             }
         }
 
+
+        // TODO: make ship selection random
+
         private ISpaceShip setUpShip()
         {
-            String shipType = "make random ship appear";
+            String shipType = "fighter";
             return setUpShip(Ai.createController(), shipType);
         }
 
@@ -113,10 +125,11 @@ namespace SpacePirates
             Ownership registration = new Ownership();
             registration.SetOwner(controller);
 
-            ISpaceShip ship = shipFactoryCollection(shipType).BuildSpaceship(registration, new Vector2(0, 0), 0);
+            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, new Vector2(0, 0), 0);
+
 
             registration.SetShip(ship);
-
+            redTeam.Add(ship);
             return ship;
         }
 
@@ -127,7 +140,7 @@ namespace SpacePirates
           
             IPlayer player = Human.createController();
          
-            cameraTarget = setUpShip(player, "Type of ship");
+            cameraTarget = setUpShip(player, "fighter");
 
            
 
@@ -156,6 +169,20 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
+            if (test)
+            {
+                //redTeam.Add(new ConcreteShip_Fighter(new Ownership(null, null), new Vector2(10, 10), 0));
+                test = false;
+            }
+
+            foreach (ISpaceShip ship in redTeam )
+            {
+                ship.draw(spriteBatch);
+            }
+            foreach (ISpaceShip ship in blueTeam)
+            {
+                ship.draw(spriteBatch);
+            }
 
         }
 

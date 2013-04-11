@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using SpacePirates.Player;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace SpacePirates.spaceShips
@@ -25,6 +26,8 @@ namespace SpacePirates.spaceShips
         void NextAbility();
 
         void PreviousAbility();
+
+        void draw(SpriteBatch bach);
 
         IPlayer GetOwner();
 
