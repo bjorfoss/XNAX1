@@ -60,6 +60,7 @@ namespace SpacePirates
     {
         private static MenuObject instance;
         static readonly object padlock = new Object();
+        bool enableMultiplayer = false;
 
         // Holds the width and the height of the viewport
         private int windowWidth;
@@ -154,15 +155,21 @@ namespace SpacePirates
                 if(Keyboard.GetState().IsKeyDown(Keys.N))//New Session.
                 {
                     currentMenu = createdlobby;
-                    NetworkObject.Instance().CreateSession();
+                    if (enableMultiplayer)
+                    {
+                        NetworkObject.Instance().CreateSession();
+                    }
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.J))//Join Session.
                 {
-                    //currentMenu = joinedlobby;
-                    currentMenu = searchLobbies;
-                    int maxLocalPlayers = 1;
-                    availableSessions = NetworkSession.Find(NetworkSessionType.SystemLink, maxLocalPlayers, null);
-                    selectedSessionIndex = 0;
+                    if (enableMultiplayer)
+                    {
+                        //currentMenu = joinedlobby;
+                        currentMenu = searchLobbies;
+                        int maxLocalPlayers = 1;
+                        availableSessions = NetworkSession.Find(NetworkSessionType.SystemLink, maxLocalPlayers, null);
+                        selectedSessionIndex = 0;
+                    }
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Q))//Quit game.
                 {
@@ -174,8 +181,11 @@ namespace SpacePirates
                 if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
                 {
                     currentMenu = mainmenu;
-                    NetworkObject.Instance().disposeNetworkSession();
-                    cleanAvailableSessions();                  
+                    if (enableMultiplayer)
+                    {
+                        NetworkObject.Instance().disposeNetworkSession();
+                        cleanAvailableSessions();
+                    }
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.S))//Start the game?
                 {
@@ -242,12 +252,15 @@ namespace SpacePirates
                 spriteBatch.Draw(startGame, startGamePos, Color.White);
                 spriteBatch.DrawString(text, "Lobby", lastPos, Color.White);
 
-                foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
+                if (enableMultiplayer)
                 {
-                    string name = gamer.Gamertag;
+                    foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
+                    {
+                        string name = gamer.Gamertag;
 
-                    spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), Color.Orange);
-                    lastPos.Y += 30;
+                        spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), Color.Orange);
+                        lastPos.Y += 30;
+                    }
                 }
 
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);

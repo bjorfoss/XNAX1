@@ -10,6 +10,7 @@ namespace SpacePirates.Player
     class Human : IPlayer
     {
         Ownership ownerLink;
+        KeyboardState oldState = Keyboard.GetState();
 
         String name;
         public Human(string name)
@@ -39,33 +40,47 @@ namespace SpacePirates.Player
         public void HandleInput()
         {
             KeyboardState newState = Keyboard.GetState();
-
-            // Accelerate
-
+            bool forwardKeyDown = false;
+            
+            //70 to 100% thrust
             if (newState.IsKeyDown(Keys.W))
             {
-                ownerLink.GetShip().Thrust(75);
+                if (newState.IsKeyDown(Keys.LeftShift))
+                {
+                    ownerLink.GetShip().Thrust(100);
+                }
+                else
+                {
+                    ownerLink.GetShip().Thrust(75);
+                }
+                forwardKeyDown = true;
             }
-            else
+            
+            //25 to 50% thrust
+            if (newState.IsKeyDown(Keys.S))
             {
+                if (newState.IsKeyDown(Keys.LeftShift)) {
+                    ownerLink.GetShip().Thrust(50);
+                } else {
+                    ownerLink.GetShip().Thrust(25);
+                }
+                forwardKeyDown = true;
+            }
+
+            //0% thrust
+            if (!forwardKeyDown) {
                 ownerLink.GetShip().Thrust(0);
             }
 
-            // Deaccelerate
-
-            if (newState.IsKeyDown(Keys.S))
+            //Turn left, right or not at all
+            if (newState.IsKeyDown(Keys.A))
             {
-
-            }
-
-            // Turn
-
-            if (newState.IsKeyDown(Keys.D))
+                ownerLink.GetShip().Turn(-100.0f);
+            } else if (newState.IsKeyDown(Keys.D))
             {
-
-            } else if (newState.IsKeyDown(Keys.A))
-            {
-
+                ownerLink.GetShip().Turn(100.0f);
+            } else {
+                ownerLink.GetShip().Turn(0.0f);
             }
 
             // Browse features
@@ -98,6 +113,7 @@ namespace SpacePirates.Player
             {
 
             }
+            oldState = newState;
         }
 
         void HandleKeyboardInput()

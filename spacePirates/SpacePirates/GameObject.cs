@@ -78,7 +78,7 @@ namespace SpacePirates
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
 
-            maxSpeed = 25;
+            maxSpeed = 5;
 
 
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
@@ -197,7 +197,7 @@ namespace SpacePirates
             {
                 IPlayer owner = ship.GetOwner();
 
-                if (owner == typeof(Human))
+                if (owner is Human)
                     (owner as Human).HandleInput();
                 //else
                 //(ship.GetOwner() as Ai)
@@ -206,7 +206,7 @@ namespace SpacePirates
             {
                 IPlayer owner = ship.GetOwner();
 
-                if (owner == typeof(Human))
+                if (owner is Human)
                     (owner as Human).HandleInput();
                 //else
                 //(ship.GetOwner() as Ai)
@@ -214,11 +214,19 @@ namespace SpacePirates
 
             for(int i = 0; i < blueTeam.Count; i++)
             {
-                (blueTeam.ElementAt(i) as Unit).Update(gameTime);
+                Unit unit = (blueTeam.ElementAt(i) as Unit);
+                unit.Update(gameTime);
+                unit.CalculateDirectionAndSpeed();
+                unit.UpdatePosition(gameTime);
+                unit.UpdateFacing(gameTime);
             }
             for (int i = 0; i < redTeam.Count; i++)
             {
-                (redTeam.ElementAt(i) as Unit).Update(gameTime);
+                Unit unit = (redTeam.ElementAt(i) as Unit);
+                unit.Update(gameTime);
+                unit.CalculateDirectionAndSpeed();
+                unit.UpdatePosition(gameTime);
+                unit.UpdateFacing(gameTime);
             }
 
             

@@ -62,6 +62,7 @@ namespace SpacePirates.spaceShips
             rotationSpeed = 0;
             velocity = new Vector2(0);
             acceleration = new Vector2(0);
+            currentThrust = 0;
 
             mass = 20000; //twenty tons
             maxHealth = 10000;
@@ -134,6 +135,7 @@ namespace SpacePirates.spaceShips
             //ensure the ship doesn't thrust more than its capabilities
             thrust = Math.Min(thrust, 100);
             thrust = thrust * maxThrust;
+            this.currentThrust = thrust;
             //we regard thrust as Force when passed, divide by mass to get acceleration
             double acceleration = thrust / mass;
 

@@ -15,7 +15,7 @@ namespace SpacePirates
         protected Vector2 acceleration;
         protected double mass;
         protected Vector2 position;
-        protected double rotation;
+        public double rotation;
         protected double rotationSpeed;
 
         protected Texture2D graphics;
@@ -37,7 +37,7 @@ namespace SpacePirates
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
-        void CalculateDirectionAndSpeed()
+        public void CalculateDirectionAndSpeed()
         {
             double max = GameObject.Instance().getMaxSpeed();
             Vector2 newVelocity = new Vector2(velocity.X + acceleration.X, velocity.Y + acceleration.Y);
@@ -47,6 +47,9 @@ namespace SpacePirates
                 newVelocity.X *= multiplier;
                 newVelocity.Y *= multiplier;
             }
+            velocity = newVelocity;
+
+            
         }
 
         /// <summary>
@@ -55,6 +58,32 @@ namespace SpacePirates
         public Vector2 UpdatePosition(Vector2 relativePosition) {
             position = position + velocity - relativePosition;
             return position;
+        }
+
+        public void UpdateFacing(GameTime gameTime)
+        {
+            //handle rotation
+            double newRotation = rotation; //+ (rotationSpeed * gametime.ElapsedGameTime.TotalMilliseconds);
+            newRotation = rotation + (rotationSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+
+            if (newRotation < 0)
+            {
+                rotation = 360 + newRotation;
+            }
+            else if (newRotation > 360)
+            {
+                rotation = 360 - newRotation;
+            }
+            else
+            {
+                rotation = newRotation;
+            }
+        }
+
+        public void UpdatePosition(GameTime gameTime)
+        {
+            position.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         /// <summary>
         /// Handle collision with a obstacle
@@ -167,6 +196,7 @@ namespace SpacePirates
         {
 
             Vector2 screenPos = WorldPosToScreenPos(position);
+            batch.DrawString(GameObject.GetContentManager().Load<SpriteFont>("Graphics/SpriteFonts/Menutext"), position.ToString(), screenPos + new Vector2(0, 200), Color.Wheat);
             batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,
                     new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
                     1.0f, SpriteEffects.None, 0f);
