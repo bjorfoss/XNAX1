@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.Storage;
 
 namespace SpacePirates
 {
@@ -21,6 +23,7 @@ namespace SpacePirates
 
         GameObject gameObject;
         MenuObject menuObject;
+        NetworkObject networkObject;
 
         GameStates currentState;
 
@@ -29,6 +32,7 @@ namespace SpacePirates
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Components.Add(new GamerServicesComponent(this));
             Content.RootDirectory = "Content";
         }
 
@@ -56,6 +60,8 @@ namespace SpacePirates
 
             gameObject = GameObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
             menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
+
+            networkObject = NetworkObject.Instance();
 
             menuObject.active = true;
 

@@ -113,6 +113,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MenuObject.cs" />
+    <Compile Include="NetworkObject.cs" />
     <Compile Include="Obstacles\ConcreteObstacleFactory.cs" />
     <Compile Include="Obstacles\ConcreteObstacle.cs" />
     <Compile Include="Obstacles\IObstacle.cs" />

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Net;
 
 
 namespace SpacePirates
@@ -60,7 +61,7 @@ namespace SpacePirates
         private static MenuObject instance;
         static readonly object padlock = new Object();
 
-        // Holds the with and the height of the viewport
+        // Holds the width and the height of the viewport
         private int windowWidth;
         private int windowHeight;
 
@@ -68,10 +69,15 @@ namespace SpacePirates
         private int mainmenu = 0;
         private int createdlobby = 1;
         private int joinedlobby = 2;
+        private int searchLobbies = 3;
 
         private int currentMenu = 0; //Main menu.
 
         public bool active = false; // Is true if this is the currentObject in Game1.cs
+
+        //Network sessions search.
+        private AvailableNetworkSessionCollection availableSessions;
+        private int selectedSessionIndex;
 
         public bool isActive()
         {
@@ -94,6 +100,8 @@ namespace SpacePirates
         Vector2 startGamePos;
         Texture2D readyButton;
         Vector2 readyButtonPos;
+
+        SpriteFont text;
 
         Button newGame;
 
@@ -122,7 +130,9 @@ namespace SpacePirates
             self.readyButtonPos = new Vector2(10, banner.Height + 10);
             self.backButton = Content.Load<Texture2D>("MenuButtons/BackButton");
             self.backButtonPos = new Vector2(10, windowHeight - 10 - backButton.Height);
-            self.newGame = new Button(newSession, new Vector2(10, quitSessionPos.Y + quitSession.Height + 10));
+            //self.newGame = new Button(newSession, new Vector2(10, quitSessionPos.Y + quitSession.Height + 10));
+
+            self.text = Content.Load<SpriteFont>("Graphics/Spritefonts/Menutext");
            
         }
 
@@ -144,10 +154,15 @@ namespace SpacePirates
                 if(Keyboard.GetState().IsKeyDown(Keys.N))//New Session.
                 {
                     currentMenu = createdlobby;
+                    NetworkObject.Instance().CreateSession();
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.J))//Join Session.
                 {
-                    currentMenu = joinedlobby;
+                    //currentMenu = joinedlobby;
+                    currentMenu = searchLobbies;
+                    int maxLocalPlayers = 1;
+                    availableSessions = NetworkSession.Find(NetworkSessionType.SystemLink, maxLocalPlayers, null);
+                    selectedSessionIndex = 0;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Q))//Quit game.
                 {
@@ -159,6 +174,8 @@ namespace SpacePirates
                 if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
                 {
                     currentMenu = mainmenu;
+                    NetworkObject.Instance().disposeNetworkSession();
+                    cleanAvailableSessions();                  
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.S))//Start the game?
                 {
@@ -170,10 +187,39 @@ namespace SpacePirates
                 if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
                 {
                     currentMenu = mainmenu;
+                    cleanAvailableSessions();
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.R))//Indicate ready.
                 {
 
+                }
+            }
+            else if (currentMenu == searchLobbies)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.B))//Back to Main menu.
+                {
+                    currentMenu = mainmenu;
+                    
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    if (selectedSessionIndex > 0)
+                        selectedSessionIndex--;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    if (selectedSessionIndex < availableSessions.Count)
+                        selectedSessionIndex++;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.J))//Join lobby.
+                {
+                    if (availableSessions.Count > 0)
+                    {
+                        currentMenu = joinedlobby;
+                        NetworkSession networkSession = NetworkSession.Join(availableSessions[selectedSessionIndex]);
+
+                        cleanAvailableSessions();
+                    }
                 }
             }
         }
@@ -191,15 +237,63 @@ namespace SpacePirates
             }
             else if (currentMenu == createdlobby)
             {
+                Vector2 lastPos = startGamePos + new Vector2(startGame.Width + 40, 0);
                 spriteBatch.Draw(banner, bannerPosition, Color.White);
                 spriteBatch.Draw(startGame, startGamePos, Color.White);
+                spriteBatch.DrawString(text, "Lobby", lastPos, Color.White);
+
+                foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
+                {
+                    string name = gamer.Gamertag;
+
+                    spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), Color.Orange);
+                    lastPos.Y += 30;
+                }
+
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);
             }
             else if (currentMenu == joinedlobby)
             {
+                Vector2 lastPos = startGamePos + new Vector2(readyButton.Width + 40, 0);
                 spriteBatch.Draw(banner, bannerPosition, Color.White);
                 spriteBatch.Draw(readyButton, readyButtonPos, Color.White);
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);
+                spriteBatch.DrawString(text, "Lobby", lastPos, Color.White);
+
+                foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
+                {
+                    string name = gamer.Gamertag;
+
+                    spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), Color.Orange);
+                    lastPos.Y += 30;
+                }
+            }
+            else if (currentMenu == searchLobbies)
+            {
+                Vector2 lastPos = new Vector2(10, banner.Height + 40);
+                spriteBatch.Draw(banner, bannerPosition, Color.White);
+                spriteBatch.Draw(backButton, backButtonPos, Color.White);
+                spriteBatch.DrawString(text, "Available games (J to join):", lastPos, Color.White);
+
+                for (int sessionIndex = 0; sessionIndex < availableSessions.Count; sessionIndex++)  
+                {
+                    Color color = Color.Blue;
+
+                    if (sessionIndex == selectedSessionIndex)
+                        color = Color.Yellow;
+
+                    spriteBatch.DrawString(text, availableSessions[sessionIndex].HostGamertag, lastPos + new Vector2(0, 30), color);
+                    lastPos.Y += 30;
+                }
+            }
+        }
+
+        private void cleanAvailableSessions()
+        {
+            if (availableSessions != null)
+            {
+                availableSessions.Dispose();
+                availableSessions = null;
             }
         }
     }
