@@ -141,15 +141,35 @@ namespace SpacePirates
         {
         }
 
+        public Vector2 GetPosition()
+        {
+            return position;
+        }
+
+        public static Vector2 WorldPosToScreenPos(Vector2 position)
+        {
+            Rectangle screen = GameObject.GetScreenArea();
+            Vector2 cameraPos = (GameObject.GetCameraTarget() as Unit).GetPosition();
+            Vector2 screenPos = new Vector2(position.X, position.Y);
+            screenPos = screenPos - cameraPos;
+            screenPos.X += (float)screen.Width / 2;
+            //screenPos.X += 400;
+            screenPos.Y += (float)screen.Height / 2;
+            //screenPos.Y += 230;
+            return screenPos;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="batch"></param>
-        public void Draw(SpriteBatch batch)
+        public virtual void Draw(SpriteBatch batch)
         {
 
-
-            batch.Draw(graphics, position, animationFrame, Color.White, (float)rotation, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0f);
+            Vector2 screenPos = WorldPosToScreenPos(position);
+            batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,
+                    new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
+                    1.0f, SpriteEffects.None, 0f);
           //  bach.Draw(texture, position, Color.White);
             
           

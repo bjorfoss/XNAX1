@@ -19,7 +19,7 @@ namespace SpacePirates
         private Boolean test = true;
         private static GameObject instance;
         static readonly object padlock = new Object();
-        // private ContentManager Content;
+        // private ContentManager Content; //Inherited
 
         public static int numberOfShips = 10;
 
@@ -28,6 +28,7 @@ namespace SpacePirates
         // Holds the with and the height of the viewport
         private int windowWidth;
         private int windowHeight;
+        private Rectangle screenArea;
 
         // Holds the level object
         private Level level;
@@ -61,6 +62,7 @@ namespace SpacePirates
             this.Content = Content;
             self.windowWidth = w;
             self.windowHeight = h;
+            screenArea = new Rectangle(0, 0, w, h);
 
             self.gameSetup = true;
 
@@ -81,6 +83,11 @@ namespace SpacePirates
 
             
 
+        }
+
+        public static Rectangle GetScreenArea()
+        {
+            return Instance().screenArea;
         }
 
         public static ContentManager GetContentManager()
@@ -131,6 +138,11 @@ namespace SpacePirates
             registration.SetShip(ship);
             redTeam.Add(ship);
             return ship;
+        }
+
+        public static ISpaceShip GetCameraTarget()
+        {
+            return GameObject.Instance().cameraTarget;
         }
 
         public void setUpGame()
@@ -185,7 +197,7 @@ namespace SpacePirates
 
             foreach (ISpaceShip ship in redTeam )
             {
-                ((Unit) ship).Draw(spriteBatch);
+                ((Unit)ship).Draw(spriteBatch);
             }
             foreach (ISpaceShip ship in blueTeam)
             {
