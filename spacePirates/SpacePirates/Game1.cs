@@ -101,7 +101,7 @@ namespace SpacePirates
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            currentState.executeGameLogic((float)gameTime.ElapsedGameTime.TotalSeconds);
+            currentState.executeGameLogic(gameTime);
 
             base.Update(gameTime);
         }

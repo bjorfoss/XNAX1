@@ -137,6 +137,9 @@ namespace SpacePirates
             return health;
         }
 
+        public virtual void Update(GameTime gameTime)
+        {
+        }
 
         /// <summary>
         /// 

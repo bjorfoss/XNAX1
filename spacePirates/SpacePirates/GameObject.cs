@@ -151,13 +151,21 @@ namespace SpacePirates
            
         }
 
-        public void executeGameLogic(float elapsed)
+        public void executeGameLogic(GameTime gameTime)
         {
             if (gameSetup)
             {
                 setUpGame();
                 
 
+            }
+            for(int i = 0; i < blueTeam.Count; i++)
+            {
+                (blueTeam.ElementAt(i) as Unit).Update(gameTime);
+            }
+            for (int i = 0; i < redTeam.Count; i++)
+            {
+                (redTeam.ElementAt(i) as Unit).Update(gameTime);
             }
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 

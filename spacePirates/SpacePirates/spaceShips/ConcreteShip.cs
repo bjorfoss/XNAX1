@@ -13,6 +13,9 @@ namespace SpacePirates.spaceShips
     {
         double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
         double maxThrust = 100000; //maximum force in Newtons output by the ship's engine(s)
+        double currentThrust; //The current thrust, in percent, of the maximum thrust
+
+        double animationTime; //The time, in milliseconds, since the last time the animation frame was changed
         
         IWeapon currentWeapon; //the currently selected weapon used by fire()
         IWeapon[] weapons; //the weapons installed on the ship
@@ -76,26 +79,61 @@ namespace SpacePirates.spaceShips
             graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            animationTime += gameTime.ElapsedGameTime.Milliseconds;
+            if(animationTime >= 200){
+                if (currentThrust > 0)
+                {
+                    //This is where the animation cycles between the two last frames at the height of the thrust
+                    if (animationFrame.X / 128 >= 2 && animationFrame.Y / 128 >= 1)
+                    {
+                        animationFrame.X -= 128;
+                    }
+                    //This is where the animation switches to a lower line of frames
+                    else if (animationFrame.X / 128 >= 3)
+                    {
+                        animationFrame.X = 0;
+                        animationFrame.Y += 128;
+                    }
+                    //Normal animation
+                    else
+                    {
+                        animationFrame.X += 128;
+                    }
+                    animationTime = 0;
+                }
+                else
+                {
+                    animationFrame.X = 0;
+                    animationFrame.Y = 0;
+                }
+                animationTime = 0;
+            }
+        }
+
         public void Turn(double turnRate)
         {
             //Check direction of turning
             if (turnRate > 0)
             {
                 //Don't exceed turn speed capability
-                turnRate = Math.Min(turnRate, maxTurnSpeed);
+                turnRate = Math.Min(turnRate, 100);
             }
-            else
+            else if (turnRate < 0)
             {
                 //Don't exceed turn speed capability
-                turnRate = Math.Max(turnRate, maxTurnSpeed * -1);
+                turnRate = Math.Max(turnRate, -100);
             }
+            turnRate *= maxTurnSpeed;
             rotationSpeed = turnRate;
         }
 
         public void Thrust(double thrust)
         {
             //ensure the ship doesn't thrust more than its capabilities
-            thrust = Math.Min(thrust, maxThrust);
+            thrust = Math.Min(thrust, 100);
+            thrust = thrust * maxThrust;
             //we regard thrust as Force when passed, divide by mass to get acceleration
             double acceleration = thrust / mass;
 

@@ -137,7 +137,7 @@ namespace SpacePirates
             }
         }
 
-        public void executeGameLogic(float elapsed)
+        public void executeGameLogic(GameTime gameTime)
         {
             if(currentMenu == mainmenu)
             {

@@ -44,7 +44,11 @@ namespace SpacePirates.Player
 
             if (newState.IsKeyDown(Keys.W))
             {
-
+                ownerLink.GetShip().Thrust(75);
+            }
+            else
+            {
+                ownerLink.GetShip().Thrust(0);
             }
 
             // Deaccelerate

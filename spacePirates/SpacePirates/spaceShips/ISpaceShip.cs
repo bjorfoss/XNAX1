@@ -14,15 +14,19 @@ namespace SpacePirates.spaceShips
         /// <summary>
         /// Make the ship turn. Implementations should consider the ship's limits.
         /// </summary>
-        /// <param name="turnRate">How fast and in which direction the turn should be
-        /// executed. Give a positive value to turn right, negative to turn left.</param>
+        /// <param name="turnRate">
+        /// How fast and in which direction the turn should be executed. 
+        /// Give a positive value to turn right, negative to turn left.
+        /// Value should be the percentage of maximum turning speed.
+        /// </param>
         void Turn(double turnRate);
 
         /// <summary>
         /// Have the ship's engines provide thrust, accelerating the ship.
-        /// Implementations should consider the ship's limits.
+        /// Implementation need to keep a maximum thrust in Newtons saved for use
+        /// by this method.
         /// </summary>
-        /// <param name="thrust">Thrust in Newtons, positive values only</param>
+        /// <param name="thrust">Thrust in percent of maximum thrust, positive values only</param>
         void Thrust(double thrust);
 
         /// <summary>
