@@ -52,10 +52,13 @@ namespace SpacePirates
         //Holds the global maximum speed of any object
         private double maxSpeed;
 
+        //Game mode variables.
+        private int goalLimit;
+        private int redScore;
+        private int blueScore;
 
-        
 
-        private GameObject(int w, int h, ContentManager Content)
+        private GameObject(int w, int h, ContentManager Content, int goalsToWin)
         {
             GameObject self = this;
             this.Content = Content;
@@ -79,7 +82,9 @@ namespace SpacePirates
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
 
-            
+            self.goalLimit = goalsToWin;
+            self.redScore = 0;
+            self.blueScore = 0;
 
         }
 
@@ -92,12 +97,12 @@ namespace SpacePirates
         {
             return active;
         }
-    
-        public static GameObject Instance(int w, int h, ContentManager Content)
+
+        public static GameObject Instance(int w, int h, ContentManager Content, int defaultGoalLimit=25)
         {
             lock (padlock) {
                 if (instance == null) {
-                    instance = new GameObject(w, h, Content);
+                    instance = new GameObject(w, h, Content, defaultGoalLimit);
                 }
                 return instance;
             }
@@ -129,7 +134,7 @@ namespace SpacePirates
 
 
             registration.SetShip(ship);
-            redTeam.Add(ship);
+            //redTeam.Add(ship);
             return ship;
         }
 
@@ -142,23 +147,59 @@ namespace SpacePirates
          
             cameraTarget = setUpShip(player, "fighter");
 
-           
+            redTeam.Add(player.GetShip());
 
             for (int i = 0; i < numberOfShips; i++) 
             {
                 spaceShips[i] = setUpShip();
+                if (i < (numberOfShips / 2) - 1)
+                    redTeam.Add(spaceShips[i]);
+                else
+                    blueTeam.Add(spaceShips[i]);
             }
            
         }
 
         public void executeGameLogic(float elapsed)
         {
+            //If we need to set up the game first, do so.
             if (gameSetup)
             {
                 setUpGame();
-                
-
             }
+
+            //Has any side won already?
+            if (redScore >= goalLimit)
+            {
+                //Show victory red team.
+                //Should perhaps show score screen of some manner before setting gameobject as false and going back to the menu?
+            }
+            else if (blueScore >= goalLimit)
+            {
+                //Show victory blue team.
+            }
+           
+
+            //Handle input from players.
+            foreach (ISpaceShip ship in redTeam)
+            {
+                IPlayer owner = ship.GetOwner();
+
+                if (owner == typeof(Human))
+                    (owner as Human).HandleInput();
+                //else
+                    //(ship.GetOwner() as Ai)
+            }
+            foreach (ISpaceShip ship in blueTeam)
+            {
+                IPlayer owner = ship.GetOwner();
+
+                if (owner == typeof(Human))
+                    (owner as Human).HandleInput();
+                //else
+                    //(ship.GetOwner() as Ai)
+            }           
+
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 
             //foreach
@@ -189,6 +230,18 @@ namespace SpacePirates
         public double getMaxSpeed()
         {
             return maxSpeed;
+        }
+
+        //Get the GameObject instance and call this when red team destroys an enemy ship.
+        public void redScored()
+        {
+            redScore++;
+        }
+
+        //Get the GameObject instance and call this when blue team destroys an enemy ship.
+        public void blueScored()
+        {
+            blueScore++;
         }
     }
 }
