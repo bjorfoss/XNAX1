@@ -33,10 +33,13 @@ namespace SpacePirates
 
         private void CalculateLevelCrop(SpriteBatch sb)
         {
-            ISpaceShip target = GameObject.GetCameraTarget();
+            //draw a section of the background as large as the window
             croppedBackground = GameObject.GetScreenArea();
+
+            //draw the world relative to the camera target
+            ISpaceShip target = GameObject.GetCameraTarget();
             Vector2 targetPos = (target as Unit).GetPosition();
-            croppedBackground.X = (int) (((float) croppedBackground.Width / 2.0f) - targetPos.X);
+            croppedBackground.X = (int) (((float) croppedBackground.Width / 2.0f) + targetPos.X);
             croppedBackground.Y = (int) (((float) croppedBackground.Height / 2.0f) - targetPos.Y);
         }
 
@@ -44,7 +47,6 @@ namespace SpacePirates
         {
             CalculateLevelCrop(spriteBatch);
             spriteBatch.Draw(background, position, croppedBackground, Color.White, 0.0f, position, 1.0f, SpriteEffects.None, 0f);
-            //spriteBatch.Draw(background, new Vector2(0,0), Color.White);
         }
     }
 }
