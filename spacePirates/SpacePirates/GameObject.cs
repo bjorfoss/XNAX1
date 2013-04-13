@@ -16,7 +16,6 @@ namespace SpacePirates
 
     class GameObject : Microsoft.Xna.Framework.Game, GameStates
     {
-        private Boolean test = true;
         private static GameObject instance;
         static readonly object padlock = new Object();
         // private ContentManager Content; //Inherited
@@ -78,7 +77,7 @@ namespace SpacePirates
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
 
-            maxSpeed = 5;
+            maxSpeed = 25;
 
 
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
@@ -129,19 +128,18 @@ namespace SpacePirates
         private ISpaceShip setUpShip()
         {
             String shipType = "fighter";
-            return setUpShip(Ai.createController(), shipType);
+            return setUpShip(Ai.createController(), shipType, Vector2.Zero);
         }
 
-        private ISpaceShip setUpShip(IPlayer controller, String shipType)
+        private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
         {
             Ownership registration = new Ownership();
             registration.SetOwner(controller);
 
-            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, new Vector2(0, 0), 0);
+            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
 
 
             registration.SetShip(ship);
-            //redTeam.Add(ship);
             return ship;
         }
 
@@ -156,12 +154,12 @@ namespace SpacePirates
 
           
             IPlayer player = Human.createController();
-         
-            cameraTarget = setUpShip(player, "fighter");
 
-            redTeam.Add(player.GetShip());
+            cameraTarget = setUpShip(player, "fighter", new Vector2(500, 600));
 
-            for (int i = 0; i < numberOfShips; i++) 
+            redTeam.Add(cameraTarget);
+
+            for (int i = 0; i < numberOfShips; i++)
             {
                 spaceShips[i] = setUpShip();
                 if (i < (numberOfShips / 2) - 1)
@@ -244,11 +242,9 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
-            if (test)
-            {
-                //redTeam.Add(new ConcreteShip_Fighter(new Ownership(null, null), new Vector2(10, 10), 0));
-                test = false;
-            }
+
+            //TODO: Investigate why not drawn for bjorfoss without this:
+            (cameraTarget as Unit).Draw(spriteBatch);
 
             foreach (ISpaceShip ship in redTeam )
             {

@@ -41,17 +41,19 @@ namespace SpacePirates.Player
         {
             KeyboardState newState = Keyboard.GetState();
             bool forwardKeyDown = false;
+            bool shiftPressed = newState.IsKeyDown(Keys.LeftShift);
+            ISpaceShip ship = ownerLink.GetShip();
             
             //70 to 100% thrust
             if (newState.IsKeyDown(Keys.W))
             {
-                if (newState.IsKeyDown(Keys.LeftShift))
+                if (shiftPressed)
                 {
-                    ownerLink.GetShip().Thrust(100);
+                    ship.Thrust(100);
                 }
                 else
                 {
-                    ownerLink.GetShip().Thrust(75);
+                    ship.Thrust(75);
                 }
                 forwardKeyDown = true;
             }
@@ -59,28 +61,43 @@ namespace SpacePirates.Player
             //25 to 50% thrust
             if (newState.IsKeyDown(Keys.S))
             {
-                if (newState.IsKeyDown(Keys.LeftShift)) {
-                    ownerLink.GetShip().Thrust(50);
+                if (shiftPressed)
+                {
+                    ship.Thrust(50);
                 } else {
-                    ownerLink.GetShip().Thrust(25);
+                    ship.Thrust(25);
                 }
                 forwardKeyDown = true;
             }
 
             //0% thrust
             if (!forwardKeyDown) {
-                ownerLink.GetShip().Thrust(0);
+                ship.Thrust(0);
             }
 
             //Turn left, right or not at all
             if (newState.IsKeyDown(Keys.A))
             {
-                ownerLink.GetShip().Turn(-100.0f);
+                if (shiftPressed)
+                {
+                    ship.Turn(-100.0f);
+                }
+                else
+                {
+                    ship.Turn(-10.0f);
+                }
             } else if (newState.IsKeyDown(Keys.D))
             {
-                ownerLink.GetShip().Turn(100.0f);
+                if (shiftPressed)
+                {
+                    ship.Turn(100.0f);
+                }
+                else
+                {
+                    ship.Turn(10.0f);
+                }
             } else {
-                ownerLink.GetShip().Turn(0.0f);
+                ship.Turn(0.0f);
             }
 
             // Browse features

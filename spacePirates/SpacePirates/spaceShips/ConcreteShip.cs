@@ -127,7 +127,7 @@ namespace SpacePirates.spaceShips
                 turnRate = Math.Max(turnRate, -100);
             }
             turnRate *= maxTurnSpeed;
-            rotationSpeed = turnRate;
+            rotationSpeed = turnRate / 100;
         }
 
         public void Thrust(double thrust)
