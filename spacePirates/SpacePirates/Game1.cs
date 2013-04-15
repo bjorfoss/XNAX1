@@ -127,10 +127,17 @@ namespace SpacePirates
         {
             GraphicsDevice.Clear(Color.Black);
 
-            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            //add samplerstate to wrap background
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
-
+            //Use clamp on menu screen to support the limited Reach api (it contains
+            //non-power of two textures) for older systems
+            if (currentState is GameObject)
+            {
+                //add samplerstate to wrap background
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            }
+            else if (currentState is MenuObject)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone);
+            }
 
             currentState.executeDraw(spriteBatch);
 

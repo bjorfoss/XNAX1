@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacePirates", "SpacePirates\SpacePirates\SpacePirates.csproj", "{0561E9E9-81FB-4DC6-8735-2BD9D64B828D}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "SpacePiratesContent", "SpacePirates\SpacePiratesContent\SpacePiratesContent.contentproj", "{AF7F5708-4FCE-4283-BCB3-59E7987049E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacePiratesContent", "SpacePirates\SpacePiratesContent\SpacePiratesContent.contentproj", "{AF7F5708-4FCE-4283-BCB3-59E7987049E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
