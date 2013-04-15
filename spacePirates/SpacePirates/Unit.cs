@@ -30,6 +30,8 @@ namespace SpacePirates
 
         protected double blastRadius;
         protected double blastDamage;
+
+        private bool outOfBounds;
         //Rectangle hitbox;
 
         //add getters and setters
@@ -168,6 +170,9 @@ namespace SpacePirates
             if (GameObject.GetLevel().IsOutsideLevel(this))
             {
                health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+               outOfBounds = true;
+            } else {
+               outOfBounds = false;
             }
 
             if (health <= 0)
@@ -256,6 +261,14 @@ namespace SpacePirates
                         Math.Round(position.Y);
                 batch.DrawString(content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"),
                         text, screenPos + new Vector2(0, 200), Color.Wheat);
+
+                if (outOfBounds)
+                {
+                    String warning = "Deserters will die, return to the combat area! -- Health: " +
+                        Math.Round(this.getHealth());
+                    batch.DrawString(content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"),
+                        warning, screenPos + new Vector2(-150, -200), Color.Red);
+                }
             }
 
             batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,
