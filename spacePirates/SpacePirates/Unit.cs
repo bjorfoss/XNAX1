@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using SpacePirates.Obstacles;
+using SpacePirates.Utilities;
 
 namespace SpacePirates
 {
@@ -253,21 +254,20 @@ namespace SpacePirates
         {
 
             Vector2 screenPos = WorldPosToScreenPos(position);
+            SpriteFont font = GraphicBank.getInstance().GetFont("Menutext");
             //Draw debug position only for player ship
             if (GameObject.GetCameraTarget() == this)
             {
                 ContentManager content = GameObject.GetContentManager();
                 String text = "X: " + Math.Round(position.X) + " -- Y: " +
                         Math.Round(position.Y);
-                batch.DrawString(content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"),
-                        text, screenPos + new Vector2(0, 200), Color.Wheat);
+                batch.DrawString(font, text, screenPos + new Vector2(0, 200), Color.Wheat);
 
                 if (outOfBounds)
                 {
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
-                    batch.DrawString(content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"),
-                        warning, screenPos + new Vector2(-150, -200), Color.Red);
+                    batch.DrawString(font, warning, screenPos + new Vector2(-150, -200), Color.Red);
                 }
             }
 
