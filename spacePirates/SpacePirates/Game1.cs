@@ -32,11 +32,13 @@ namespace SpacePirates
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Components.Add(new GamerServicesComponent(this));
+            Components.Add(new GamerServicesComponent(this));          
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
+
+            
         }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace SpacePirates
             menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
 
             networkObject = NetworkObject.Instance();
+            networkObject.testConnection();
 
             menuObject.active = true;
 
