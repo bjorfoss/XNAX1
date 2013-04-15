@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace SpacePirates.Obstacles
 {
-    public class Factory_Asteroid : ObstacleFactory
+    public class Factory_Bullet : ObstacleFactory
     { 
-        IObstacle ObstacleFactory.CreateObstacle()
+
+        public IObstacle CreateObstacle(Vector2 velocity, Vector2 position)
         {
-            return new ConcreteObstacle_Asteroid();
+            return new ConcreteObstacle_Bullet(velocity, position);
         }
     }
 }
