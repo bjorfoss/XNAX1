@@ -138,6 +138,7 @@
     <Compile Include="spaceShips\Weapons\WeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\WeaponState_Gun.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="Utilities\GraphicBank.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
