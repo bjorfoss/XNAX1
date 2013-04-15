@@ -77,7 +77,7 @@ namespace SpacePirates
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
 
-            maxSpeed = 25;
+            maxSpeed = 300;
 
 
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
@@ -214,7 +214,7 @@ namespace SpacePirates
             {
                 Unit unit = (blueTeam.ElementAt(i) as Unit);
                 unit.Update(gameTime);
-                unit.CalculateDirectionAndSpeed();
+                unit.CalculateDirectionAndSpeed(gameTime);
                 unit.UpdatePosition(gameTime);
                 unit.UpdateFacing(gameTime);
             }
@@ -222,7 +222,7 @@ namespace SpacePirates
             {
                 Unit unit = (redTeam.ElementAt(i) as Unit);
                 unit.Update(gameTime);
-                unit.CalculateDirectionAndSpeed();
+                unit.CalculateDirectionAndSpeed(gameTime);
                 unit.UpdatePosition(gameTime);
                 unit.UpdateFacing(gameTime);
             }
