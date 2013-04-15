@@ -64,6 +64,9 @@ namespace SpacePirates
 
         SpriteFont spritefont;
 
+        private PacketReader packetReader = new PacketReader();
+        private PacketWriter packetWriter = new PacketWriter();
+
         private GameObject(int w, int h, ContentManager Content, int goalsToWin)
         {
             GameObject self = this;
@@ -202,11 +205,15 @@ namespace SpacePirates
                     {
                         ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
                         addToGame(redTeam, ship);
+                        if (player.IsLocal)
+                            cameraTarget = ship;
                     }
                     else
                     {
                         ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
                         addToGame(blueTeam, ship);
+                        if (player.IsLocal)
+                            cameraTarget = ship;
                     }
 
                     nPut++;
@@ -268,8 +275,10 @@ namespace SpacePirates
             {
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
-                    KeyboardState state = Keyboard.GetState();
-                    (player.Tag as Human).HandleInput(state);
+                    if (player.IsLocal)
+                    {
+                        (player.Tag as Human).HandleInput(Keyboard.GetState());
+                    }           
                 }
             }
             else
@@ -326,21 +335,28 @@ namespace SpacePirates
 
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
-                IPlayer human = player.Tag as Human;
-
-                ISpaceShip ship = human.GetShip();
-
-                Vector2 pos = new Vector2(300, 600);
-                Color col = Color.OrangeRed;
-
-                if(blueTeam.Contains(ship))
+                if (player.IsLocal)
                 {
-                    pos = new Vector2(500, 600);
-                    col = Color.LightBlue;
+                    (cameraTarget as Unit).Draw(spriteBatch);
                 }
+                else
+                {
+                    IPlayer human = player.Tag as Human;
 
-                (ship as Unit).Draw(spriteBatch);
-                spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                    ISpaceShip ship = human.GetShip();
+
+                    Vector2 pos = new Vector2(300, 600);
+                    Color col = Color.OrangeRed;
+
+                    if (blueTeam.Contains(ship))
+                    {
+                        pos = new Vector2(500, 600);
+                        col = Color.LightBlue;
+                    }
+
+                    (ship as Unit).Draw(spriteBatch);
+                    spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                }
             }
             /*
             foreach (ISpaceShip ship in redTeam )

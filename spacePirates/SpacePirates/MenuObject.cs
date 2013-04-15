@@ -219,7 +219,7 @@ namespace SpacePirates
                     }
                 }
 
-                if (NetworkObject.Instance().getNetworked())
+                if (NetworkObject.Instance().getNetworked() && NetworkObject.Instance().getNetworksession() != null)
                 {
                     NetworkObject.Instance().getNetworksession().Update();
                 }
@@ -245,7 +245,7 @@ namespace SpacePirates
                     }
                 }
 
-                if (NetworkObject.Instance().getNetworked())
+                if (NetworkObject.Instance().getNetworked() && NetworkObject.Instance().getNetworksession() != null)
                 {
                     NetworkObject.Instance().getNetworksession().Update();
                 }

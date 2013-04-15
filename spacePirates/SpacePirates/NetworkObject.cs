@@ -118,6 +118,8 @@ namespace SpacePirates
             try
             {
                 NetworkSession test = NetworkSession.Create(NetworkSessionType.SystemLink, 1, 8, 2, null);
+                test.Dispose();
+                test = null;
             }
             catch (NetworkNotAvailableException)
             {

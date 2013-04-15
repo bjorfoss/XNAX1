@@ -67,7 +67,6 @@ namespace SpacePirates
             menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
 
             networkObject = NetworkObject.Instance();
-            //networkObject.testConnection();
 
             menuObject.active = true;
 
@@ -100,8 +99,9 @@ namespace SpacePirates
             {
                 currentState = menuObject;
                 menuObject.active = true;
+                networkObject.testConnection();
             }
-            else if (!currentState.isActive() && currentState.Equals(menuObject))
+            else if (!currentState.isActive() && currentState.Equals(menuObject) || (NetworkObject.Instance().getNetworksession() != null && NetworkObject.Instance().getNetworksession().SessionState == NetworkSessionState.Playing))
             {
                 currentState = gameObject;
                 gameObject.active = true;
@@ -126,8 +126,6 @@ namespace SpacePirates
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-           
 
             //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             //add samplerstate to wrap background
