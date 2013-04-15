@@ -103,6 +103,11 @@ namespace SpacePirates
 
         }
 
+        public static Level GetLevel()
+        {
+            return Instance().level;
+        }
+
         public static Rectangle GetScreenArea()
         {
             return Instance().screenArea;
