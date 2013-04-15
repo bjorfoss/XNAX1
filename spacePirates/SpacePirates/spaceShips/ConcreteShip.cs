@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SpacePirates.Player;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
@@ -32,7 +33,7 @@ namespace SpacePirates.spaceShips
         /// 
      
 
-        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) : base(position, rotation, velocity, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40);
+        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) : base(position, rotation, velocity, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("fighter"))
         {
            
             /*
@@ -64,7 +65,7 @@ namespace SpacePirates.spaceShips
             this.registration = registration;
             animationFrame = new Rectangle(0, 0, 128, 128);
 
-            graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
+            
         }
 
         public override void Update(GameTime gameTime)

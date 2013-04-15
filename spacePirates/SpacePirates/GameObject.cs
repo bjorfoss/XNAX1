@@ -230,9 +230,18 @@ namespace SpacePirates
 
             float chance = randomNumber * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            
+
             if (chance < chanceOfAstroidPerSecond)
             {
-                IObstacle ship = obstacleFactoryCollection[obstacleType].CreateObstacle();
+
+                // Generate outside level limit with a directional velocity that will make it go across the level
+
+                Vector2 position = new Vector2(0);
+
+                Vector2 velocity = new Vector2(0);
+
+                IObstacle asteroid = obstacleFactoryCollection[obstacleType].CreateObstacle(position, velocity);
 
             }
 
@@ -284,9 +293,7 @@ namespace SpacePirates
             {
                 Unit unit = objectsInGame.ElementAt(i);
                 unit.Update(gameTime);
-                unit.CalculateDirectionAndSpeed(gameTime);
-                unit.UpdatePosition(gameTime);
-                unit.UpdateFacing(gameTime);
+                
             }
            
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));

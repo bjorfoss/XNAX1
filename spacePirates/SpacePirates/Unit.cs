@@ -36,7 +36,7 @@ namespace SpacePirates
              
 
          public Unit(Vector2 position, double rotation, Vector2 velocity, Vector2 acceleration, double mass, 
-             double rotationSpeed, double health, double maxHealth, double armorThreshold, double armorEffectiveness, double blastRadius, double blastDamage)
+             double rotationSpeed, double health, double maxHealth, double armorThreshold, double armorEffectiveness, double blastRadius, double blastDamage, Texture2D graphics)
         {
             this.velocity = velocity;
             this.acceleration = acceleration;
@@ -50,8 +50,11 @@ namespace SpacePirates
             this.armorThreshold = armorThreshold;
             this.blastDamage = blastDamage;
             this.blastRadius = blastRadius;
+
+            this.graphics = graphics;
         }
         
+
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
@@ -160,6 +163,18 @@ namespace SpacePirates
         
         }
 
+        private void checkIfOutsideLevel(GameTime gameTime)
+        {
+            if (GameObject.getLevel().isOutSideLevel(this))
+            {
+               health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (health <= 0)
+            {
+                OnDestroy();
+            }
+        }
         /// <summary>
         /// TODO: create a blast if there should be one
         /// TODO: position the blast according to blastradius, shipsize and shipposition.
@@ -194,8 +209,12 @@ namespace SpacePirates
             return health;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
+            CalculateDirectionAndSpeed(gameTime);
+            UpdatePosition(gameTime);
+            UpdateFacing(gameTime);
+            checkIfOutsideLevel(gameTime);
         }
 
         public Vector2 GetPosition()
