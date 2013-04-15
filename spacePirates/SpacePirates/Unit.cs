@@ -33,7 +33,24 @@ namespace SpacePirates
         //Rectangle hitbox;
 
         //add getters and setters
+             
 
+         public Unit(Vector2 position, double rotation, Vector2 velocity, Vector2 acceleration, double mass, 
+             double rotationSpeed, double health, double maxHealth, double armorThreshold, double armorEffectiveness, double blastRadius, double blastDamage)
+        {
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+            this.mass = mass;
+            this.position = position;
+            this.rotation = rotation;
+            this.rotationSpeed = rotationSpeed;
+            this.health = health;
+            this.maxHealth = maxHealth;
+            this.armorEffectiveness = armorEffectiveness;
+            this.armorThreshold = armorThreshold;
+            this.blastDamage = blastDamage;
+            this.blastRadius = blastRadius;
+        }
         
         /// <summary>
         /// Same as UpdatePosition()

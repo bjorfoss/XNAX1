@@ -60,7 +60,7 @@ namespace SpacePirates
     {
         private static MenuObject instance;
         static readonly object padlock = new Object();
-        private bool enableMultiplayer = true;
+        private bool enableMultiplayer = false;
 
         // Holds the width and the height of the viewport
         private int windowWidth;
