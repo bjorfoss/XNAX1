@@ -25,16 +25,16 @@ namespace SpacePirates.spaceShips
 
         Ownership registration; //vehicle registration. The player can be retrieved from this
 
-
-
-
-
-
+       
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
         /// </summary>
-        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation)
+        /// 
+     
+
+        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) : base(position, rotation, velocity, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40);
         {
+           
             /*
              *  Vector2 velocity;
              *  Vector2 acceleration;
@@ -55,24 +55,11 @@ namespace SpacePirates.spaceShips
              * double blastRadius;
              * double blastDamage;
              */
-            this.position = position;
-            this.rotation = rotation;
+           
             
             //start at a standstill
-            rotationSpeed = 0;
-            velocity = new Vector2(0);
-            acceleration = new Vector2(0);
+           
             currentThrust = 0;
-
-            mass = 20000; //twenty tons
-            maxHealth = 10000;
-            health = maxHealth;
-
-            armorEffectiveness = 100;
-            armorThreshold = 50;
-
-            blastRadius = 30;
-            blastDamage = 40;
 
             this.registration = registration;
             animationFrame = new Rectangle(0, 0, 128, 128);

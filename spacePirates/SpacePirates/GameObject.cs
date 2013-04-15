@@ -32,11 +32,17 @@ namespace SpacePirates
         // Holds the level object
         private Level level;
 
+        //percent chance of astroid spawning per second
+        private int chanceOfAstroidPerSecond = 5;
+
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
         
         //Hashtable with all spaceships
         private Dictionary<String, IShipFactory> shipFactoryCollection;
+
+        //Hashtable with obstacle types
+        private Dictionary<String, ObstacleFactory> obstacleFactoryCollection;
 
         private bool gameSetup;
 
@@ -88,6 +94,9 @@ namespace SpacePirates
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
 
+            obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
+            obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
+
             self.goalLimit = goalsToWin;
             self.redScore = 0;
             self.blueScore = 0;
@@ -137,7 +146,7 @@ namespace SpacePirates
             return setUpShip(new Ai(), shipType, Vector2.Zero);
         }
 
-        // Sets up ship for Player
+        // Sets up ship 
         private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
         {
             Ownership registration = new Ownership();
@@ -205,6 +214,25 @@ namespace SpacePirates
            
         }
 
+        private void generateAstroids(GameTime gameTime)
+        {
+
+            String obstacleType = "astroid";
+
+            // chance of Asteroid being created
+            Random random = new Random();
+            int randomNumber = random.Next(0, 100);
+
+            float chance = randomNumber * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (chance < chanceOfAstroidPerSecond)
+            {
+                IObstacle ship = obstacleFactoryCollection[obstacleType].CreateObstacle();
+
+            }
+
+        }
+
         
 
         public void executeGameLogic(GameTime gameTime)
@@ -249,19 +277,13 @@ namespace SpacePirates
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
-                Unit unit = (objectsInGame.ElementAt(i) as Unit);
+                Unit unit = objectsInGame.ElementAt(i);
                 unit.Update(gameTime);
                 unit.CalculateDirectionAndSpeed(gameTime);
                 unit.UpdatePosition(gameTime);
                 unit.UpdateFacing(gameTime);
             }
            
-
-            
-           
-
-                       
-
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 
             //foreach
@@ -276,14 +298,11 @@ namespace SpacePirates
             //TODO: Investigate why not drawn for bjorfoss without this:
             (cameraTarget as Unit).Draw(spriteBatch);
 
-            foreach (ISpaceShip ship in redTeam )
+            foreach (Unit unit in objectsInGame)
             {
-                ((Unit)ship).Draw(spriteBatch);
+                unit.Draw(spriteBatch);
             }
-            foreach (ISpaceShip ship in blueTeam)
-            {
-                ((Unit)ship).Draw(spriteBatch);
-            }
+         
 
         }
 
