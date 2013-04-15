@@ -88,13 +88,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="background.jpg">
-      <Name>background</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Sound\Stratospheres.mp3">
       <Name>Stratospheres</Name>
       <Importer>Mp3Importer</Importer>
@@ -113,7 +106,7 @@
       <Name>AiNames</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-	</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Obstacles\Projectile01.png">
       <Name>Projectile01</Name>
@@ -122,11 +115,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-  <Compile Include="Graphics\Ships\Eightwing.png">
+    <Compile Include="Graphics\Ships\Eightwing.png">
       <Name>Eightwing</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-	</Compile>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\background.png">
+      <Name>background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
