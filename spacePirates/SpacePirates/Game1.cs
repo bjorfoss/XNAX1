@@ -134,7 +134,7 @@ namespace SpacePirates
             if (currentState is GameObject)
             {
                 //add samplerstate to wrap background
-                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
             }
             else if (currentState is MenuObject)
             {
