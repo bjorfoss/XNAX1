@@ -128,7 +128,7 @@ namespace SpacePirates
         private ISpaceShip setUpShip()
         {
             String shipType = "fighter";
-            return setUpShip(Ai.createController(), shipType, Vector2.Zero);
+            return setUpShip(new Ai(), shipType, Vector2.Zero);
         }
 
         private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
