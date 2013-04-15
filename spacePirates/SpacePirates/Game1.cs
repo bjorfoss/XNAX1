@@ -67,7 +67,7 @@ namespace SpacePirates
             menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
 
             networkObject = NetworkObject.Instance();
-            networkObject.testConnection();
+            //networkObject.testConnection();
 
             menuObject.active = true;
 

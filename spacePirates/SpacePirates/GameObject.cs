@@ -62,6 +62,7 @@ namespace SpacePirates
         private int redScore;
         private int blueScore;
 
+        SpriteFont spritefont;
 
         private GameObject(int w, int h, ContentManager Content, int goalsToWin)
         {
@@ -94,6 +95,8 @@ namespace SpacePirates
             self.goalLimit = goalsToWin;
             self.redScore = 0;
             self.blueScore = 0;
+
+            self.spritefont = Content.Load<SpriteFont>("Graphics/Spritefonts/Menutext");
 
         }
 
@@ -145,6 +148,7 @@ namespace SpacePirates
         {
             Ownership registration = new Ownership();
             registration.SetOwner(controller);
+            controller.SetOwnerShip(registration);
 
             ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
 
@@ -189,24 +193,21 @@ namespace SpacePirates
                 int nPlayers = NetworkObject.Instance().getNetworksession().AllGamers.Count;
                 int nPut = 0;
 
-                foreach (LocalNetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
-                {
-                    IPlayer human = player.Tag as Human;
-
-                    ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
-                    addToGame(redTeam, ship);
-                    nPut++;
-                }
-
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     IPlayer human = player.Tag as Human;
 
-                    ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
-                    if (nPut < (nPlayers / 2) - 1)
+                    
+                    if (nPut < (nPlayers / 2))
+                    {
+                        ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
                         addToGame(redTeam, ship);
+                    }
                     else
+                    {
+                        ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
                         addToGame(blueTeam, ship);
+                    }
 
                     nPut++;
                 }
@@ -265,15 +266,10 @@ namespace SpacePirates
 
             if (NetworkObject.Instance().getNetworked())
             {
-                foreach (LocalNetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
+                foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     KeyboardState state = Keyboard.GetState();
                     (player.Tag as Human).HandleInput(state);
-                }
-
-                foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
-                {
-                   
                 }
             }
             else
@@ -326,16 +322,37 @@ namespace SpacePirates
             level.executeDraw(spriteBatch);
 
             //TODO: Investigate why not drawn for bjorfoss without this:
-            (cameraTarget as Unit).Draw(spriteBatch);
+            //(cameraTarget as Unit).Draw(spriteBatch);
 
+            foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
+            {
+                IPlayer human = player.Tag as Human;
+
+                ISpaceShip ship = human.GetShip();
+
+                Vector2 pos = new Vector2(300, 600);
+                Color col = Color.OrangeRed;
+
+                if(blueTeam.Contains(ship))
+                {
+                    pos = new Vector2(500, 600);
+                    col = Color.LightBlue;
+                }
+
+                (ship as Unit).Draw(spriteBatch);
+                spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+            }
+            /*
             foreach (ISpaceShip ship in redTeam )
             {
-                ((Unit)ship).Draw(spriteBatch);
+                (ship as Unit).Draw(spriteBatch);
+                spriteBatch.DrawString(spritefont, ship.GetOwner().GetName(), new Vector2(300, 600), Color.OrangeRed); 
             }
             foreach (ISpaceShip ship in blueTeam)
             {
-                ((Unit)ship).Draw(spriteBatch);
-            }
+                (ship as Unit).Draw(spriteBatch);
+                spriteBatch.DrawString(spritefont, ship.GetOwner().GetName(), new Vector2(500, 600), Color.LightBlue);
+            }*/
 
         }
 
