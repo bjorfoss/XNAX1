@@ -34,6 +34,9 @@ namespace SpacePirates
             graphics = new GraphicsDeviceManager(this);
             Components.Add(new GamerServicesComponent(this));
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -104,7 +107,8 @@ namespace SpacePirates
 
            
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                    || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
             currentState.executeGameLogic(gameTime);

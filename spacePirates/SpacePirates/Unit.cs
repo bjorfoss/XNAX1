@@ -38,10 +38,12 @@ namespace SpacePirates
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
-        public void CalculateDirectionAndSpeed()
+        public void CalculateDirectionAndSpeed(GameTime gameTime)
         {
             double max = GameObject.Instance().getMaxSpeed();
-            Vector2 newVelocity = new Vector2(velocity.X + acceleration.X, velocity.Y + acceleration.Y);
+            Vector2 newVelocity = new Vector2(
+                velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
+                velocity.Y + acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds);
             if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
             {
                 float multiplier = (float)(max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
@@ -73,11 +75,11 @@ namespace SpacePirates
 
             if (newRotation < 0)
             {
-                rotation = 360 + newRotation;
+                rotation = MathHelper.TwoPi + newRotation;
             }
-            else if (newRotation > 360)
+            else if (newRotation > MathHelper.TwoPi)
             {
-                rotation = 360 - newRotation;
+                rotation = MathHelper.TwoPi - newRotation;
             }
             else
             {
