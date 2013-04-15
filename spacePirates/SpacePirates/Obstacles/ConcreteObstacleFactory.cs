@@ -14,4 +14,13 @@ namespace SpacePirates.Obstacles
             return new ConcreteObstacle_Bullet(velocity, position);
         }
     }
+
+    public class Factory_Asteroid : ObstacleFactory
+    {
+
+        public IObstacle CreateObstacle(Vector2 velocity, Vector2 position)
+        {
+            return new ConcreteObstacle_Asteroid(velocity, position);
+        }
+    }
 }

@@ -12,11 +12,16 @@ namespace SpacePirates.Utilities
         private static GraphicBank instance;
         static readonly object padlock = new Object();
 
+        private Dictionary<String, Texture2D> graphics;
         Texture2D bullet;
+        Texture2D fighter;
 
         private GraphicBank()
         {
-            GameObject.GetContentManager().Load<Texture2D>("Graphics/Obstacles/Projectile01");
+            graphics = new Dictionary<String, Texture2D>();
+            graphics.Add("bullet", GameObject.GetContentManager().Load<Texture2D>("Graphics/Obstacles/Projectile01"));
+            graphics.Add("fighter", GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth"));
+
         }
 
         public static GraphicBank getInstance()
@@ -31,9 +36,9 @@ namespace SpacePirates.Utilities
             }
         }
 
-        public Texture2D getBulletGraphic()
+        public Texture2D getGraphic(String name)
         {
-            return bullet;
+            return graphics[name];
         }
     }
 }
