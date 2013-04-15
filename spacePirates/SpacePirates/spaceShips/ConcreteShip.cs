@@ -33,7 +33,7 @@ namespace SpacePirates.spaceShips
         /// 
      
 
-        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) : base(position, rotation, velocity, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("fighter"))
+        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) : base(position, rotation, Vector2.Zero, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("fighter"))
         {
            
             /*

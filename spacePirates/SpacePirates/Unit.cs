@@ -165,7 +165,7 @@ namespace SpacePirates
 
         private void checkIfOutsideLevel(GameTime gameTime)
         {
-            if (GameObject.getLevel().isOutSideLevel(this))
+            if (GameObject.GetLevel().IsOutsideLevel(this))
             {
                health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -209,7 +209,11 @@ namespace SpacePirates
             return health;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        public void UpdateUnit(GameTime gameTime)
         {
             CalculateDirectionAndSpeed(gameTime);
             UpdatePosition(gameTime);

@@ -293,6 +293,7 @@ namespace SpacePirates
             {
                 Unit unit = objectsInGame.ElementAt(i);
                 unit.Update(gameTime);
+                unit.UpdateUnit(gameTime);
                 
             }
            
