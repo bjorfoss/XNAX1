@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.Obstacles
 {
-    interface IObstacle
+    public interface IObstacle
     {
         
     }
