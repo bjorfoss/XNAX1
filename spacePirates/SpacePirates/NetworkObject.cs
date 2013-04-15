@@ -20,11 +20,10 @@ namespace SpacePirates
         static readonly object padlock = new Object();
 
         private NetworkSession networkSession;
-        private AvailableNetworkSessionCollection availableSessions;
-        private int selectedSessionIndex;
         private PacketReader packetReader = new PacketReader();
         private PacketWriter packetWriter = new PacketWriter();
 
+        private bool networkEnabled = true;
 
         public NetworkObject()
         {
@@ -74,10 +73,8 @@ namespace SpacePirates
 
         public void setNetworkSession(NetworkSession session)
         {
-            networkSession = session;
-            
-            if(session != null)
-                HookSessionEvents();
+            if(session.SessionState == NetworkSessionState.Lobby)
+                networkSession = session;
         }
 
         public void disposeNetworkSession()
@@ -114,6 +111,27 @@ namespace SpacePirates
             }
 
             return new Human("Player");
+        }
+
+        public void testConnection()
+        {
+            try
+            {
+                NetworkSession test = NetworkSession.Create(NetworkSessionType.SystemLink, 1, 8, 2, null);
+            }
+            catch (NetworkNotAvailableException)
+            {
+                networkEnabled = false;
+            }
+            catch (GamerPrivilegeException)
+            {
+                networkEnabled = false;
+            }
+        }
+
+        public bool getNetworked()
+        {
+            return networkEnabled; 
         }
 
 

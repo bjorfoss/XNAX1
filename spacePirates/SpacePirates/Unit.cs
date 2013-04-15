@@ -33,15 +33,34 @@ namespace SpacePirates
         //Rectangle hitbox;
 
         //add getters and setters
+             
 
+         public Unit(Vector2 position, double rotation, Vector2 velocity, Vector2 acceleration, double mass, 
+             double rotationSpeed, double health, double maxHealth, double armorThreshold, double armorEffectiveness, double blastRadius, double blastDamage)
+        {
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+            this.mass = mass;
+            this.position = position;
+            this.rotation = rotation;
+            this.rotationSpeed = rotationSpeed;
+            this.health = health;
+            this.maxHealth = maxHealth;
+            this.armorEffectiveness = armorEffectiveness;
+            this.armorThreshold = armorThreshold;
+            this.blastDamage = blastDamage;
+            this.blastRadius = blastRadius;
+        }
         
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
-        public void CalculateDirectionAndSpeed()
+        public void CalculateDirectionAndSpeed(GameTime gameTime)
         {
             double max = GameObject.Instance().getMaxSpeed();
-            Vector2 newVelocity = new Vector2(velocity.X + acceleration.X, velocity.Y + acceleration.Y);
+            Vector2 newVelocity = new Vector2(
+                velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
+                velocity.Y + acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds);
             if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
             {
                 float multiplier = (float)(max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
@@ -73,11 +92,11 @@ namespace SpacePirates
 
             if (newRotation < 0)
             {
-                rotation = 360 + newRotation;
+                rotation = MathHelper.TwoPi + newRotation;
             }
-            else if (newRotation > 360)
+            else if (newRotation > MathHelper.TwoPi)
             {
-                rotation = 360 - newRotation;
+                rotation = MathHelper.TwoPi - newRotation;
             }
             else
             {

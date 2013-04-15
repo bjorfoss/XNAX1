@@ -32,11 +32,17 @@ namespace SpacePirates
         // Holds the level object
         private Level level;
 
+        //percent chance of astroid spawning per second
+        private int chanceOfAstroidPerSecond = 5;
+
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
         
         //Hashtable with all spaceships
         private Dictionary<String, IShipFactory> shipFactoryCollection;
+
+        //Hashtable with obstacle types
+        private Dictionary<String, ObstacleFactory> obstacleFactoryCollection;
 
         private bool gameSetup;
 
@@ -48,6 +54,8 @@ namespace SpacePirates
 
         // Holds a collection of obstacles: asteroids, fired obstacles ...
         private List<IObstacle> obstacles;
+
+        private List<Unit> objectsInGame;
 
         //Holds the global maximum speed of any object
         private double maxSpeed;
@@ -77,11 +85,17 @@ namespace SpacePirates
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
 
-            maxSpeed = 25;
+            // Holds everything classified as a unit
+            self.objectsInGame = new List<Unit>();
+
+            maxSpeed = 300;
 
 
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
+
+            obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
+            obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
 
             self.goalLimit = goalsToWin;
             self.redScore = 0;
@@ -125,12 +139,14 @@ namespace SpacePirates
 
         // TODO: make ship selection random
 
+        // Sets up AI ship
         private ISpaceShip setUpShip()
         {
             String shipType = "fighter";
             return setUpShip(new Ai(), shipType, Vector2.Zero);
         }
 
+        // Sets up ship 
         private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
         {
             Ownership registration = new Ownership();
@@ -143,9 +159,31 @@ namespace SpacePirates
             return ship;
         }
 
+
         public static ISpaceShip GetCameraTarget()
         {
             return GameObject.Instance().cameraTarget;
+        }
+
+        // Adds obstacles to the game
+        private void addToGame(List<IObstacle> list, IObstacle iObstacle)
+        {
+            list.Add(iObstacle);
+            addToGame((Unit)iObstacle);
+        }
+
+        // Adds spaceships to the game
+        private void addToGame(List<ISpaceShip> list, ISpaceShip iSpaceShip)
+        {
+            list.Add(iSpaceShip);
+            addToGame((Unit)iSpaceShip);
+        }
+
+        // Adds to unit collection in game
+        public void addToGame(Unit unit)
+        {
+            objectsInGame.Add(unit);
+            
         }
 
         public void setUpGame()
@@ -157,18 +195,45 @@ namespace SpacePirates
 
             cameraTarget = setUpShip(player, "fighter", new Vector2(500, 600));
 
-            redTeam.Add(cameraTarget);
+            addToGame(redTeam, cameraTarget);
 
             for (int i = 0; i < numberOfShips; i++)
             {
                 spaceShips[i] = setUpShip();
                 if (i < (numberOfShips / 2) - 1)
+                {
                     redTeam.Add(spaceShips[i]);
+                    addToGame(redTeam, spaceShips[i]);
+                }
                 else
+                {
                     blueTeam.Add(spaceShips[i]);
+                    addToGame(blueTeam, spaceShips[i]);
+                }
             }
            
         }
+
+        private void generateAstroids(GameTime gameTime)
+        {
+
+            String obstacleType = "astroid";
+
+            // chance of Asteroid being created
+            Random random = new Random();
+            int randomNumber = random.Next(0, 100);
+
+            float chance = randomNumber * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (chance < chanceOfAstroidPerSecond)
+            {
+                IObstacle ship = obstacleFactoryCollection[obstacleType].CreateObstacle();
+
+            }
+
+        }
+
+        
 
         public void executeGameLogic(GameTime gameTime)
         {
@@ -210,28 +275,15 @@ namespace SpacePirates
                 //(ship.GetOwner() as Ai)
             }
 
-            for(int i = 0; i < blueTeam.Count; i++)
+            for (int i = 0; i < objectsInGame.Count; i++)
             {
-                Unit unit = (blueTeam.ElementAt(i) as Unit);
+                Unit unit = objectsInGame.ElementAt(i);
                 unit.Update(gameTime);
-                unit.CalculateDirectionAndSpeed();
+                unit.CalculateDirectionAndSpeed(gameTime);
                 unit.UpdatePosition(gameTime);
                 unit.UpdateFacing(gameTime);
             }
-            for (int i = 0; i < redTeam.Count; i++)
-            {
-                Unit unit = (redTeam.ElementAt(i) as Unit);
-                unit.Update(gameTime);
-                unit.CalculateDirectionAndSpeed();
-                unit.UpdatePosition(gameTime);
-                unit.UpdateFacing(gameTime);
-            }
-
-            
            
-
-                       
-
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 
             //foreach
@@ -246,14 +298,11 @@ namespace SpacePirates
             //TODO: Investigate why not drawn for bjorfoss without this:
             (cameraTarget as Unit).Draw(spriteBatch);
 
-            foreach (ISpaceShip ship in redTeam )
+            foreach (Unit unit in objectsInGame)
             {
-                ((Unit)ship).Draw(spriteBatch);
+                unit.Draw(spriteBatch);
             }
-            foreach (ISpaceShip ship in blueTeam)
-            {
-                ((Unit)ship).Draw(spriteBatch);
-            }
+         
 
         }
 
