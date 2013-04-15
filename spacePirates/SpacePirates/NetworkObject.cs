@@ -25,6 +25,7 @@ namespace SpacePirates
         private PacketReader packetReader = new PacketReader();
         private PacketWriter packetWriter = new PacketWriter();
 
+        private bool networkEnabled = false;
 
         public NetworkObject()
         {
@@ -114,6 +115,11 @@ namespace SpacePirates
             }
 
             return new Human("Player");
+        }
+
+        public bool getNetworked()
+        {
+            return networkEnabled; 
         }
 
 
