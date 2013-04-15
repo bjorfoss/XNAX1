@@ -133,7 +133,5 @@ namespace SpacePirates
         {
             return networkEnabled; 
         }
-
-
     }
 }

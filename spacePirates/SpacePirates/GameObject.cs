@@ -8,6 +8,9 @@ using SpacePirates.spaceShips;
 using SpacePirates.Obstacles;
 using SpacePirates.Player;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace SpacePirates
@@ -181,26 +184,59 @@ namespace SpacePirates
         {
             gameSetup = false;
 
-          
-            IPlayer player = Human.createController();
-
-            cameraTarget = setUpShip(player, "fighter", new Vector2(500, 600));
-
-            addToGame(redTeam, cameraTarget);
-
-            for (int i = 0; i < numberOfShips; i++)
+            if (NetworkObject.Instance().getNetworked())
             {
-                spaceShips[i] = setUpShip();
-                if (i < (numberOfShips / 2) - 1)
+                int nPlayers = NetworkObject.Instance().getNetworksession().AllGamers.Count;
+                int nPut = 0;
+
+                foreach (LocalNetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
-                    redTeam.Add(spaceShips[i]);
-                    addToGame(redTeam, spaceShips[i]);
+                    IPlayer human = player.Tag as Human;
+
+                    ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
+                    addToGame(redTeam, ship);
+                    nPut++;
                 }
-                else
+
+                foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
-                    blueTeam.Add(spaceShips[i]);
-                    addToGame(blueTeam, spaceShips[i]);
+                    IPlayer human = player.Tag as Human;
+
+                    ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
+                    if (nPut < (nPlayers / 2) - 1)
+                        addToGame(redTeam, ship);
+                    else
+                        addToGame(blueTeam, ship);
+
+                    nPut++;
                 }
+            }
+            else
+            {
+                IPlayer player = Human.createController();
+
+                cameraTarget = setUpShip(player, "fighter", new Vector2(500, 600));
+
+                addToGame(redTeam, cameraTarget);
+
+
+
+                
+                for (int i = 0; i < numberOfShips; i++)
+                {
+                    spaceShips[i] = setUpShip();
+                    if (i < (numberOfShips / 2) - 1)
+                    {
+                        redTeam.Add(spaceShips[i]);
+                        addToGame(redTeam, spaceShips[i]);
+                    }
+                    else
+                    {
+                        blueTeam.Add(spaceShips[i]);
+                        addToGame(blueTeam, spaceShips[i]);
+                    }
+                }
+
             }
            
         }
@@ -227,25 +263,42 @@ namespace SpacePirates
                 //Show victory blue team.
             }
 
-            //Handle input from players.
-            foreach (ISpaceShip ship in redTeam)
+            if (NetworkObject.Instance().getNetworked())
             {
-                IPlayer owner = ship.GetOwner();
+                foreach (LocalNetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
+                {
+                    KeyboardState state = Keyboard.GetState();
+                    (player.Tag as Human).HandleInput(state);
+                }
 
-                if (owner is Human)
-                    (owner as Human).HandleInput();
-                //else
-                //(ship.GetOwner() as Ai)
+                foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
+                {
+                   
+                }
             }
-            foreach (ISpaceShip ship in blueTeam)
+            else
             {
-                IPlayer owner = ship.GetOwner();
+                //Handle input from players.
+                foreach (ISpaceShip ship in redTeam)
+                {
+                    IPlayer owner = ship.GetOwner();
 
-                if (owner is Human)
-                    (owner as Human).HandleInput();
-                //else
-                //(ship.GetOwner() as Ai)
+                    if (owner is Human)
+                        (owner as Human).HandleInput(Keyboard.GetState());
+                    //else
+                    //(ship.GetOwner() as Ai)
+                }
+                foreach (ISpaceShip ship in blueTeam)
+                {
+                    IPlayer owner = ship.GetOwner();
+
+                    if (owner is Human)
+                        (owner as Human).HandleInput(Keyboard.GetState());
+                    //else
+                    //(ship.GetOwner() as Ai)
+                }
             }
+
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
@@ -255,12 +308,11 @@ namespace SpacePirates
                 unit.UpdatePosition(gameTime);
                 unit.UpdateFacing(gameTime);
             }
-           
 
-            
-           
-
-                       
+            if (NetworkObject.Instance().getNetworked())
+            {
+                NetworkObject.Instance().getNetworksession().Update();
+            }
 
             //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 

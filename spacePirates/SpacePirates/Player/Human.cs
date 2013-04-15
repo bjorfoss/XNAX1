@@ -37,9 +37,9 @@ namespace SpacePirates.Player
         /// <summary>
         /// Handle input logic and call Spaceship interface methods.
         /// </summary>
-        public void HandleInput()
+        public void HandleInput(KeyboardState newState)
         {
-            KeyboardState newState = Keyboard.GetState();
+            //KeyboardState newState = Keyboard.GetState();
             bool forwardKeyDown = false;
             bool shiftPressed = newState.IsKeyDown(Keys.LeftShift);
             ISpaceShip ship = ownerLink.GetShip();
