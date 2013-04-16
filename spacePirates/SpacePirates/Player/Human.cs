@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SpacePirates.spaceShips;
 
@@ -37,7 +38,7 @@ namespace SpacePirates.Player
         /// <summary>
         /// Handle input logic and call Spaceship interface methods.
         /// </summary>
-        public void HandleInput()
+        public void HandleInput(GameTime gameTime)
         {
             KeyboardState newState = Keyboard.GetState();
             bool forwardKeyDown = false;
@@ -128,7 +129,7 @@ namespace SpacePirates.Player
             // Fire weapon
             if (newState.IsKeyDown(Keys.F))
             {
-
+                ship.Fire(gameTime);
             }
             oldState = newState;
         }

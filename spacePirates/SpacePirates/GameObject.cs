@@ -96,6 +96,7 @@ namespace SpacePirates
 
             obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
             obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
+            obstacleFactoryCollection.Add("bullet", new Factory_Bullet());
 
             self.goalLimit = goalsToWin;
             self.redScore = 0;
@@ -275,7 +276,7 @@ namespace SpacePirates
                 IPlayer owner = ship.GetOwner();
 
                 if (owner is Human)
-                    (owner as Human).HandleInput();
+                    (owner as Human).HandleInput(gameTime);
                 //else
                 //(ship.GetOwner() as Ai)
             }
@@ -284,7 +285,7 @@ namespace SpacePirates
                 IPlayer owner = ship.GetOwner();
 
                 if (owner is Human)
-                    (owner as Human).HandleInput();
+                    (owner as Human).HandleInput(gameTime);
                 //else
                 //(ship.GetOwner() as Ai)
             }
@@ -334,6 +335,11 @@ namespace SpacePirates
         public void blueScored()
         {
             blueScore++;
+        }
+
+        public ObstacleFactory getOFactory(String name)
+        {
+            return obstacleFactoryCollection[name];
         }
     }
 }

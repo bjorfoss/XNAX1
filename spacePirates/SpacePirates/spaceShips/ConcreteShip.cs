@@ -65,7 +65,7 @@ namespace SpacePirates.spaceShips
             this.registration = registration;
             animationFrame = new Rectangle(0, 0, 128, 128);
 
-            
+            currentWeapon = new WeaponState_Gun();
         }
 
         public override void Update(GameTime gameTime)
@@ -132,9 +132,9 @@ namespace SpacePirates.spaceShips
             this.acceleration.Y = (float)(Math.Cos(rotation) * acceleration);
         }
 
-        public void Fire()
+        public void Fire(GameTime gameTime)
         {
-            currentWeapon.Fire();
+            currentWeapon.Fire(gameTime, this);
         }
 
         public void NextWeapon()
