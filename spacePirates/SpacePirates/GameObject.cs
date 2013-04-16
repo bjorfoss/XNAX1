@@ -57,6 +57,8 @@ namespace SpacePirates
 
         private List<Unit> objectsInGame;
 
+        private List<SpaceStation> spaceStations; 
+
         //Holds the global maximum speed of any object
         private double maxSpeed;
 
@@ -87,6 +89,9 @@ namespace SpacePirates
 
             // Holds everything classified as a unit
             self.objectsInGame = new List<Unit>();
+
+            // Holds the spacestation in the game
+            self.spaceStations = new List<SpaceStation>();
 
             maxSpeed = 300;
 
@@ -185,6 +190,14 @@ namespace SpacePirates
             addToGame((Unit)iSpaceShip);
         }
 
+        // Adds spacestations to the game
+        private void addToGame(List<SpaceStation> list, SpaceStation Station)
+        {
+            list.Add(Station);
+            addToGame((Unit)Station);
+
+        }
+
         // Adds to unit collection in game
         public void addToGame(Unit unit)
         {
@@ -217,6 +230,9 @@ namespace SpacePirates
                     addToGame(blueTeam, spaceShips[i]);
                 }
             }
+            addToGame(spaceStations, new SpaceStation(new Vector2(0f, 0f)));
+
+
            
         }
 

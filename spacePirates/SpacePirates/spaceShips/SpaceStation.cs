@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
@@ -15,15 +16,15 @@ namespace SpacePirates.spaceShips
 
 
 
-        public SpaceStation(Vector2 position) : base(position, 0, new Vector2(0), new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40)
+        public SpaceStation(Vector2 position)
+            : base(position, 0, Vector2.Zero, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("fighter"))
+        
         {
 
             
             
             
-            
-            // placeholder
-            graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/Eightwing");
+         
 
         }
 
