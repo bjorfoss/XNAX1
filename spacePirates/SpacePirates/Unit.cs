@@ -66,8 +66,17 @@ namespace SpacePirates
             double max = GameObject.Instance().getMaxSpeed();
             Vector2 newVelocity = new Vector2(
                 velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
-                velocity.Y + acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
+                velocity.Y + (acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds));
+            if (this is ConcreteObstacle_Bullet)
+            {
+                if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(2*max, 2))
+                {
+                    float multiplier = (float)(2*max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
+                    newVelocity.X *= multiplier;
+                    newVelocity.Y *= multiplier;
+                }
+            }
+            else if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
             {
                 float multiplier = (float)(max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
                 newVelocity.X *= multiplier;
@@ -100,7 +109,7 @@ namespace SpacePirates
             {
                 rotation = MathHelper.TwoPi + newRotation;
             }
-            else if (newRotation > MathHelper.TwoPi)
+            else if (newRotation >= MathHelper.TwoPi)
             {
                 rotation = MathHelper.TwoPi - newRotation;
             }
@@ -237,11 +246,13 @@ namespace SpacePirates
             Rectangle screen = GameObject.GetScreenArea();
             Vector2 cameraPos = (GameObject.GetCameraTarget() as Unit).GetPosition();
             Vector2 screenPos = new Vector2(position.X, position.Y);
-            screenPos = screenPos - cameraPos;
+            screenPos.X -= cameraPos.X;
             screenPos.X += (float)screen.Width / 2;
-            //screenPos.X += 400;
+            
+            screenPos.Y -= cameraPos.Y;
             screenPos.Y += (float)screen.Height / 2;
-            //screenPos.Y += 230;
+            screenPos.Y = screen.Height - screenPos.Y;
+
             return screenPos;
         }
 

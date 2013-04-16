@@ -25,8 +25,14 @@ namespace SpacePirates.spaceShips
             time += gameTime.ElapsedGameTime.TotalMilliseconds;
             if(time >= fireRate)
             {
+                System.Diagnostics.Debug.WriteLine(ship.rotation);
+
                 Vector2 vel = new Vector2((float)(Math.Sin(ship.rotation) * 300), (float)(Math.Cos(ship.rotation) * 300));
-                vel += ship.getVelocity();
+                System.Diagnostics.Debug.WriteLine(vel.X + ", " + vel.Y);
+                vel.X += ship.getVelocity().X;
+                vel.Y += ship.getVelocity().Y;
+                System.Diagnostics.Debug.WriteLine(ship.getVelocity().X + ", " + ship.getVelocity().Y);
+                System.Diagnostics.Debug.WriteLine(vel.X + ", " + vel.Y);
                 Vector2 pos = new Vector2(ship.GetPosition().X, ship.GetPosition().Y);
 
                 Factory_Bullet factory = GameObject.Instance().getOFactory("bullet") as Factory_Bullet;

@@ -81,21 +81,21 @@ namespace SpacePirates.Player
             {
                 if (shiftPressed)
                 {
-                    ship.Turn(-100.0f);
+                    ship.Turn(-40.0f);
                 }
                 else
                 {
-                    ship.Turn(-10.0f);
+                    ship.Turn(-100.0f);
                 }
             } else if (newState.IsKeyDown(Keys.D))
             {
                 if (shiftPressed)
                 {
-                    ship.Turn(100.0f);
+                    ship.Turn(40.0f);
                 }
                 else
                 {
-                    ship.Turn(10.0f);
+                    ship.Turn(100.0f);
                 }
             } else {
                 ship.Turn(0.0f);

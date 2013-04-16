@@ -258,8 +258,6 @@ namespace SpacePirates
                 setUpGame();
             }
 
-
-
             //Has any side won already?
             if (redScore >= goalLimit)
             {
@@ -276,7 +274,9 @@ namespace SpacePirates
                 IPlayer owner = ship.GetOwner();
 
                 if (owner is Human)
+                {
                     (owner as Human).HandleInput(gameTime);
+                }
                 //else
                 //(ship.GetOwner() as Ai)
             }
@@ -285,11 +285,14 @@ namespace SpacePirates
                 IPlayer owner = ship.GetOwner();
 
                 if (owner is Human)
+                {
                     (owner as Human).HandleInput(gameTime);
+                }
                 //else
                 //(ship.GetOwner() as Ai)
             }
 
+            //Updates all the units in the game
             for (int i = 0; i < objectsInGame.Count; i++)
             {
                 Unit unit = objectsInGame.ElementAt(i);
@@ -310,7 +313,7 @@ namespace SpacePirates
             level.executeDraw(spriteBatch);
 
             //TODO: Investigate why not drawn for bjorfoss without this:
-            (cameraTarget as Unit).Draw(spriteBatch);
+            //(cameraTarget as Unit).Draw(spriteBatch);
 
             foreach (Unit unit in objectsInGame)
             {
