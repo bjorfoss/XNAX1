@@ -28,7 +28,7 @@ namespace SpacePirates.Player
             return name;
         }
 
-        public ISpaceShip GetShip()
+        public SpaceShip GetShip()
         {
             return ownerLink.GetShip();
         }

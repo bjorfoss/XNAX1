@@ -19,7 +19,7 @@ namespace SpacePirates.Player
         /// Get the spaceship associated with the player (Human or Ai)
         /// </summary>
         /// <returns>Ship implementing ISpaceship</returns>
-        ISpaceShip GetShip();
+        SpaceShip GetShip();
 
         /// <summary>
         /// Get the name of the player

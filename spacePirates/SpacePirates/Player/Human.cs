@@ -25,7 +25,7 @@ namespace SpacePirates.Player
             return name;
         }
 
-        public ISpaceShip GetShip()
+        public SpaceShip GetShip()
         {
             return ownerLink.GetShip();
         }
@@ -43,7 +43,7 @@ namespace SpacePirates.Player
             KeyboardState newState = Keyboard.GetState();
             bool forwardKeyDown = false;
             bool shiftPressed = newState.IsKeyDown(Keys.LeftShift);
-            ISpaceShip ship = ownerLink.GetShip();
+            SpaceShip ship = ownerLink.GetShip();
             
             //70 to 100% thrust
             if (newState.IsKeyDown(Keys.W))

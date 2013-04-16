@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace SpacePirates.spaceShips
 {
-    interface IWeapon
+    public interface IWeapon
     {
         void Fire(GameTime gameTime, Unit ship);
     }

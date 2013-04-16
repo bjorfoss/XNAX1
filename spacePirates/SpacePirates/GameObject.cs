@@ -22,7 +22,7 @@ namespace SpacePirates
 
         public static int numberOfShips = 10;
 
-        ISpaceShip[] spaceShips = new ISpaceShip[10];
+        SpaceShip[] spaceShips = new SpaceShip[10];
 
         // Holds the with and the height of the viewport
         private int windowWidth;
@@ -36,7 +36,7 @@ namespace SpacePirates
         private int chanceOfAstroidPerSecond = 5;
 
         // Holds the player unit : spaceship
-        private ISpaceShip cameraTarget;
+        private SpaceShip cameraTarget;
         
         //Hashtable with all spaceships
         private Dictionary<String, IShipFactory> shipFactoryCollection;
@@ -49,8 +49,8 @@ namespace SpacePirates
         public bool active = false; // Is true if this is the currentObject in Game1.cs
 
         // Holds the spaceShips belonging to each team
-        private List<ISpaceShip> redTeam;
-        private List<ISpaceShip> blueTeam;
+        private List<SpaceShip> redTeam;
+        private List<SpaceShip> blueTeam;
 
         // Holds a collection of obstacles: asteroids, fired obstacles ...
         private List<IObstacle> obstacles;
@@ -59,7 +59,7 @@ namespace SpacePirates
 
         private List<SpaceStation> spaceStations; 
 
-        //Holds the global maximum speed of any object
+        //Holds the global maximum speed of any normal object
         private double maxSpeed;
 
         //Game mode variables.
@@ -81,8 +81,8 @@ namespace SpacePirates
             self.level = new Level(Content);
 
             // Holds the spaceShips belonging to each team
-            self.redTeam = new List<ISpaceShip>();
-            self.blueTeam = new List<ISpaceShip>();
+            self.redTeam = new List<SpaceShip>();
+            self.blueTeam = new List<SpaceShip>();
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
@@ -129,6 +129,14 @@ namespace SpacePirates
             return active;
         }
 
+        /// <summary>
+        /// Call this for first time setup of the GameObject
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="Content"></param>
+        /// <param name="defaultGoalLimit"></param>
+        /// <returns></returns>
         public static GameObject Instance(int w, int h, ContentManager Content, int defaultGoalLimit=25)
         {
             lock (padlock) {
@@ -139,6 +147,10 @@ namespace SpacePirates
             }
         }
 
+        /// <summary>
+        /// Call this to get the GameObject
+        /// </summary>
+        /// <returns></returns>
         public static GameObject Instance()
         {
             lock (padlock)
@@ -151,27 +163,25 @@ namespace SpacePirates
         // TODO: make ship selection random
 
         // Sets up AI ship
-        private ISpaceShip setUpShip()
+        private SpaceShip setUpShip()
         {
             String shipType = "fighter";
             return setUpShip(new Ai(), shipType, Vector2.Zero);
         }
 
         // Sets up ship 
-        private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
+        private SpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
         {
             Ownership registration = new Ownership();
             registration.SetOwner(controller);
 
-            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
-
+            SpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
 
             registration.SetShip(ship);
             return ship;
         }
 
-
-        public static ISpaceShip GetCameraTarget()
+        public static SpaceShip GetCameraTarget()
         {
             return GameObject.Instance().cameraTarget;
         }
@@ -184,10 +194,10 @@ namespace SpacePirates
         }
 
         // Adds spaceships to the game
-        private void addToGame(List<ISpaceShip> list, ISpaceShip iSpaceShip)
+        private void addToGame(List<SpaceShip> list, SpaceShip spaceShip)
         {
-            list.Add(iSpaceShip);
-            addToGame((Unit)iSpaceShip);
+            list.Add(spaceShip);
+            addToGame(spaceShip);
         }
 
         // Adds spacestations to the game
@@ -285,7 +295,7 @@ namespace SpacePirates
             }
 
             //Handle input from players.
-            foreach (ISpaceShip ship in redTeam)
+            foreach (SpaceShip ship in redTeam)
             {
                 IPlayer owner = ship.GetOwner();
 
@@ -296,7 +306,7 @@ namespace SpacePirates
                 //else
                 //(ship.GetOwner() as Ai)
             }
-            foreach (ISpaceShip ship in blueTeam)
+            foreach (SpaceShip ship in blueTeam)
             {
                 IPlayer owner = ship.GetOwner();
 

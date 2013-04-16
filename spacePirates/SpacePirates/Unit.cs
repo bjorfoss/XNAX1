@@ -10,7 +10,7 @@ using SpacePirates.Utilities;
 
 namespace SpacePirates
 {
-    class Unit
+    public class Unit
     {
         //todo make protected
         protected Vector2 velocity;
