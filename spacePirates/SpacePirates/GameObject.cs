@@ -235,7 +235,7 @@ namespace SpacePirates
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
-                    ISpaceShip ship;
+                    SpaceShip ship;
 
                     if (nTeam == 1)
                     {
@@ -382,7 +382,7 @@ namespace SpacePirates
                     //IPlayer human = player.Tag as Human;
                     Human human = NetworkObject.Instance().getPlayer();
 
-                    ISpaceShip ship = human.GetShip();
+                    SpaceShip ship = human.GetShip();
 
                     Vector2 pos = new Vector2(300, 600);
                     Color col = Color.OrangeRed;
@@ -401,7 +401,7 @@ namespace SpacePirates
                     Human human = player.Tag as Human;
                     if (human != null)
                     {
-                        ISpaceShip ship = human.GetShip();
+                        SpaceShip ship = human.GetShip();
 
                         Vector2 pos = new Vector2(300, 600);
                         Color col = Color.OrangeRed;
@@ -457,7 +457,7 @@ namespace SpacePirates
                     if (!sender.IsLocal)
                     {
                         Human senderHuman = sender.Tag as Human;
-                        ISpaceShip ship = senderHuman.GetShip();
+                        SpaceShip ship = senderHuman.GetShip();
 
                         //This should be the same as was is sent in the send function.
                         ship.SetShipPosition(packetReader.ReadVector2());
@@ -472,7 +472,7 @@ namespace SpacePirates
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
             {
                 Human me = gamer.Tag as Human;
-                ISpaceShip ship = me.GetShip();
+                SpaceShip ship = me.GetShip();
 
                 //This should be the same as is read in the read function.
                 packetWriter.Write(ship.GetShipPosition());

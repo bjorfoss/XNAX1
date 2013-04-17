@@ -160,5 +160,15 @@ namespace SpacePirates.spaceShips
         {
             return registration.GetOwner();
         }
+
+        public Vector2 GetShipPosition()
+        {
+            return position;
+        }
+
+        public void SetShipPosition(Vector2 pos)
+        {
+            position = pos;
+        }
     }
 }

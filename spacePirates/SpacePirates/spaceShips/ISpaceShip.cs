@@ -66,11 +66,5 @@ namespace SpacePirates.spaceShips
         /// <returns>The ship's owner. Can be Human or Ai.</returns>
         IPlayer GetOwner();
 
-        //Gets the ship position.
-        Vector2 GetShipPosition();
-
-        //To update the ship position for network gamers.
-        void SetShipPosition(Vector2 pos);
-
     }
 }

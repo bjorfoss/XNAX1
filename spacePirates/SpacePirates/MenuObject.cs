@@ -394,7 +394,7 @@ namespace SpacePirates
 
                 spriteBatch.Draw(startGame, startGamePos, startCol);
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);
-                spriteBatch.DrawString(text, "Press E for red team, L for blue team..", startGamePos + new Vector2(0, readyButton.Height * 2 + 10), Color.White);
+                spriteBatch.DrawString(text, "Press E for red team,\n L for blue team.", startGamePos + new Vector2(0, readyButton.Height * 2 + 10), Color.White);
             }
             else if (currentMenu == joinedlobby)
             {
@@ -426,7 +426,7 @@ namespace SpacePirates
                     spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), playerCol);
                     lastPos.Y += 30;
                 }
-                spriteBatch.DrawString(text, "Press E for red team, L for blue team.", readyButtonPos + new Vector2(0, readyButton.Height + 10), Color.White);
+                spriteBatch.DrawString(text, "Press E for red team,\n L for blue team.", readyButtonPos + new Vector2(0, readyButton.Height + 10), Color.White);
             }
             else if (currentMenu == searchLobbies)
             {
