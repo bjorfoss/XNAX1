@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -26,19 +27,15 @@ namespace SpacePirates
         NetworkObject networkObject;
 
         GameStates currentState;
-
+        
         Song song;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Components.Add(new GamerServicesComponent(this));          
-            Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.IsFullScreen = false;
+            Components.Add(new GamerServicesComponent(this));
 
-            
+            Content.RootDirectory = "Content";            
         }
 
         /// <summary>
@@ -49,8 +46,19 @@ namespace SpacePirates
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            // Deal with configuration file - should be saved in
+            //local appdata/org.ntnu.tdt4240.xna1/xxx/xxx/user.config
+            //setting values to ensure local config values
+            Settings1 s = Settings1.Default;
+            s.ResolutionHorizontal = s.ResolutionHorizontal;
+            s.ResolutionVertical = s.ResolutionVertical;
+            s.Fullscreen = s.Fullscreen;
+            s.Save();
+            
+            graphics.PreferredBackBufferWidth = s.ResolutionHorizontal;
+            graphics.PreferredBackBufferHeight = s.ResolutionVertical;
+            graphics.IsFullScreen = s.Fullscreen;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -128,10 +136,17 @@ namespace SpacePirates
         {
             GraphicsDevice.Clear(Color.Black);
 
-            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            //add samplerstate to wrap background
-            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            //Use clamp on menu screen to support the limited Reach api (it contains
+            //non-power of two textures) for older systems
+            if (currentState is GameObject)
+            {
+                //add samplerstate to wrap background
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            }
+            else if (currentState is MenuObject)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone);
+            }
 
             currentState.executeDraw(spriteBatch);
 
