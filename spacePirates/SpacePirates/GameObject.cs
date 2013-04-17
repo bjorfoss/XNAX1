@@ -330,9 +330,6 @@ namespace SpacePirates
         {
             level.executeDraw(spriteBatch);
 
-            //TODO: Investigate why not drawn for bjorfoss without this:
-            //(cameraTarget as Unit).Draw(spriteBatch);
-
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
                 if (player.IsLocal)
