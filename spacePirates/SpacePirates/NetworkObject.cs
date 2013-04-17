@@ -25,6 +25,8 @@ namespace SpacePirates
 
         private bool networkEnabled = true;
 
+        private Human player;
+
         public NetworkObject()
         {
             //Include Game services.
@@ -73,8 +75,11 @@ namespace SpacePirates
 
         public void setNetworkSession(NetworkSession session)
         {
-            if(session.SessionState == NetworkSessionState.Lobby)
+            if (session.SessionState == NetworkSessionState.Lobby)
+            {
                 networkSession = session;
+                HookSessionEvents();
+            }
         }
 
         public void disposeNetworkSession()
@@ -85,14 +90,15 @@ namespace SpacePirates
 
         void SignedInGamer_SignedIn(object sender, SignedInEventArgs e)
         {
-            e.Gamer.Tag = new Human(e.Gamer.DisplayName);          
+            e.Gamer.Tag = new Human(e.Gamer.Gamertag);
+            player = e.Gamer.Tag as Human;
         }
 
         void networkSession_GamerJoined(object sender, GamerJoinedEventArgs e)
         {
             if (!e.Gamer.IsLocal)
             {
-                e.Gamer.Tag = new Human(e.Gamer.DisplayName);
+                e.Gamer.Tag = new Human(e.Gamer.Gamertag);
             }
             else
             {
@@ -134,6 +140,11 @@ namespace SpacePirates
         public bool getNetworked()
         {
             return networkEnabled; 
+        }
+
+        public Human getPlayer()
+        {
+            return player;
         }
     }
 }

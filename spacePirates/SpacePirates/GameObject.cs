@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 
 namespace SpacePirates
@@ -193,30 +194,85 @@ namespace SpacePirates
 
             if (NetworkObject.Instance().getNetworked())
             {
+                foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
+                {
+                    int nTeam = (player.Tag as Human).GetTeam();
+                    ISpaceShip ship;
+
+                    if (nTeam == 1)
+                    {
+                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(300, 600));
+                        addToGame(redTeam, ship);
+                    }
+                    else
+                    {
+                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(500, 600));
+                        addToGame(blueTeam, ship);
+                    }
+
+                    if (player.IsLocal)
+                        cameraTarget = ship;
+                }
+
+                //IPlayer human = NetworkObject.Instance().getPlayer();
+                //ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
+                //addToGame(redTeam, ship);
+                //cameraTarget = ship;
+
+                /*
                 int nPlayers = NetworkObject.Instance().getNetworksession().AllGamers.Count;
                 int nPut = 0;
 
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
-                    IPlayer human = player.Tag as Human;
-
-                    
-                    if (nPut < (nPlayers / 2))
+                    if (player.IsLocal)
                     {
-                        ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
-                        addToGame(redTeam, ship);
-                        if (player.IsLocal)
-                            cameraTarget = ship;
+                        IPlayer human = player.Tag as Human;
+
+
+                        if (nPut < (nPlayers / 2))
+                        {
+                            ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
+                            addToGame(redTeam, ship);
+                            if (player.IsLocal)
+                                cameraTarget = ship;
+
+                            player.Tag = human;
+                        }
+                        else
+                        {
+                            ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
+                            addToGame(blueTeam, ship);
+                            if (player.IsLocal)
+                                cameraTarget = ship;
+
+                            player.Tag = human;
+                        }
+
+                        nPut++;
                     }
                     else
                     {
-                        ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
-                        addToGame(blueTeam, ship);
-                        if (player.IsLocal)
-                            cameraTarget = ship;
-                    }
+                        IPlayer human = player.Tag as Human;
 
-                    nPut++;
+
+                        if (nPut < (nPlayers / 2))
+                        {
+                            ISpaceShip ship = setUpShip(human, "fighter", new Vector2(300, 600));
+                            addToGame(redTeam, ship);
+
+                            player.Tag = human;
+                        }
+                        else
+                        {
+                            ISpaceShip ship = setUpShip(human, "fighter", new Vector2(500, 600));
+                            addToGame(blueTeam, ship);
+
+                            player.Tag = human;
+                        }
+
+                        nPut++;
+                    }
                 }
             }
             else
@@ -245,21 +301,23 @@ namespace SpacePirates
                     }
                 }
 
+            
+
+            NetworkObject.Instance().getNetworksession().Update();
+            */
             }
-           
         }
 
         
 
         public void executeGameLogic(GameTime gameTime)
         {
-            //If we need to set up the game first, do so.
             if (gameSetup)
             {
                 setUpGame();
             }
 
-
+            ReceiveNetworkData();
 
             //Has any side won already?
             if (redScore >= goalLimit)
@@ -277,7 +335,9 @@ namespace SpacePirates
                 {
                     if (player.IsLocal)
                     {
-                        (player.Tag as Human).HandleInput(Keyboard.GetState());
+                        Human test = (player.Tag as Human);
+                        //Human test = NetworkObject.Instance().getPlayer();
+                        test.HandleInput(Keyboard.GetState());
                     }           
                 }
             }
@@ -324,6 +384,8 @@ namespace SpacePirates
             //foreach
             //UnitARRAY.UpdatePosition(playerPosition);
 
+            SendNetworkData();
+
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
@@ -337,11 +399,9 @@ namespace SpacePirates
             {
                 if (player.IsLocal)
                 {
-                    (cameraTarget as Unit).Draw(spriteBatch);
-                }
-                else
-                {
-                    IPlayer human = player.Tag as Human;
+                    //(cameraTarget as Unit).Draw(spriteBatch);
+                    //IPlayer human = player.Tag as Human;
+                    Human human = NetworkObject.Instance().getPlayer();
 
                     ISpaceShip ship = human.GetShip();
 
@@ -356,6 +416,26 @@ namespace SpacePirates
 
                     (ship as Unit).Draw(spriteBatch);
                     spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                }
+                else
+                {
+                    Human human = player.Tag as Human;
+                    if (human != null)
+                    {
+                        ISpaceShip ship = human.GetShip();
+
+                        Vector2 pos = new Vector2(300, 600);
+                        Color col = Color.OrangeRed;
+
+                        if (blueTeam.Contains(ship))
+                        {
+                            pos = new Vector2(500, 600);
+                            col = Color.LightBlue;
+                        }
+
+                        (ship as Unit).Draw(spriteBatch);
+                        spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                    }
                 }
             }
             /*
@@ -387,6 +467,42 @@ namespace SpacePirates
         public void blueScored()
         {
             blueScore++;
+        }
+
+        private void ReceiveNetworkData()
+        {
+            foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+            {
+                while (gamer.IsDataAvailable)
+                {
+                    NetworkGamer sender;
+                    gamer.ReceiveData(packetReader, out sender);
+
+                    if (!sender.IsLocal)
+                    {
+                        Human senderHuman = sender.Tag as Human;
+                        ISpaceShip ship = senderHuman.GetShip();
+
+                        //This should be the same as was is sent in the send function.
+                        ship.SetShipPosition(packetReader.ReadVector2());
+
+                    }
+                }
+            }
+        }
+
+        private void SendNetworkData()
+        {
+            foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+            {
+                Human me = gamer.Tag as Human;
+                ISpaceShip ship = me.GetShip();
+
+                //This should be the same as is read in the read function.
+                packetWriter.Write(ship.GetShipPosition());
+
+                gamer.SendData(packetWriter, SendDataOptions.None);
+            }
         }
     }
 }

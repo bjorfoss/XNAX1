@@ -13,6 +13,10 @@ namespace SpacePirates.Player
         KeyboardState oldState = Keyboard.GetState();
 
         String name;
+        private int team = 0;//No team.
+        bool pickedTeam = false;
+        private int shipSelection = 1; //Ship 1 - the fighter.
+
         public Human(string name)
         {
             this.name = name;
@@ -32,6 +36,36 @@ namespace SpacePirates.Player
         public void SetOwnerShip(Ownership ownerLink)
         {
             this.ownerLink = ownerLink;
+        }
+
+        public bool GetPickedTeam()
+        {
+            return pickedTeam;
+        }
+
+        public void SetTeam(int choice)
+        {
+            if (choice == 1)
+                team = 1;//Red.
+            else
+                team = 2;//Blue.
+
+            pickedTeam = true;
+        }
+
+        public int GetTeam()
+        {
+            return team;
+        }
+
+        public void SetSelectedShip(int selection)
+        {
+            shipSelection = selection;
+        }
+
+        public int GetShipSelection()
+        {
+            return shipSelection;
         }
 
         /// <summary>

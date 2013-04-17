@@ -141,7 +141,7 @@ namespace SpacePirates.spaceShips
 
             //decompose acceleration into vectors:
             this.acceleration.X = (float) (Math.Sin(rotation) * acceleration);
-            this.acceleration.Y = (float)(Math.Cos(rotation) * acceleration);
+            this.acceleration.Y = -(float)(Math.Cos(rotation) * acceleration);
         }
 
         public void Fire()
@@ -219,6 +219,16 @@ namespace SpacePirates.spaceShips
         public IPlayer GetOwner()
         {
             return registration.GetOwner();
+        }
+
+        public Vector2 GetShipPosition()
+        {
+            return position;
+        }
+
+        public void SetShipPosition(Vector2 pos)
+        {
+            position = pos;
         }
     }
 }

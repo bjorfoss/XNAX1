@@ -114,6 +114,7 @@ namespace SpacePirates
                     || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
+
             currentState.executeGameLogic(gameTime);
 
             base.Update(gameTime);
@@ -129,8 +130,8 @@ namespace SpacePirates
 
             //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             //add samplerstate to wrap background
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
-
+            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             currentState.executeDraw(spriteBatch);
 
