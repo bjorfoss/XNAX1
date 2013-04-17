@@ -139,11 +139,14 @@
     <Compile Include="spaceShips\ConcreteShip.cs" />
     <Compile Include="spaceShips\ISpaceShip.cs" />
     <Compile Include="spaceShips\IShipFactory.cs" />
+    <Compile Include="spaceShips\SpaceShip.cs" />
+    <Compile Include="spaceShips\SpaceStation.cs" />
     <Compile Include="spaceShips\Weapons\ConcreteWeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\IWeapon.cs" />
     <Compile Include="spaceShips\Weapons\WeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\WeaponState_Gun.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="Utilities\GraphicBank.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

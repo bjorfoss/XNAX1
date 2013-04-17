@@ -6,80 +6,28 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SpacePirates.Player;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
-    class ConcreteShip_Fighter : Unit, ISpaceShip
+    class ConcreteShip_Fighter : SpaceShip, ISpaceShip
     {
-        double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
-        double maxThrust = 50000; //maximum force in Newtons output by the ship's engine(s)
-        double currentThrust; //The current thrust, in percent, of the maximum thrust
-
-        double animationTime; //The time, in milliseconds, since the last time the animation frame was changed
-        
-        IWeapon currentWeapon; //the currently selected weapon used by fire()
-        IWeapon[] weapons; //the weapons installed on the ship
-        
-        IAbility currentAbility; //the ability used by useAbility()
-        IAbility[] abilities; //the abilities installed on the ship
-
-        Ownership registration; //vehicle registration. The player can be retrieved from this
-
-
-
-
-
 
         /// <summary>
         /// Instance a basic fighter. Supply the initial position and facing
         /// </summary>
-        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation)
+        /// 
+        public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) 
+            : base(20000, 10000, 50, 30, 40, registration, position, rotation, GraphicBank.getInstance().getGraphic("fighter"))
         {
-            /*
-             *  Vector2 velocity;
-             *  Vector2 acceleration;
-             * double mass;
-        
-             * Vector2 position;        
-             * double rotation;        
-             * double rotationSpeed;
-
-             * Texture2D graphics;
-        
-             * double health;
-             * double maxHealth;
-        
-             * double armorThreshold; //how many hitpoints an attack needs to bypass armor - also reduces armor effectiveness
-             * double armorEffectiveness; //at 100% the full armor threshold is used, otherwise this percentage of it
-        
-             * double blastRadius;
-             * double blastDamage;
-             */
-            this.position = position;
-            this.rotation = rotation;
-            
-            //start at a standstill
-            rotationSpeed = 0;
-            velocity = new Vector2(0);
-            acceleration = new Vector2(0);
-            currentThrust = 0;
-
-            mass = 20000; //twenty tons
-            maxHealth = 10000;
-            health = maxHealth;
-
-            armorEffectiveness = 100;
-            armorThreshold = 50;
-
-            blastRadius = 30;
-            blastDamage = 40;
-
-            this.registration = registration;
             animationFrame = new Rectangle(0, 0, 128, 128);
-
-            graphics = GameObject.GetContentManager().Load<Texture2D>("Graphics/Ships/NFighterSheeth");
         }
 
+        /// <summary>
+        /// Animates the fighter.
+        /// Overridden from the empty method in Unit
+        /// </summary>
+        /// <param name="gameTime">GameTime used for correct animation</param>
         public override void Update(GameTime gameTime)
         {
             animationTime += gameTime.ElapsedGameTime.Milliseconds;
@@ -141,7 +89,7 @@ namespace SpacePirates.spaceShips
 
             //decompose acceleration into vectors:
             this.acceleration.X = (float) (Math.Sin(rotation) * acceleration);
-            this.acceleration.Y = -(float)(Math.Cos(rotation) * acceleration);
+            this.acceleration.Y = (float)(Math.Cos(rotation) * acceleration);
         }
 
         public void Fire()

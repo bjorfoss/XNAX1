@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpacePirates.spaceShips
 {
-    interface IAbility
+    public interface IAbility
     {
         void Activate();
 

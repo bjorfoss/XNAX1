@@ -6,10 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using SpacePirates.Obstacles;
+using SpacePirates.Utilities;
 
 namespace SpacePirates
 {
-    class Unit
+    public class Unit
     {
         //todo make protected
         protected Vector2 velocity;
@@ -30,11 +31,33 @@ namespace SpacePirates
 
         protected double blastRadius;
         protected double blastDamage;
+
+        private bool outOfBounds;
         //Rectangle hitbox;
 
         //add getters and setters
+             
 
+         public Unit(Vector2 position, double rotation, Vector2 velocity, Vector2 acceleration, double mass, 
+             double rotationSpeed, double health, double maxHealth, double armorThreshold, double armorEffectiveness, double blastRadius, double blastDamage, Texture2D graphics)
+        {
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+            this.mass = mass;
+            this.position = position;
+            this.rotation = rotation;
+            this.rotationSpeed = rotationSpeed;
+            this.health = health;
+            this.maxHealth = maxHealth;
+            this.armorEffectiveness = armorEffectiveness;
+            this.armorThreshold = armorThreshold;
+            this.blastDamage = blastDamage;
+            this.blastRadius = blastRadius;
+
+            this.graphics = graphics;
+        }
         
+
         /// <summary>
         /// Same as UpdatePosition()
         /// </summary>
@@ -43,8 +66,17 @@ namespace SpacePirates
             double max = GameObject.Instance().getMaxSpeed();
             Vector2 newVelocity = new Vector2(
                 velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
-                velocity.Y + acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
+                velocity.Y + (acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds));
+            if (this is ConcreteObstacle_Bullet)
+            {
+                if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(2*max, 2))
+                {
+                    float multiplier = (float)(2*max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
+                    newVelocity.X *= multiplier;
+                    newVelocity.Y *= multiplier;
+                }
+            }
+            else if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(max, 2))
             {
                 float multiplier = (float)(max / Math.Sqrt(Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2)));
                 newVelocity.X *= multiplier;
@@ -77,7 +109,7 @@ namespace SpacePirates
             {
                 rotation = MathHelper.TwoPi + newRotation;
             }
-            else if (newRotation > MathHelper.TwoPi)
+            else if (newRotation >= MathHelper.TwoPi)
             {
                 rotation = MathHelper.TwoPi - newRotation;
             }
@@ -96,6 +128,16 @@ namespace SpacePirates
             position.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             position.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+
+        /// <summary>
+        /// The method that will called when this Unit collides with another.
+        /// Usually, this method will only call HandleCollision.
+        /// </summary>
+        public virtual void Collide(Unit unit, GameTime gameTime)
+        {
+            HandleCollision(unit);
+        }
+
         /// <summary>
         /// Handle collision with a obstacle
         /// if it will be needed
@@ -111,31 +153,58 @@ namespace SpacePirates
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        void HandleCollision(Unit unit) {
-
-
-
+        protected void HandleCollision(Unit unit) {
 
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
-
-
-
+            double moveEnergy = 0.2; //The percentage of energy involved in movement
+            
             Vector2 velocityUnit = unit.getVelocity();
+            Vector2 positionUnit = unit.GetPosition();
+            Rectangle unitRec = unit.getUnitRectangle();
+            double unitMass = unit.getMass();
 
-            double xforce = ( (velocity.X * mass) - (velocityUnit.X * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
-            double yforce = ( (velocity.Y * mass) - (velocityUnit.Y * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
+            //From here starts calculations that will move the lightest unit out of the other unit's hitbox
+            Vector2 difference = new Vector2(position.X - positionUnit.X, position.Y - positionUnit.Y);
+            double distance = Math.Sqrt(Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2));
 
-            acceleration.X += (float) xforce;
-            acceleration.Y += (float) yforce;
+            //Finds the vector that multiplies difference, but only reaches to the edge of the hitbox
+            double rad = Math.Sqrt(Math.Pow(animationFrame.Width / 2, 2) + Math.Pow(animationFrame.Height / 2, 2));
+            double var = Math.Sqrt(Math.Pow(rad, 2) / (Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2)));
+            Vector2 edge = new Vector2((float)var*difference.X, (float)var*difference.Y);
+            edge = -edge;
+            edge = downSize(edge, new Vector2(animationFrame.Width / 2, animationFrame.Height / 2));
 
+            //Finds the vector that multiplies difference, but only reaches to the edge of the other ship's hitbox
+            rad = Math.Sqrt(Math.Pow(unitRec.Width / 2, 2) + Math.Pow(unitRec.Height / 2, 2));
+            var = Math.Sqrt(Math.Pow(rad, 2) / (Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2)));
+            Vector2 edge2 = new Vector2((float)var * difference.X, (float)var * difference.Y);
+            edge2 = downSize(edge2, new Vector2(unitRec.Width/2, unitRec.Height/2));
 
-            double force = Math.Sqrt(xforce * xforce + yforce * yforce) * ratio;
+            //Moves the lightest ship
+            Vector2 move;
+            if (mass > unit.getMass())
+            {
+                move = edge - edge2 + difference;
+                unit.setPosition(positionUnit + move);
+            }
+            else
+            {
+                move = edge2 - edge - difference;
+                setPosition(position + move);
+            }
 
-            health = health - force;
+            //End of movement calculations
 
+            double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
+            double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
+            double vel1y = (moveEnergy * velocity.Y * (mass - unitMass) + 2 * unitMass * velocityUnit.Y) / (mass + unitMass);
+            double vel2y = (moveEnergy * velocityUnit.Y * (unitMass - mass) + 2 * mass * velocity.Y) / (mass + unitMass);
 
-            if (health < 0)
+            setVelocity(new Vector2((float)vel1x, (float)vel1y));
+            unit.setVelocity(new Vector2((float)vel2x, (float)vel2y));
+            
+            if(health < 0)
             {
                 OnDestroy();
             }
@@ -143,6 +212,52 @@ namespace SpacePirates
         
         }
 
+        public Vector2 downSize(Vector2 vector, Vector2 scale)
+        {
+            Vector2 edge = new Vector2(vector.X, vector.Y);
+            double var;
+            if (edge.X > scale.X)
+            {
+                var = scale.X / edge.X;
+                edge.X = scale.X;
+                edge.Y *= (float)var;
+            }
+            else if (edge.X < -scale.X)
+            {
+                var = -scale.X / edge.X;
+                edge.X = -scale.X;
+                edge.Y *= (float)var;
+            }
+            if (edge.Y > scale.Y)
+            {
+                var = scale.Y / edge.Y;
+                edge.Y = scale.Y;
+                edge.X *= (float)var;
+            }
+            else if (edge.Y < -scale.Y)
+            {
+                var = -scale.Y / edge.Y;
+                edge.Y = -scale.Y;
+                edge.X *= (float)var;
+            }
+            return edge;
+        }
+
+        private void checkIfOutsideLevel(GameTime gameTime)
+        {
+            if (GameObject.GetLevel().IsOutsideLevel(this))
+            {
+               health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+               outOfBounds = true;
+            } else {
+               outOfBounds = false;
+            }
+
+            if (health <= 0)
+            {
+                OnDestroy();
+            }
+        }
         /// <summary>
         /// TODO: create a blast if there should be one
         /// TODO: position the blast according to blastradius, shipsize and shipposition.
@@ -176,14 +291,36 @@ namespace SpacePirates
         {
             return health;
         }
+        public Rectangle getUnitRectangle()
+        {
+            return new Rectangle((int)(position.X - (double)animationFrame.Width / 2), 
+                (int)(position.Y - (double)animationFrame.Height / 2), animationFrame.Width, animationFrame.Height);
+        }
+        public Vector2 GetPosition()
+        {
+            return position;
+        }
+        public void setPosition(Vector2 pos)
+        {
+            position = pos;
+        }
+        public void setVelocity(Vector2 vel)
+        {
+            velocity = vel;
+        }
+
+
 
         public virtual void Update(GameTime gameTime)
         {
         }
 
-        public Vector2 GetPosition()
+        public void UpdateUnit(GameTime gameTime)
         {
-            return position;
+            CalculateDirectionAndSpeed(gameTime);
+            UpdatePosition(gameTime);
+            UpdateFacing(gameTime);
+            checkIfOutsideLevel(gameTime);
         }
 
         public static Vector2 WorldPosToScreenPos(Vector2 position)
@@ -191,11 +328,13 @@ namespace SpacePirates
             Rectangle screen = GameObject.GetScreenArea();
             Vector2 cameraPos = (GameObject.GetCameraTarget() as Unit).GetPosition();
             Vector2 screenPos = new Vector2(position.X, position.Y);
-            screenPos = screenPos - cameraPos;
+            screenPos.X -= cameraPos.X;
             screenPos.X += (float)screen.Width / 2;
-            //screenPos.X += 400;
+            
+            screenPos.Y -= cameraPos.Y;
             screenPos.Y += (float)screen.Height / 2;
-            //screenPos.Y += 230;
+            screenPos.Y = screen.Height - screenPos.Y;
+
             return screenPos;
         }
 
@@ -208,14 +347,21 @@ namespace SpacePirates
         {
 
             Vector2 screenPos = WorldPosToScreenPos(position);
+            SpriteFont font = GraphicBank.getInstance().GetFont("Menutext");
             //Draw debug position only for player ship
             if (GameObject.GetCameraTarget() == this)
             {
                 ContentManager content = GameObject.GetContentManager();
                 String text = "X: " + Math.Round(position.X) + " -- Y: " +
                         Math.Round(position.Y);
-                batch.DrawString(content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"),
-                        text, screenPos + new Vector2(0, 200), Color.Wheat);
+                batch.DrawString(font, text, screenPos + new Vector2(0, 200), Color.Wheat);
+
+                if (outOfBounds)
+                {
+                    String warning = "Deserters will die, return to the combat area! -- Health: " +
+                        Math.Round(this.getHealth());
+                    batch.DrawString(font, warning, screenPos + new Vector2(-150, -200), Color.Red);
+                }
             }
 
             batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,

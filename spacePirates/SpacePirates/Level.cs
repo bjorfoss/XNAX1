@@ -59,7 +59,7 @@ namespace SpacePirates
             croppedBackground = GameObject.GetScreenArea();
 
             //draw the world relative to the camera target
-            ISpaceShip target = GameObject.GetCameraTarget();
+            SpaceShip target = GameObject.GetCameraTarget();
             Vector2 targetPos = (target as Unit).GetPosition();
             croppedBackground.X = (int) (((float) croppedBackground.Width / 2.0f) + targetPos.X);
             croppedBackground.Y = (int) (((float) croppedBackground.Height / 2.0f) - targetPos.Y);

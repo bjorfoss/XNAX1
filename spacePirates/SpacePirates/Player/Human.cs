@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SpacePirates.spaceShips;
 
@@ -28,7 +29,7 @@ namespace SpacePirates.Player
             return name;
         }
 
-        public ISpaceShip GetShip()
+        public SpaceShip GetShip()
         {
             return ownerLink.GetShip();
         }
@@ -71,12 +72,13 @@ namespace SpacePirates.Player
         /// <summary>
         /// Handle input logic and call Spaceship interface methods.
         /// </summary>
-        public void HandleInput(KeyboardState newState)
+
+        public void HandleInput(KeyboardState newState, GameTime gameTime)
         {
             //KeyboardState newState = Keyboard.GetState();
             bool forwardKeyDown = false;
             bool shiftPressed = newState.IsKeyDown(Keys.LeftShift);
-            ISpaceShip ship = ownerLink.GetShip();
+            SpaceShip ship = ownerLink.GetShip();
             
             //70 to 100% thrust
             if (newState.IsKeyDown(Keys.W))
@@ -114,21 +116,21 @@ namespace SpacePirates.Player
             {
                 if (shiftPressed)
                 {
-                    ship.Turn(-100.0f);
+                    ship.Turn(-40.0f);
                 }
                 else
                 {
-                    ship.Turn(-10.0f);
+                    ship.Turn(-100.0f);
                 }
             } else if (newState.IsKeyDown(Keys.D))
             {
                 if (shiftPressed)
                 {
-                    ship.Turn(100.0f);
+                    ship.Turn(40.0f);
                 }
                 else
                 {
-                    ship.Turn(10.0f);
+                    ship.Turn(100.0f);
                 }
             } else {
                 ship.Turn(0.0f);
@@ -162,7 +164,7 @@ namespace SpacePirates.Player
             // Fire weapon
             if (newState.IsKeyDown(Keys.F))
             {
-
+                ship.Fire(gameTime);
             }
             oldState = newState;
         }

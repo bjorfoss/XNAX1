@@ -32,7 +32,7 @@ namespace SpacePirates.spaceShips
         /// <summary>
         /// Fire the ship's currently selected weapon.
         /// </summary>
-        void Fire();
+        void Fire(GameTime gameTime);
 
         /// <summary>
         /// Change the currently selected weapon to the next one

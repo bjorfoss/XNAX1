@@ -9,7 +9,7 @@ namespace SpacePirates
     class Log
     {
 
-        private Log log; //This is a singleton object
+        private static Log log; //This is a singleton object
 
         ArrayList eventLog;
 
@@ -26,7 +26,7 @@ namespace SpacePirates
         /// can be used.
         /// </summary>
         /// <returns></returns>
-        public Log getLog()
+        public static Log getLog()
         {
             lock (padlock)
             {
@@ -47,6 +47,7 @@ namespace SpacePirates
         public void addEvent(String happening)
         {
             eventLog.Add(happening);
+            System.Diagnostics.Debug.WriteLine(happening);
         }
 
     }

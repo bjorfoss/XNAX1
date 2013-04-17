@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SpacePirates.Player;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
-    class SpaceShip : Unit
+    public class SpaceShip : Unit
     {
-
         protected double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
-        protected double maxThrust = 100000; //maximum force in Newtons output by the ship's engine(s)
+        protected double maxThrust = 50000; //maximum force in Newtons output by the ship's engine(s)
         protected double currentThrust; //The current thrust, in percent, of the maximum thrust
 
         protected double animationTime; //The time, in milliseconds, since the last time the animation frame was changed
@@ -25,39 +26,35 @@ namespace SpacePirates.spaceShips
 
         protected Ownership registration; //vehicle registration. The player can be retrieved from this
 
-        public SpaceShip(Ownership registration, Vector2 position, double rotation)
-        {
-            /*
-             *  Vector2 velocity;
-             *  Vector2 acceleration;
-             * double mass;
-        
-             * Vector2 position;        
-             * double rotation;        
-             * double rotationSpeed;
 
-             * Texture2D graphics;
-        
-             * double health;
-             * double maxHealth;
-        
-             * double armorThreshold; //how many hitpoints an attack needs to bypass armor - also reduces armor effectiveness
-             * double armorEffectiveness; //at 100% the full armor threshold is used, otherwise this percentage of it
-        
-             * double blastRadius;
-             * double blastDamage;
-             */
-            this.position = position;
-            this.rotation = rotation;
-            
-            //start at a standstill
-            rotationSpeed = 0;
-            velocity = new Vector2(0);
-            acceleration = new Vector2(0);
+        /// <summary>
+        /// Instance a spaceship.
+        /// When inheriting from this class, it is important to set the animationFrame.
+        /// To animate, make the method "public override void Update(GameTime gameTime){//Your animation code here}"
+        /// </summary>
+        /// <param name="mass">The mass of the ship in kilograms</param>
+        /// <param name="health">The maximum health of the ship, current starts at maximum</param>
+        /// <param name="armor">The armor of the ship, starts at 100% effectiveness</param>
+        /// <param name="blastRadius">The blast radius of the shp, the higher number, the bigger explosion at death</param>
+        /// <param name="blastDamage">The damage of the explosion</param>
+        /// <param name="registration">The connection of ownership between a ship and a player</param>
+        /// <param name="position">The starting position of the ship</param>
+        /// <param name="rotation">The starting rotation of the ship, in radians</param>
+        /// <param name="graphic">The sprite or spritesheet that represents the ship</param>
+        public SpaceShip(double mass, double health, double armor, double blastRadius, double blastDamage, Ownership registration, Vector2 position, double rotation, Texture2D graphic)
+            : base(position, rotation, Vector2.Zero, Vector2.Zero, mass, 0, health, health, armor, 100, blastRadius, blastDamage, graphic)
+        {
+            currentThrust = 0;
 
             this.registration = registration;
+
+            currentWeapon = new WeaponState_Gun();
         }
 
+        /// <summary>
+        /// Turn the spaceship
+        /// </summary>
+        /// <param name="turnRate">The percentage of maximum turn power to be used</param>
         public virtual void Turn(double turnRate)
         {
             //Check direction of turning
@@ -72,25 +69,30 @@ namespace SpacePirates.spaceShips
                 turnRate = Math.Max(turnRate, -100);
             }
             turnRate *= maxTurnSpeed;
-            rotationSpeed = turnRate;
+            rotationSpeed = turnRate / 100;
         }
 
+        /// <summary>
+        /// Gives the ship thrust, accelerating it
+        /// </summary>
+        /// <param name="thrust">The percentage of maximum thrust power to be used</param>
         public virtual void Thrust(double thrust)
         {
             //ensure the ship doesn't thrust more than its capabilities
             thrust = Math.Min(thrust, 100);
             thrust = thrust * maxThrust;
+            this.currentThrust = thrust;
             //we regard thrust as Force when passed, divide by mass to get acceleration
             double acceleration = thrust / mass;
 
             //decompose acceleration into vectors:
-            this.acceleration.X = (float) (Math.Sin(rotation) * acceleration);
+            this.acceleration.X = (float)(Math.Sin(rotation) * acceleration);
             this.acceleration.Y = (float)(Math.Cos(rotation) * acceleration);
         }
 
-        public virtual void Fire()
+        public virtual void Fire(GameTime gameTime)
         {
-            currentWeapon.Fire();
+            currentWeapon.Fire(gameTime, this);
         }
 
         public virtual void NextWeapon()
@@ -153,12 +155,6 @@ namespace SpacePirates.spaceShips
                 currentAbility = abilities[abilities.Length - 1];
             }
         }
-
-        /*public void draw(SpriteBatch batch)
-        {
-
-            this.draw(batch, graphics);
-        }*/
 
         public IPlayer GetOwner()
         {
