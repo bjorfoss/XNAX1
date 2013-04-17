@@ -10,10 +10,25 @@ namespace SpacePirates.Obstacles
 {
     class ConcreteObstacle_Bullet : Unit, IObstacle
     {
-        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 0, 0, 0, 0, 0, 0, 0, 0, GraphicBank.getInstance().getGraphic("bullet"))
-        {
+        double safeTime;
 
+        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 500, 0, 0, 0, 0, 0, 0, 0, GraphicBank.getInstance().getGraphic("bullet"))
+        {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
+            safeTime = 0;
+        }
+
+        public override void Collide(Unit unit, GameTime gameTime)
+        {
+            double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (safeTime + temp > 500)
+            {
+                base.HandleCollision(unit);
+            }
+            else
+            {
+                safeTime += temp;
+            }
         }
     }
 

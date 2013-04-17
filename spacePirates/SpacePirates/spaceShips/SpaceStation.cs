@@ -17,7 +17,7 @@ namespace SpacePirates.spaceShips
 
 
         public SpaceStation(Vector2 position)
-            : base(position, 0, Vector2.Zero, new Vector2(0), 20000, 0, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("station"))
+            : base(position, 0, Vector2.Zero, new Vector2(0), 100000, MathHelper.Pi/16, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("station"))
         
         {
             animationFrame = new Rectangle(0, 0, 256, 256);

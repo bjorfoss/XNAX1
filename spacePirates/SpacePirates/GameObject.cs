@@ -223,23 +223,9 @@ namespace SpacePirates
             IPlayer player = Human.createController();
 
             cameraTarget = setUpShip(player, "fighter", new Vector2(500, 600));
+            redTeam.Add(cameraTarget);
+            addToGame(cameraTarget);
 
-            addToGame(redTeam, cameraTarget);
-
-            for (int i = 0; i < numberOfShips; i++)
-            {
-                spaceShips[i] = setUpShip();
-                if (i < (numberOfShips / 2) - 1)
-                {
-                    redTeam.Add(spaceShips[i]);
-                    addToGame(redTeam, spaceShips[i]);
-                }
-                else
-                {
-                    blueTeam.Add(spaceShips[i]);
-                    addToGame(blueTeam, spaceShips[i]);
-                }
-            }
             addToGame(spaceStations, new SpaceStation(new Vector2(0f, 0f)));
 
 
@@ -326,12 +312,17 @@ namespace SpacePirates
                 unit.UpdateUnit(gameTime);
                 
             }
-           
-            //Vector2 playerPosition = cameraTarget.UpdatePosition(new Vector2(0, 0));
 
-            //foreach
-            //UnitARRAY.UpdatePosition(playerPosition);
-
+            for (int i = 0; i < objectsInGame.Count; i++)
+            {
+                for (int j = i + 1; j < objectsInGame.Count; j++)
+                {
+                    if (objectsInGame.ElementAt(i).getUnitRectangle().Intersects(objectsInGame.ElementAt(j).getUnitRectangle()))
+                    {
+                        objectsInGame.ElementAt(i).Collide(objectsInGame.ElementAt(j), gameTime);
+                    }
+                }
+            }       
         }
 
         public void executeDraw(SpriteBatch spriteBatch)

@@ -128,6 +128,16 @@ namespace SpacePirates
             position.X += velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             position.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+
+        /// <summary>
+        /// The method that will called when this Unit collides with another.
+        /// Usually, this method will only call HandleCollision.
+        /// </summary>
+        public virtual void Collide(Unit unit, GameTime gameTime)
+        {
+            HandleCollision(unit);
+        }
+
         /// <summary>
         /// Handle collision with a obstacle
         /// if it will be needed
@@ -143,36 +153,94 @@ namespace SpacePirates
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        void HandleCollision(Unit unit) {
-
-
-
+        protected void HandleCollision(Unit unit) {
 
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
-
-
-
+            double moveEnergy = 0.2; //The percentage of energy involved in movement
+            
             Vector2 velocityUnit = unit.getVelocity();
+            Vector2 positionUnit = unit.GetPosition();
+            Rectangle unitRec = unit.getUnitRectangle();
+            double unitMass = unit.getMass();
 
-            double xforce = ( (velocity.X * mass) - (velocityUnit.X * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
-            double yforce = ( (velocity.Y * mass) - (velocityUnit.Y * unit.getMass()) ) / (mass / 2 * unit.getMass() / 2);
+            //From here starts calculations that will move the lightest unit out of the other unit's hitbox
+            Vector2 difference = new Vector2(position.X - positionUnit.X, position.Y - positionUnit.Y);
+            double distance = Math.Sqrt(Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2));
 
-            acceleration.X += (float) xforce;
-            acceleration.Y += (float) yforce;
+            //Finds the vector that multiplies difference, but only reaches to the edge of the hitbox
+            double rad = Math.Sqrt(Math.Pow(animationFrame.Width / 2, 2) + Math.Pow(animationFrame.Height / 2, 2));
+            double var = Math.Sqrt(Math.Pow(rad, 2) / (Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2)));
+            Vector2 edge = new Vector2((float)var*difference.X, (float)var*difference.Y);
+            edge = -edge;
+            edge = downSize(edge, new Vector2(animationFrame.Width / 2, animationFrame.Height / 2));
 
+            //Finds the vector that multiplies difference, but only reaches to the edge of the other ship's hitbox
+            rad = Math.Sqrt(Math.Pow(unitRec.Width / 2, 2) + Math.Pow(unitRec.Height / 2, 2));
+            var = Math.Sqrt(Math.Pow(rad, 2) / (Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2)));
+            Vector2 edge2 = new Vector2((float)var * difference.X, (float)var * difference.Y);
+            edge2 = downSize(edge2, new Vector2(unitRec.Width/2, unitRec.Height/2));
 
-            double force = Math.Sqrt(xforce * xforce + yforce * yforce) * ratio;
+            //Moves the lightest ship
+            Vector2 move;
+            if (mass > unit.getMass())
+            {
+                move = edge - edge2 + difference;
+                unit.setPosition(positionUnit + move);
+            }
+            else
+            {
+                move = edge2 - edge - difference;
+                setPosition(position + move);
+            }
 
-            health = health - force;
+            //End of movement calculations
 
+            double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
+            double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
+            double vel1y = (moveEnergy * velocity.Y * (mass - unitMass) + 2 * unitMass * velocityUnit.Y) / (mass + unitMass);
+            double vel2y = (moveEnergy * velocityUnit.Y * (unitMass - mass) + 2 * mass * velocity.Y) / (mass + unitMass);
 
-            if (health < 0)
+            setVelocity(new Vector2((float)vel1x, (float)vel1y));
+            unit.setVelocity(new Vector2((float)vel2x, (float)vel2y));
+            
+            if(health < 0)
             {
                 OnDestroy();
             }
 
         
+        }
+
+        public Vector2 downSize(Vector2 vector, Vector2 scale)
+        {
+            Vector2 edge = new Vector2(vector.X, vector.Y);
+            double var;
+            if (edge.X > scale.X)
+            {
+                var = scale.X / edge.X;
+                edge.X = scale.X;
+                edge.Y *= (float)var;
+            }
+            else if (edge.X < -scale.X)
+            {
+                var = -scale.X / edge.X;
+                edge.X = -scale.X;
+                edge.Y *= (float)var;
+            }
+            if (edge.Y > scale.Y)
+            {
+                var = scale.Y / edge.Y;
+                edge.Y = scale.Y;
+                edge.X *= (float)var;
+            }
+            else if (edge.Y < -scale.Y)
+            {
+                var = -scale.Y / edge.Y;
+                edge.Y = -scale.Y;
+                edge.X *= (float)var;
+            }
+            return edge;
         }
 
         private void checkIfOutsideLevel(GameTime gameTime)
@@ -223,6 +291,25 @@ namespace SpacePirates
         {
             return health;
         }
+        public Rectangle getUnitRectangle()
+        {
+            return new Rectangle((int)(position.X - (double)animationFrame.Width / 2), 
+                (int)(position.Y - (double)animationFrame.Height / 2), animationFrame.Width, animationFrame.Height);
+        }
+        public Vector2 GetPosition()
+        {
+            return position;
+        }
+        public void setPosition(Vector2 pos)
+        {
+            position = pos;
+        }
+        public void setVelocity(Vector2 vel)
+        {
+            velocity = vel;
+        }
+
+
 
         public virtual void Update(GameTime gameTime)
         {
@@ -234,11 +321,6 @@ namespace SpacePirates
             UpdatePosition(gameTime);
             UpdateFacing(gameTime);
             checkIfOutsideLevel(gameTime);
-        }
-
-        public Vector2 GetPosition()
-        {
-            return position;
         }
 
         public static Vector2 WorldPosToScreenPos(Vector2 position)
