@@ -204,7 +204,7 @@ namespace SpacePirates
                     {
                         if (NetworkObject.Instance().getNetworksession().IsEveryoneReady)
                         {
-                            GameObject.Instance().setUpGame();
+                            //GameObject.Instance().setUpGame();
                             NetworkObject.Instance().getNetworksession().StartGame();
                             active = false;
                         }

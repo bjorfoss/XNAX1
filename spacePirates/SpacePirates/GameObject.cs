@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
@@ -459,18 +460,39 @@ namespace SpacePirates
                         Human senderHuman = sender.Tag as Human;
                         SpaceShip ship = senderHuman.GetShip();
 
-                        //This should be the same as was is sent in the send function.
-                        ship.SetShipPosition(packetReader.ReadVector2());
-                        ship.SetRotation(packetReader.ReadDouble());
+                        Vector2 pos;
+                        double rot;
+                        Vector2 xy;
+                        Vector2 wh;
+                        bool firing;
 
-                        Vector2 xy = packetReader.ReadVector2();
-                        Vector2 wh = packetReader.ReadVector2();
-                        ship.SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
+                        try
+                        {
+                            //This should be the same as was is sent in the send function.
+                            
+                            
+                            pos = packetReader.ReadVector2();
+                            rot = packetReader.ReadDouble();
 
-                        bool firing = packetReader.ReadBoolean();
-                        if (firing)
-                            ship.Fire(gameTime);
+                            xy = packetReader.ReadVector2();
+                            wh = packetReader.ReadVector2();
+                            
 
+                            firing = packetReader.ReadBoolean();
+
+                            ship.setPosition(pos);
+                            ship.SetRotation(rot);
+
+                            ship.SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
+
+                            if (firing)
+                                ship.Fire(gameTime);
+
+                        }
+                        catch (EndOfStreamException estre)
+                        {
+                            //Debug!
+                        }
                     }
                 }
             }
