@@ -22,6 +22,7 @@ namespace SpacePirates
 
         protected Texture2D graphics;
         protected Rectangle animationFrame;
+        protected Color unitColor = Color.White;
 
         protected double health;
         protected double maxHealth;
@@ -129,13 +130,21 @@ namespace SpacePirates
             position.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
+        public virtual bool readyToCollide(GameTime gameTime)
+        {
+            return true;
+        }
+
         /// <summary>
         /// The method that will called when this Unit collides with another.
         /// Usually, this method will only call HandleCollision.
         /// </summary>
-        public virtual void Collide(Unit unit, GameTime gameTime)
+        public void Collide(Unit unit, GameTime gameTime)
         {
-            HandleCollision(unit);
+            if (readyToCollide(gameTime) && unit.readyToCollide(gameTime))
+            {
+                HandleCollision(unit);
+            }
         }
 
         /// <summary>
@@ -181,21 +190,25 @@ namespace SpacePirates
             Vector2 edge2 = new Vector2((float)var * difference.X, (float)var * difference.Y);
             edge2 = downSize(edge2, new Vector2(unitRec.Width/2, unitRec.Height/2));
 
+            var = Math.Sqrt(1 / (Math.Pow(difference.X, 2) + Math.Pow(difference.Y, 2)));
+            Vector2 unity = new Vector2((float)(difference.X * var), (float)(difference.Y * var));
+
             //Moves the lightest ship
             Vector2 move;
             if (mass > unit.getMass())
             {
-                move = edge - edge2 + difference;
+                move = edge - edge2 - unity + difference;
                 unit.setPosition(positionUnit + move);
             }
             else
             {
-                move = edge2 - edge - difference;
+                move = edge2 + unity - edge - difference;
                 setPosition(position + move);
             }
 
-            //End of movement calculations
 
+
+            //End of movement calculations
             double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
             double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
             double vel1y = (moveEnergy * velocity.Y * (mass - unitMass) + 2 * unitMass * velocityUnit.Y) / (mass + unitMass);
@@ -203,6 +216,11 @@ namespace SpacePirates
 
             setVelocity(new Vector2((float)vel1x, (float)vel1y));
             unit.setVelocity(new Vector2((float)vel2x, (float)vel2y));
+
+            Log.getLog().addEvent("Unit at (" + position.X + ", " + position.Y + ") collided with unit at (" + positionUnit.X + ", " + positionUnit.Y + ")");
+            bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
+
+
             
             if(health < 0)
             {
@@ -308,7 +326,10 @@ namespace SpacePirates
         {
             velocity = vel;
         }
-
+        public void setColor(Color col)
+        {
+            unitColor = col;
+        }
 
 
         public virtual void Update(GameTime gameTime)
@@ -364,7 +385,7 @@ namespace SpacePirates
                 }
             }
 
-            batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,
+            batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
                     new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
                     1.0f, SpriteEffects.None, 0f);
             

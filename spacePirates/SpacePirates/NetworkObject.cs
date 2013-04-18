@@ -29,9 +29,6 @@ namespace SpacePirates
 
         public NetworkObject()
         {
-            //Include Game services.
-            //Components.Add(new GamerServicesComponent(this)); -- need to be in the main.
-
             // Respond to the SignedInGamer event
             SignedInGamer.SignedIn +=
                 new EventHandler<SignedInEventArgs>(SignedInGamer_SignedIn);

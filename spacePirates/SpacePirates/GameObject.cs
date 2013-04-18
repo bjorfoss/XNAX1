@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
@@ -103,9 +104,9 @@ namespace SpacePirates
 
             maxSpeed = 300;
 
-
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
+            shipFactoryCollection.Add("eightwing", new Factory_Eightwing());
 
             obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
             obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
@@ -167,6 +168,11 @@ namespace SpacePirates
             {
                 return instance;
             }
+        }
+
+        public Dictionary<String, IShipFactory> GetShipCollection()
+        {
+            return shipFactoryCollection;
         }
 
 
@@ -236,15 +242,16 @@ namespace SpacePirates
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
                     SpaceShip ship;
+                    string shipType = (player.Tag as Human).GetShipSelection();
 
                     if (nTeam == 1)
                     {
-                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(300, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(300, 600));
                         addToGame(redTeam, ship);
                     }
                     else
                     {
-                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(500, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(500, 600));
                         addToGame(blueTeam, ship);
                     }
 
@@ -300,7 +307,7 @@ namespace SpacePirates
                 setUpGame();
             }
 
-            ReceiveNetworkData();
+            ReceiveNetworkData(gameTime);
 
             //Has any side won already?
             if (redScore >= goalLimit)
@@ -378,9 +385,7 @@ namespace SpacePirates
             if (NetworkObject.Instance().getNetworked())
             {
                 NetworkObject.Instance().getNetworksession().Update();
-            }
-
-            SendNetworkData();
+            }            
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
@@ -395,7 +400,9 @@ namespace SpacePirates
                         objectsInGame.ElementAt(i).Collide(objectsInGame.ElementAt(j), gameTime);
                     }
                 }
-            }       
+            }
+
+            SendNetworkData();
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
@@ -428,7 +435,7 @@ namespace SpacePirates
                 else
                 {
                     Human human = player.Tag as Human;
-                    if (human != null)
+                    if (human != null && !player.HasLeftSession)
                     {
                         SpaceShip ship = human.GetShip();
 
@@ -481,7 +488,7 @@ namespace SpacePirates
             blueScore++;
         }
 
-        private void ReceiveNetworkData()
+        private void ReceiveNetworkData(GameTime gameTime)
         {
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
             {
@@ -495,9 +502,39 @@ namespace SpacePirates
                         Human senderHuman = sender.Tag as Human;
                         SpaceShip ship = senderHuman.GetShip();
 
-                        //This should be the same as was is sent in the send function.
-                        ship.SetShipPosition(packetReader.ReadVector2());
+                        Vector2 pos;
+                        double rot;
+                        Vector2 xy;
+                        Vector2 wh;
+                        bool firing;
 
+                        try
+                        {
+                            //This should be the same as was is sent in the send function.
+                            
+                            
+                            pos = packetReader.ReadVector2();
+                            rot = packetReader.ReadDouble();
+
+                            xy = packetReader.ReadVector2();
+                            wh = packetReader.ReadVector2();
+                            
+
+                            firing = packetReader.ReadBoolean();
+
+                            ship.setPosition(pos);
+                            ship.SetRotation(rot);
+
+                            ship.SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
+
+                            if (firing)
+                                ship.Fire(gameTime);
+
+                        }
+                        catch (EndOfStreamException)
+                        {
+                            //Debug!
+                        }
                     }
                 }
             }
@@ -512,7 +549,15 @@ namespace SpacePirates
 
                 //This should be the same as is read in the read function.
                 packetWriter.Write(ship.GetShipPosition());
+                packetWriter.Write(ship.GetRotation());
 
+                Rectangle anim = ship.GetAnimationFrame();
+                packetWriter.Write(new Vector2(anim.X, anim.Y));
+                packetWriter.Write(new Vector2(anim.Width, anim.Height));
+
+                packetWriter.Write(me.GetFiring());
+                me.ShipFired();
+                
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
 	}
