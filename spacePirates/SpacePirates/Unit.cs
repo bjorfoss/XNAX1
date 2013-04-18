@@ -120,6 +120,30 @@ namespace SpacePirates
             }
         }
 
+        public void SetAnimationFrame(Rectangle frame)
+        {
+            this.animationFrame = frame;
+        }
+
+        public Rectangle GetAnimationFrame()
+        {
+            return animationFrame;
+        }
+
+        public void SetRotation(double rotation)
+        {
+            this.rotation = rotation;
+        }
+
+        /// <summary>
+        /// Return rotation in radians
+        /// </summary>
+        /// <returns></returns>
+        public double GetRotation()
+        {
+            return this.rotation;
+        }
+
         /// <summary>
         /// Update movement from velocity, scale by time since last update.
         /// </summary>

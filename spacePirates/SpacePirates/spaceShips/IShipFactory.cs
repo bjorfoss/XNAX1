@@ -16,6 +16,6 @@ namespace SpacePirates.spaceShips
         /// <param name="position">The ship's position</param>
         /// <param name="rotation">Which way the ship is oriented</param>
         /// <returns></returns>
-        SpaceShip BuildSpaceship(Ownership registration, Vector2 position, double rotation);
+        ISpaceShip BuildSpaceship(Ownership registration, Vector2 position, double rotation);
     }
 }

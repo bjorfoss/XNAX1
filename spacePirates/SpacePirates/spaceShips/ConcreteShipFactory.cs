@@ -11,7 +11,7 @@ namespace SpacePirates.spaceShips
     {
         public Factory_Fighter() { }
 
-        public SpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
+        public ISpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
         {
             return new ConcreteShip_Fighter(ownership, position, rotation);
         }
@@ -19,7 +19,7 @@ namespace SpacePirates.spaceShips
 
     public class Factory_Eightwing : IShipFactory
     {
-        public SpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
+        public ISpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
         {
             return new ConcreteShip_Eightwing(ownership, position, rotation);
         }

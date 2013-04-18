@@ -10,7 +10,7 @@ using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
-    public class SpaceShip : Unit
+    public class SpaceShip : Unit, ISpaceShip
     {
         protected double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
         protected double maxThrust = 50000; //maximum force in Newtons output by the ship's engine(s)

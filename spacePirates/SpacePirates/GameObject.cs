@@ -27,7 +27,7 @@ namespace SpacePirates
 
         public static int numberOfShips = 10;
 
-        SpaceShip[] spaceShips = new SpaceShip[10];
+        ISpaceShip[] spaceShips = new ISpaceShip[10];
 
         // Holds the with and the height of the viewport
         private int windowWidth;
@@ -41,7 +41,7 @@ namespace SpacePirates
         private int chanceOfAstroidPerSecond = 5;
 
         // Holds the player unit : spaceship
-        private SpaceShip cameraTarget;
+        private ISpaceShip cameraTarget;
         
         //Hashtable with all spaceships
         private Dictionary<String, IShipFactory> shipFactoryCollection;
@@ -54,8 +54,8 @@ namespace SpacePirates
         public bool active = false; // Is true if this is the currentObject in Game1.cs
 
         // Holds the spaceShips belonging to each team
-        private List<SpaceShip> redTeam;
-        private List<SpaceShip> blueTeam;
+        private List<ISpaceShip> redTeam;
+        private List<ISpaceShip> blueTeam;
 
         // Holds a collection of obstacles: asteroids, fired obstacles ...
         private List<IObstacle> obstacles;
@@ -90,8 +90,8 @@ namespace SpacePirates
             self.level = new Level(Content);
 
             // Holds the spaceShips belonging to each team
-            self.redTeam = new List<SpaceShip>();
-            self.blueTeam = new List<SpaceShip>();
+            self.redTeam = new List<ISpaceShip>();
+            self.blueTeam = new List<ISpaceShip>();
 
             // Holds a collection of obstacles: asteroids, fired obstacles ...
             self.obstacles = new List<IObstacle>();
@@ -179,26 +179,26 @@ namespace SpacePirates
         // TODO: make ship selection random
 
         // Sets up AI ship
-        private SpaceShip setUpShip()
+        private ISpaceShip setUpShip()
         {
             String shipType = "fighter";
             return setUpShip(new Ai(), shipType, Vector2.Zero);
         }
 
         // Sets up ship 
-        private SpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
+        private ISpaceShip setUpShip(IPlayer controller, String shipType, Vector2 position)
         {
             Ownership registration = new Ownership();
             registration.SetOwner(controller);
             controller.SetOwnerShip(registration);
 
-            SpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
+            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
 
             registration.SetShip(ship);
             return ship;
         }
 
-        public static SpaceShip GetCameraTarget()
+        public static ISpaceShip GetCameraTarget()
         {
             return GameObject.Instance().cameraTarget;
         }
@@ -211,10 +211,10 @@ namespace SpacePirates
         }
 
         // Adds spaceships to the game
-        private void addToGame(List<SpaceShip> list, SpaceShip spaceShip)
+        private void addToGame(List<ISpaceShip> list, ISpaceShip spaceShip)
         {
             list.Add(spaceShip);
-            addToGame(spaceShip);
+            addToGame((spaceShip as Unit));
         }
 
         // Adds spacestations to the game
@@ -241,7 +241,7 @@ namespace SpacePirates
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
-                    SpaceShip ship;
+                    ISpaceShip ship;
                     string shipType = (player.Tag as Human).GetShipSelection();
 
                     if (nTeam == 1)
@@ -366,17 +366,17 @@ namespace SpacePirates
             {
                 station.Update(gameTime);
             }
-            foreach (SpaceShip ship in redTeam){
+            foreach (ISpaceShip ship in redTeam){
 
-                if(ship.getUnitRectangle().Intersects(spaceStations.ElementAt(0).getRectangle()))
+                if((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(0).getRectangle()))
                 {
                     spaceStations.ElementAt(0).dockShip(ship);
                 }
             }
-            foreach (SpaceShip ship in blueTeam)
+            foreach (ISpaceShip ship in blueTeam)
             {
 
-                if (ship.getUnitRectangle().Intersects(spaceStations.ElementAt(1).getRectangle()))
+                if ((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(1).getRectangle()))
                 {
                     spaceStations.ElementAt(1).dockShip(ship);
                 }
@@ -418,7 +418,7 @@ namespace SpacePirates
                     //IPlayer human = player.Tag as Human;
                     Human human = NetworkObject.Instance().getPlayer();
 
-                    SpaceShip ship = human.GetShip();
+                    ISpaceShip ship = human.GetShip();
 
                     Vector2 pos = new Vector2(300, 600);
                     Color col = Color.OrangeRed;
@@ -437,7 +437,7 @@ namespace SpacePirates
                     Human human = player.Tag as Human;
                     if (human != null && !player.HasLeftSession)
                     {
-                        SpaceShip ship = human.GetShip();
+                        ISpaceShip ship = human.GetShip();
 
                         Vector2 pos = new Vector2(300, 600);
                         Color col = Color.OrangeRed;
@@ -500,7 +500,7 @@ namespace SpacePirates
                     if (!sender.IsLocal)
                     {
                         Human senderHuman = sender.Tag as Human;
-                        SpaceShip ship = senderHuman.GetShip();
+                        ISpaceShip ship = senderHuman.GetShip();
 
                         Vector2 pos;
                         double rot;
@@ -522,10 +522,10 @@ namespace SpacePirates
 
                             firing = packetReader.ReadBoolean();
 
-                            ship.setPosition(pos);
-                            ship.SetRotation(rot);
+                            (ship as Unit).setPosition(pos);
+                            (ship as Unit).SetRotation(rot);
 
-                            ship.SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
+                            (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
                             if (firing)
                                 ship.Fire(gameTime);
@@ -540,18 +540,20 @@ namespace SpacePirates
             }
         }
 
+        /// <summary>
+        /// Send data of local player ships to others
+        /// </summary>
         private void SendNetworkData()
         {
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
             {
                 Human me = gamer.Tag as Human;
-                SpaceShip ship = me.GetShip();
-
+                Unit unit = (me.GetShip() as Unit);
                 //This should be the same as is read in the read function.
-                packetWriter.Write(ship.GetShipPosition());
-                packetWriter.Write(ship.GetRotation());
+                packetWriter.Write(unit.GetPosition());
+                packetWriter.Write(unit.GetRotation());
 
-                Rectangle anim = ship.GetAnimationFrame();
+                Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));
                 packetWriter.Write(new Vector2(anim.Width, anim.Height));
 
