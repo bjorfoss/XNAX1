@@ -33,6 +33,8 @@ namespace SpacePirates
         protected double blastDamage;
 
         private bool outOfBounds;
+
+        List<CollisionCd> cooldowns;
         //Rectangle hitbox;
 
         //add getters and setters
@@ -55,6 +57,8 @@ namespace SpacePirates
             this.blastRadius = blastRadius;
 
             this.graphics = graphics;
+
+            cooldowns = new List<CollisionCd>();
         }
         
 
@@ -129,9 +133,58 @@ namespace SpacePirates
             position.Y += velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
+        /// <summary>
+        /// A method meant to be overritten, to allow some units to avoid collision
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
         public virtual bool readyToCollide(GameTime gameTime)
         {
             return true;
+        }
+
+        /// <summary>
+        /// Check whether two units are ready to collide again
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public bool ableToCollide(Unit unit)
+        {
+            foreach (CollisionCd cd in cooldowns)
+            {
+                if (cd.getUnit() == unit) { return false; }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the collision cooldowns
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void updateCooldowns(GameTime gameTime)
+        {
+            List<CollisionCd> toBeRemoved = new List<CollisionCd>();
+            foreach (CollisionCd cd in cooldowns)
+            {
+                cd.update(gameTime);
+                if (cd.cdOver())
+                {
+                    toBeRemoved.Add(cd);
+                }
+            }
+            foreach (CollisionCd cd in toBeRemoved)
+            {
+                cooldowns.Remove(cd);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new cooldown with a unit
+        /// </summary>
+        /// <param name="cd"></param>
+        public void addCd(CollisionCd cd)
+        {
+            cooldowns.Add(cd);
         }
 
         /// <summary>
@@ -142,7 +195,12 @@ namespace SpacePirates
         {
             if (readyToCollide(gameTime) && unit.readyToCollide(gameTime))
             {
-                HandleCollision(unit);
+                if (ableToCollide(unit) && unit.ableToCollide(this))
+                {
+                    HandleCollision(unit);
+                    addCd(new CollisionCd(unit));
+                    unit.addCd(new CollisionCd(this));
+                }
             }
         }
 
@@ -156,6 +214,13 @@ namespace SpacePirates
 
         }
 
+        public void damage(double damage)
+        {
+            damage -= ((armorEffectiveness / 100) * armorThreshold);
+            if(damage < 0){ damage = 0; }
+            health -= damage;
+        }
+
         /// <summary>
         /// Calculate own collision damage, check if colliding with an explosion
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
@@ -166,7 +231,19 @@ namespace SpacePirates
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
             double moveEnergy = 0.2; //The percentage of energy involved in movement
-            
+
+            damage(1000);
+            unit.damage(1000);
+
+            if (health <= 0)
+            {
+                OnDestroy();
+            }
+            if (unit.getHealth() <= 0)
+            {
+                unit.OnDestroy();
+            }
+
             Vector2 velocityUnit = unit.getVelocity();
             Vector2 positionUnit = unit.GetPosition();
             Rectangle unitRec = unit.getUnitRectangle();
@@ -205,8 +282,6 @@ namespace SpacePirates
                 setPosition(position + move);
             }
 
-
-
             //End of movement calculations
             double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
             double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
@@ -218,15 +293,6 @@ namespace SpacePirates
 
             Log.getLog().addEvent("Unit at (" + position.X + ", " + position.Y + ") collided with unit at (" + positionUnit.X + ", " + positionUnit.Y + ")");
             bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
-
-
-            
-            if(health < 0)
-            {
-                OnDestroy();
-            }
-
-        
         }
 
         public Vector2 downSize(Vector2 vector, Vector2 scale)
@@ -281,12 +347,12 @@ namespace SpacePirates
         /// </summary>
         void OnDestroy() 
         {
-
             if (blastDamage > 0)
             {
+                GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage));
                 //something.CreateBlast(position, blastradius, blastdamage);
             }
-        
+            GameObject.Instance().removeFromGame(this);
         }
 
 
@@ -334,6 +400,7 @@ namespace SpacePirates
 
         public void UpdateUnit(GameTime gameTime)
         {
+            updateCooldowns(gameTime);
             CalculateDirectionAndSpeed(gameTime);
             UpdatePosition(gameTime);
             UpdateFacing(gameTime);
@@ -377,7 +444,7 @@ namespace SpacePirates
                 {
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
-                    batch.DrawString(font, warning, screenPos + new Vector2(-150, -200), Color.Red);
+                    batch.DrawString(font, warning, screenPos + new Vector2(-300, -200), Color.Red);
                 }
             }
 
