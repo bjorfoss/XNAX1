@@ -12,51 +12,6 @@ using SpacePirates.Player;
 
 namespace SpacePirates
 {
-    class Button
-    {
-        Texture2D normal;
-        Texture2D pressed;
-        Texture2D hover;
-        Texture2D released;
-
-        Vector2 position;
-        
-        Texture2D currentState;
-
-        public Button(Texture2D normal, Texture2D pressed, Texture2D hover, Texture2D released, Vector2 position)
-        {
-            Button self     = this;
-            self.normal     = normal;
-            self.pressed    = pressed;
-            self.hover      = hover;
-            self.released   = released;
-
-            self.currentState = self.normal;
-
-            self.position = position;
-        }
-
-        public Button(Texture2D normal, Texture2D pressed, Texture2D hover, Vector2 position)
-        {
-            new Button(normal, pressed, hover, normal, position);
-        }
-
-        public Button(Texture2D normal, Texture2D pressed, Vector2 position)
-        {
-            new Button(normal, pressed, normal, normal, position);
-        }
-
-        public Button(Texture2D normal, Vector2 position)
-        {
-            new Button(normal, normal, normal, normal, position);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(currentState, position, Color.White);
-        }
-    }
-
     class MenuObject : Microsoft.Xna.Framework.Game, GameStates
     {
         private static MenuObject instance;
@@ -81,6 +36,7 @@ namespace SpacePirates
         //Network sessions search.
         private AvailableNetworkSessionCollection availableSessions;
         private int selectedSessionIndex;
+
         private int selectedShipIndex = 0;
 
         private PacketReader packetReader = new PacketReader();
@@ -110,8 +66,6 @@ namespace SpacePirates
 
         SpriteFont text;
 
-        Button newGame;
-
         Vector2 bannerPosition;
 
         //Handling the keyboard inputs.
@@ -140,7 +94,6 @@ namespace SpacePirates
             self.readyButtonPos = new Vector2(10, banner.Height + 10);
             self.backButton = Content.Load<Texture2D>("MenuButtons/BackButton");
             self.backButtonPos = new Vector2(10, windowHeight - 10 - backButton.Height);
-            //self.newGame = new Button(newSession, new Vector2(10, quitSessionPos.Y + quitSession.Height + 10));
 
             self.text = Content.Load<SpriteFont>("Graphics/Spritefonts/Menutext");
         }
@@ -156,6 +109,7 @@ namespace SpacePirates
             }
         }
 
+        //Handle menu screen input and update.
         public void executeGameLogic(GameTime gameTime)
         {
             KeyboardState newKeyState = Keyboard.GetState();
@@ -174,7 +128,6 @@ namespace SpacePirates
                 {
                     if (NetworkObject.Instance().getNetworked())
                     {
-                        //currentMenu = joinedlobby;
                         currentMenu = searchLobbies;
                         int maxLocalPlayers = 1;
                         availableSessions = NetworkSession.Find(NetworkSessionType.SystemLink, maxLocalPlayers, null);
@@ -205,7 +158,6 @@ namespace SpacePirates
                     {
                         if (NetworkObject.Instance().getNetworksession().IsEveryoneReady)
                         {
-                            //GameObject.Instance().setUpGame();
                             NetworkObject.Instance().getNetworksession().StartGame();
                             active = false;
                         }
@@ -409,6 +361,7 @@ namespace SpacePirates
 
         }
 
+        //Draw the different menu screens in the game.
         public void executeDraw(SpriteBatch spriteBatch)
         {
             if (currentMenu == mainmenu)
@@ -417,8 +370,6 @@ namespace SpacePirates
                 spriteBatch.Draw(newSession, newSessionPos, Color.White);
                 spriteBatch.Draw(joinSession, joinSessionPos, Color.White);
                 spriteBatch.Draw(quitSession, quitSessionPos, Color.White);
-                //newGame.Draw(spriteBatch);
-                //spriteBatch.Draw(self.newGame.currentState, self.newGame.position, Color.White);
             }
             else if (currentMenu == createdlobby)
             {
@@ -525,6 +476,7 @@ namespace SpacePirates
             }
         }
 
+        //Receive network data for the lobby screen. Shows player choices and readiness.
         private void ReceiveNetworkData()
         {
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
@@ -547,6 +499,7 @@ namespace SpacePirates
             }
         }
 
+        //Send the network data needed to show the selection between players in the lobby menu.
         private void SendNetworkData()
         {
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)

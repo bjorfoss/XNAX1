@@ -361,9 +361,7 @@ namespace SpacePirates
             if (NetworkObject.Instance().getNetworked())
             {
                 NetworkObject.Instance().getNetworksession().Update();
-            }
-
-            SendNetworkData();
+            }            
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
@@ -374,7 +372,9 @@ namespace SpacePirates
                         objectsInGame.ElementAt(i).Collide(objectsInGame.ElementAt(j), gameTime);
                     }
                 }
-            }       
+            }
+
+            SendNetworkData();
         }
 
         public void executeDraw(SpriteBatch spriteBatch)
@@ -495,7 +495,7 @@ namespace SpacePirates
                                 ship.Fire(gameTime);
 
                         }
-                        catch (EndOfStreamException estre)
+                        catch (EndOfStreamException)
                         {
                             //Debug!
                         }
