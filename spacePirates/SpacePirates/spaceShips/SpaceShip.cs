@@ -161,31 +161,37 @@ namespace SpacePirates.spaceShips
             return registration.GetOwner();
         }
 
+        [Obsolete("Use GetPosition in Unit instead")]
         public Vector2 GetShipPosition()
         {
             return position;
         }
 
+        [Obsolete("Use SetPosition in Unit instead")]
         public void SetShipPosition(Vector2 pos)
         {
             position = pos;
         }
 
+        [Obsolete("Use GetRotation in Unit instead")]
         public double GetRotation()
         {
             return rotation;
         }
 
+        [Obsolete("Use SetRotation in Unit instead")]
         public void SetRotation(double rot)
         {
             rotation = rot;
         }
 
+        [Obsolete("Use GetAnimationFrame in Unit instead")]
         public Rectangle GetAnimationFrame()
         {
             return animationFrame;
         }
 
+        [Obsolete("Use SetAnimationFrame in Unit instead")]
         public void SetAnimationFrame(Rectangle anim)
         {
             animationFrame = anim;
