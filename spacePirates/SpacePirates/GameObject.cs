@@ -268,7 +268,6 @@ namespace SpacePirates
 
             if (NetworkObject.Instance().getNetworked())
             {
-                addToGame(new SpaceStation(new Vector2(100, 100)));
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
