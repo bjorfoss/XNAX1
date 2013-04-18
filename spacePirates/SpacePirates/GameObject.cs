@@ -474,8 +474,15 @@ namespace SpacePirates
                         col = Color.LightBlue;
                     }
 
-                    (ship as Unit).Draw(spriteBatch);
-                    spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                    Unit unit = (ship as Unit);
+
+                    if (unit.getHealth() > 0)
+                    {
+                        unit.Draw(spriteBatch);
+                        Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
+                        screenPos -= new Vector2(50,150);
+                        spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                    }
                 }
                 else
                 {
@@ -493,14 +500,17 @@ namespace SpacePirates
                             col = Color.LightBlue;
                         }
 
-                        (ship as Unit).Draw(spriteBatch);
-                        spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                        Unit unit = (ship as Unit);
+                        if (unit.getHealth() > 0)
+                        {
+                            unit.Draw(spriteBatch);
+                            Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
+                            screenPos -= new Vector2(50, 150);
+                            spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col);
+                        }
                     }
                 }
             }
-
-            //TODO: Investigate why not drawn for bjorfoss without this:
-            //(cameraTarget as Unit).Draw(spriteBatch);
 
             foreach (Explosion explosion in explosions)
             {
