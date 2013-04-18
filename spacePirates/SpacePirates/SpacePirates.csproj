@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Explosion.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameStates.cs" />
     <Compile Include="Level.cs" />
@@ -146,6 +147,8 @@
     <Compile Include="spaceShips\Weapons\WeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\WeaponState_Gun.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="Utilities\CollisionCd.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\GraphicBank.cs" />
   </ItemGroup>
   <ItemGroup>

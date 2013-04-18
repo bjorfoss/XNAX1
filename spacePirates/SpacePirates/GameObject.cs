@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using SpacePirates.spaceShips;
 using SpacePirates.Obstacles;
 using SpacePirates.Player;
+using SpacePirates.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
@@ -62,7 +63,9 @@ namespace SpacePirates
 
         private List<Unit> objectsInGame;
 
-        private List<SpaceStation> spaceStations; 
+        private List<SpaceStation> spaceStations;
+
+        private List<Explosion> explosions;
 
         //Holds the global maximum speed of any normal object
         private double maxSpeed;
@@ -101,6 +104,9 @@ namespace SpacePirates
 
             // Holds the spacestation in the game
             self.spaceStations = new List<SpaceStation>();
+
+            // Holds the explosions in the game
+            self.explosions = new List<Explosion>();
 
             maxSpeed = 300;
 
@@ -232,12 +238,37 @@ namespace SpacePirates
             
         }
 
+        public void addToGame(Explosion explosion)
+        {
+            explosions.Add(explosion);
+        }
+
+        public void removeFromGame(Unit unit)
+        {
+            objectsInGame.Remove(unit);
+            if (unit is SpaceShip)
+            {
+                redTeam.Remove(unit as SpaceShip);
+                blueTeam.Remove(unit as SpaceShip);
+            }
+            else if (unit is IObstacle)
+            {
+                obstacles.Remove(unit as IObstacle);
+            }
+        }
+
+        public void removeFromGame(Explosion explosion)
+        {
+            explosions.Remove(explosion);
+        }
+
         public void setUpGame()
         {
             gameSetup = false;
 
             if (NetworkObject.Instance().getNetworked())
             {
+                addToGame(new SpaceStation(new Vector2(100, 100)));
                 foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
@@ -353,6 +384,21 @@ namespace SpacePirates
                     //(ship.GetOwner() as Ai)
                 }
             }
+            
+            List<Explosion> exClone = Extensions.CloneExplosions(explosions);
+            foreach (Explosion ex in exClone)
+            {
+                foreach (Unit unit in objectsInGame)
+                {
+                    if (ex.update(gameTime))
+                    {
+                        if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
+                        {
+                            unit.damage(ex.getDamage());
+                        }
+                    }
+                }
+            }
 
             //Updates all the units in the game
             for (int i = 0; i < objectsInGame.Count; i++)
@@ -456,6 +502,11 @@ namespace SpacePirates
 
             //TODO: Investigate why not drawn for bjorfoss without this:
             //(cameraTarget as Unit).Draw(spriteBatch);
+
+            foreach (Explosion explosion in explosions)
+            {
+                explosion.Draw(spriteBatch);
+            }
 
             foreach (Unit unit in objectsInGame)
             {
