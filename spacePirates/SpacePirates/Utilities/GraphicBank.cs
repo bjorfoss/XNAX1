@@ -26,6 +26,7 @@ namespace SpacePirates.Utilities
             graphics.Add("bullet", content.Load<Texture2D>("Graphics/Obstacles/Projectile01"));
             graphics.Add("fighter", content.Load<Texture2D>("Graphics/Ships/NFighterSheeth"));
             graphics.Add("station", content.Load<Texture2D>("Graphics/Obstacles/SpaceStation"));
+            graphics.Add("eightwing", content.Load<Texture2D>("Graphics/Ships/Eightwing"));
 
             fonts = new Dictionary<String, SpriteFont>();
             fonts.Add("Menutext", content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"));

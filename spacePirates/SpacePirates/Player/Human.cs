@@ -16,7 +16,7 @@ namespace SpacePirates.Player
         String name;
         private int team = 0;//No team.
         bool pickedTeam = false;
-        private int shipSelection = 1; //Ship 1 - the fighter.
+        private string shipSelection = "fighter";
         bool shipFires = false;
 
         public Human(string name)
@@ -60,12 +60,12 @@ namespace SpacePirates.Player
             return team;
         }
 
-        public void SetSelectedShip(int selection)
+        public void SetSelectedShip(string selection)
         {
             shipSelection = selection;
         }
 
-        public int GetShipSelection()
+        public string GetShipSelection()
         {
             return shipSelection;
         }

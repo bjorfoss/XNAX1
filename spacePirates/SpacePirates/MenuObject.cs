@@ -81,6 +81,7 @@ namespace SpacePirates
         //Network sessions search.
         private AvailableNetworkSessionCollection availableSessions;
         private int selectedSessionIndex;
+        private int selectedShipIndex = 0;
 
         private PacketReader packetReader = new PacketReader();
         private PacketWriter packetWriter = new PacketWriter();
@@ -249,6 +250,40 @@ namespace SpacePirates
                         }
                     }                
                 }
+                else if (newKeyState.IsKeyDown(Keys.Left) && !oldKeyState.IsKeyDown(Keys.Left))
+                {
+                    if (NetworkObject.Instance().getNetworked())
+                    {
+                        foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+                        {
+                            if (!gamer.IsReady)
+                            {
+                                if (selectedShipIndex > 0)
+                                {
+                                    selectedShipIndex--;
+                                    (gamer.Tag as Human).SetSelectedShip(GameObject.Instance().GetShipCollection().ElementAt(selectedShipIndex).Key);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (newKeyState.IsKeyDown(Keys.Right) && !oldKeyState.IsKeyDown(Keys.Right))
+                {
+                    if (NetworkObject.Instance().getNetworked())
+                    {
+                        foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+                        {
+                            if (!gamer.IsReady)
+                            {
+                                if (selectedShipIndex < GameObject.Instance().GetShipCollection().Count - 1) //max
+                                {
+                                    selectedShipIndex++;
+                                    (gamer.Tag as Human).SetSelectedShip(GameObject.Instance().GetShipCollection().ElementAt(selectedShipIndex).Key);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 SendNetworkData();
             }
@@ -293,6 +328,40 @@ namespace SpacePirates
                         {
                             if (!gamer.IsReady)
                                 (gamer.Tag as Human).SetTeam(2);
+                        }
+                    }
+                }
+                else if (newKeyState.IsKeyDown(Keys.Left) && !oldKeyState.IsKeyDown(Keys.Left))
+                {
+                    if (NetworkObject.Instance().getNetworked())
+                    {
+                        foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+                        {
+                            if (!gamer.IsReady)
+                            {
+                                if (selectedShipIndex > 0)
+                                {
+                                    selectedShipIndex--;
+                                    (gamer.Tag as Human).SetSelectedShip(GameObject.Instance().GetShipCollection().ElementAt(selectedShipIndex).Key);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (newKeyState.IsKeyDown(Keys.Right) && !oldKeyState.IsKeyDown(Keys.Right))
+                {
+                    if (NetworkObject.Instance().getNetworked())
+                    {
+                        foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+                        {
+                            if (!gamer.IsReady)
+                            {
+                                if (selectedShipIndex < GameObject.Instance().GetShipCollection().Count - 1) //max
+                                {
+                                    selectedShipIndex++;
+                                    (gamer.Tag as Human).SetSelectedShip(GameObject.Instance().GetShipCollection().ElementAt(selectedShipIndex).Key);
+                                }
+                            }
                         }
                     }
                 }
@@ -367,7 +436,7 @@ namespace SpacePirates
 
                     foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
                     {
-                        string name = gamer.Gamertag;
+                        string name = gamer.Gamertag + " - Ship(" + (gamer.Tag as Human).GetShipSelection().ToString() + ")";
                         Color playerCol = Color.White;
 
                         if (gamer.IsReady)
@@ -393,7 +462,7 @@ namespace SpacePirates
 
                 spriteBatch.Draw(startGame, startGamePos, startCol);
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);
-                spriteBatch.DrawString(text, "Press E for red team,\n L for blue team.", startGamePos + new Vector2(0, readyButton.Height * 2 + 10), Color.White);
+                spriteBatch.DrawString(text, "Press E for red team,\nL for blue team.\nLeft and right arrows to\ncycle ship selection.", startGamePos + new Vector2(0, readyButton.Height * 2 + 10), Color.White);
             }
             else if (currentMenu == joinedlobby)
             {
@@ -405,7 +474,7 @@ namespace SpacePirates
 
                 foreach (NetworkGamer gamer in NetworkObject.Instance().getNetworksession().AllGamers)
                 {
-                    string name = gamer.Gamertag;
+                    string name = gamer.Gamertag + " - Ship(" + (gamer.Tag as Human).GetShipSelection().ToString() + ")";
                     Color playerCol = Color.White;
 
                     if (gamer.IsReady)
@@ -425,7 +494,7 @@ namespace SpacePirates
                     spriteBatch.DrawString(text, name, lastPos + new Vector2(0, 30), playerCol);
                     lastPos.Y += 30;
                 }
-                spriteBatch.DrawString(text, "Press E for red team,\n L for blue team.", readyButtonPos + new Vector2(0, readyButton.Height + 10), Color.White);
+                spriteBatch.DrawString(text, "Press E for red team,\nL for blue team.\nLeft and right arrows to\ncycle ship selection.", readyButtonPos + new Vector2(0, readyButton.Height + 10), Color.White);
             }
             else if (currentMenu == searchLobbies)
             {
@@ -471,7 +540,7 @@ namespace SpacePirates
 
                         //This should be the same as was is sent in the send function.
                         senderHuman.SetTeam(packetReader.ReadInt16());
-                        senderHuman.SetSelectedShip(packetReader.ReadInt16());
+                        senderHuman.SetSelectedShip(packetReader.ReadString());
 
                     }
                 }

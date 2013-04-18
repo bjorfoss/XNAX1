@@ -104,9 +104,9 @@ namespace SpacePirates
 
             maxSpeed = 300;
 
-
             shipFactoryCollection = new Dictionary<String, IShipFactory>();
             shipFactoryCollection.Add("fighter", new Factory_Fighter());
+            shipFactoryCollection.Add("eightwing", new Factory_Eightwing());
 
             obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
             obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
@@ -168,6 +168,11 @@ namespace SpacePirates
             {
                 return instance;
             }
+        }
+
+        public Dictionary<String, IShipFactory> GetShipCollection()
+        {
+            return shipFactoryCollection;
         }
 
 
@@ -237,15 +242,16 @@ namespace SpacePirates
                 {
                     int nTeam = (player.Tag as Human).GetTeam();
                     SpaceShip ship;
+                    string shipType = (player.Tag as Human).GetShipSelection();
 
                     if (nTeam == 1)
                     {
-                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(300, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(300, 600));
                         addToGame(redTeam, ship);
                     }
                     else
                     {
-                        ship = setUpShip((player.Tag as Human), "fighter", new Vector2(500, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(500, 600));
                         addToGame(blueTeam, ship);
                     }
 
@@ -400,7 +406,7 @@ namespace SpacePirates
                 else
                 {
                     Human human = player.Tag as Human;
-                    if (human != null)
+                    if (human != null && !player.HasLeftSession)
                     {
                         SpaceShip ship = human.GetShip();
 

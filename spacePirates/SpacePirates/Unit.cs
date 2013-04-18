@@ -22,6 +22,7 @@ namespace SpacePirates
 
         protected Texture2D graphics;
         protected Rectangle animationFrame;
+        protected Color unitColor = Color.White;
 
         protected double health;
         protected double maxHealth;
@@ -325,7 +326,10 @@ namespace SpacePirates
         {
             velocity = vel;
         }
-
+        public void setColor(Color col)
+        {
+            unitColor = col;
+        }
 
 
         public virtual void Update(GameTime gameTime)
@@ -381,7 +385,7 @@ namespace SpacePirates
                 }
             }
 
-            batch.Draw(graphics, screenPos, animationFrame, Color.White, (float)rotation,
+            batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
                     new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
                     1.0f, SpriteEffects.None, 0f);
             
