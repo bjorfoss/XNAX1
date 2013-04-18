@@ -508,7 +508,14 @@ namespace SpacePirates
 
                 //This should be the same as is read in the read function.
                 packetWriter.Write(me.GetTeam());
-                packetWriter.Write(me.GetShipSelection());
+                String shipType = me.GetShipSelection();
+                if (shipType == null || shipType == "")
+                {
+                    shipType = "fighter";
+                    Console.WriteLine("Attempted to send invalid ship type, fall back to default value");
+                    me.SetSelectedShip(shipType);
+                }
+                packetWriter.Write(shipType);
 
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }

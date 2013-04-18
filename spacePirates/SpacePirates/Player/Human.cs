@@ -62,6 +62,11 @@ namespace SpacePirates.Player
 
         public void SetSelectedShip(string selection)
         {
+            if (selection == null || selection == "")
+            {
+                selection = "fighter";
+                Console.WriteLine("Human.SetSelectedShip: Received invalid ship selection value, fall back to default");
+            }
             shipSelection = selection;
         }
 
