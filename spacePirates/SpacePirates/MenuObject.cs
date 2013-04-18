@@ -237,7 +237,6 @@ namespace SpacePirates
                                 (gamer.Tag as Human).SetTeam(1);
                         }
                     }
-                    SendNetworkData();
                 }
                 else if (newKeyState.IsKeyDown(Keys.L) && !oldKeyState.IsKeyDown(Keys.L))
                 {
@@ -248,9 +247,10 @@ namespace SpacePirates
                             if (!gamer.IsReady)
                                 (gamer.Tag as Human).SetTeam(2);
                         }
-                    }
-                    SendNetworkData();
+                    }                
                 }
+
+                SendNetworkData();
             }
             else if (currentMenu == joinedlobby)
             {
@@ -283,9 +283,7 @@ namespace SpacePirates
                             if(!gamer.IsReady)
                                 (gamer.Tag as Human).SetTeam(1);
                         }
-                    }
-
-                    SendNetworkData();
+                    }             
                 }
                 else if (newKeyState.IsKeyDown(Keys.L) && !oldKeyState.IsKeyDown(Keys.L))
                 {
@@ -297,9 +295,10 @@ namespace SpacePirates
                                 (gamer.Tag as Human).SetTeam(2);
                         }
                     }
-
-                    SendNetworkData();
                 }
+
+                SendNetworkData();
+
             }
             else if (currentMenu == searchLobbies)
             {

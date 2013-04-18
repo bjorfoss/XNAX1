@@ -170,5 +170,25 @@ namespace SpacePirates.spaceShips
         {
             position = pos;
         }
+
+        public double GetRotation()
+        {
+            return rotation;
+        }
+
+        public void SetRotation(double rot)
+        {
+            rotation = rot;
+        }
+
+        public Rectangle GetAnimationFrame()
+        {
+            return animationFrame;
+        }
+
+        public void SetAnimationFrame(Rectangle anim)
+        {
+            animationFrame = anim;
+        }
     }
 }

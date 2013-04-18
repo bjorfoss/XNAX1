@@ -17,6 +17,7 @@ namespace SpacePirates.Player
         private int team = 0;//No team.
         bool pickedTeam = false;
         private int shipSelection = 1; //Ship 1 - the fighter.
+        bool shipFires = false;
 
         public Human(string name)
         {
@@ -67,6 +68,16 @@ namespace SpacePirates.Player
         public int GetShipSelection()
         {
             return shipSelection;
+        }
+
+        public bool GetFiring()
+        {
+            return shipFires;
+        }
+
+        public void ShipFired()
+        {
+            shipFires = false;
         }
 
         /// <summary>
@@ -164,6 +175,7 @@ namespace SpacePirates.Player
             // Fire weapon
             if (newState.IsKeyDown(Keys.F))
             {
+                shipFires = true;
                 ship.Fire(gameTime);
             }
             oldState = newState;

@@ -295,7 +295,7 @@ namespace SpacePirates
                 setUpGame();
             }
 
-            ReceiveNetworkData();
+            ReceiveNetworkData(gameTime);
 
             //Has any side won already?
             if (redScore >= goalLimit)
@@ -445,7 +445,7 @@ namespace SpacePirates
             blueScore++;
         }
 
-        private void ReceiveNetworkData()
+        private void ReceiveNetworkData(GameTime gameTime)
         {
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
             {
@@ -461,6 +461,15 @@ namespace SpacePirates
 
                         //This should be the same as was is sent in the send function.
                         ship.SetShipPosition(packetReader.ReadVector2());
+                        ship.SetRotation(packetReader.ReadDouble());
+
+                        Vector2 xy = packetReader.ReadVector2();
+                        Vector2 wh = packetReader.ReadVector2();
+                        ship.SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
+
+                        bool firing = packetReader.ReadBoolean();
+                        if (firing)
+                            ship.Fire(gameTime);
 
                     }
                 }
@@ -476,7 +485,15 @@ namespace SpacePirates
 
                 //This should be the same as is read in the read function.
                 packetWriter.Write(ship.GetShipPosition());
+                packetWriter.Write(ship.GetRotation());
 
+                Rectangle anim = ship.GetAnimationFrame();
+                packetWriter.Write(new Vector2(anim.X, anim.Y));
+                packetWriter.Write(new Vector2(anim.Width, anim.Height));
+
+                packetWriter.Write(me.GetFiring());
+                me.ShipFired();
+                
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
 	}
