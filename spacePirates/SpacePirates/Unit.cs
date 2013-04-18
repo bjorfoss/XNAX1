@@ -472,7 +472,7 @@ namespace SpacePirates
                 {
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
-                    batch.DrawString(font, warning, screenPos + new Vector2(-300, -200), Color.Red);
+                    batch.DrawString(font, warning, screenPos + new Vector2(0, -200), Color.Red);
                 }
             }
 

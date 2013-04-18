@@ -77,7 +77,8 @@ namespace SpacePirates.Player
 
         public bool GetFiring()
         {
-            return shipFires;
+            //only non-destroyed ships can fire
+            return (shipFires && ((ownerLink.GetShip() as Unit).getHealth() > 0));
         }
 
         public void ShipFired()
@@ -91,11 +92,24 @@ namespace SpacePirates.Player
 
         public void HandleInput(KeyboardState newState, GameTime gameTime)
         {
-            //KeyboardState newState = Keyboard.GetState();
+            //allow ship control only if ship still alive
+            if ((ownerLink.GetShip() as Unit).getHealth() > 0) {
+                HandleShipInput(newState, gameTime);
+            }
+            oldState = newState;
+        }
+
+        void HandleShipInput(KeyboardState newState, GameTime gameTime)
+        {
+            HandleShipKeyboardInput(newState, gameTime);
+        }
+
+        void HandleShipKeyboardInput(KeyboardState newState, GameTime gameTime)
+        {
             bool forwardKeyDown = false;
             bool shiftPressed = newState.IsKeyDown(Keys.LeftShift);
             ISpaceShip ship = ownerLink.GetShip();
-            
+
             //70 to 100% thrust
             if (newState.IsKeyDown(Keys.W))
             {
@@ -109,21 +123,24 @@ namespace SpacePirates.Player
                 }
                 forwardKeyDown = true;
             }
-            
+
             //25 to 50% thrust
             if (newState.IsKeyDown(Keys.S))
             {
                 if (shiftPressed)
                 {
                     ship.Thrust(50);
-                } else {
+                }
+                else
+                {
                     ship.Thrust(25);
                 }
                 forwardKeyDown = true;
             }
 
             //0% thrust
-            if (!forwardKeyDown) {
+            if (!forwardKeyDown)
+            {
                 ship.Thrust(0);
             }
 
@@ -138,7 +155,8 @@ namespace SpacePirates.Player
                 {
                     ship.Turn(-100.0f);
                 }
-            } else if (newState.IsKeyDown(Keys.D))
+            }
+            else if (newState.IsKeyDown(Keys.D))
             {
                 if (shiftPressed)
                 {
@@ -148,7 +166,9 @@ namespace SpacePirates.Player
                 {
                     ship.Turn(100.0f);
                 }
-            } else {
+            }
+            else
+            {
                 ship.Turn(0.0f);
             }
 
@@ -156,7 +176,8 @@ namespace SpacePirates.Player
             if (newState.IsKeyDown(Keys.I))
             {
 
-            } else if (newState.IsKeyDown(Keys.J))
+            }
+            else if (newState.IsKeyDown(Keys.J))
             {
 
             }
@@ -183,12 +204,6 @@ namespace SpacePirates.Player
                 shipFires = true;
                 ship.Fire(gameTime);
             }
-            oldState = newState;
-        }
-
-        void HandleKeyboardInput()
-        {
-
 
         }
 
