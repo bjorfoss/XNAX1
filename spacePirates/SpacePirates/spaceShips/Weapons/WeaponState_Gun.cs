@@ -28,9 +28,12 @@ namespace SpacePirates.spaceShips
                 System.Diagnostics.Debug.WriteLine(ship.rotation);
 
                 Vector2 vel = new Vector2((float)(Math.Sin(ship.rotation) * 300), (float)(Math.Cos(ship.rotation) * 300));
+                double edge = Math.Sqrt(Math.Pow(ship.getUnitRectangle().Width / 2, 2) + Math.Pow(ship.getUnitRectangle().Height / 2, 2));
+                float var = (float)Math.Sqrt(Math.Pow(((ship.getUnitRectangle().Height / 2) + 8), 2) / 
+                    (Math.Pow(vel.X, 2) + Math.Pow(vel.Y, 2)));
+                Vector2 pos = new Vector2(ship.GetPosition().X + var * vel.X, ship.GetPosition().Y + var * vel.Y);
                 vel.X += ship.getVelocity().X;
                 vel.Y += ship.getVelocity().Y;
-                Vector2 pos = new Vector2(ship.GetPosition().X, ship.GetPosition().Y);
 
                 Factory_Bullet factory = GameObject.Instance().getOFactory("bullet") as Factory_Bullet;
                 ConcreteObstacle_Bullet bullet = factory.CreateObstacle(vel, pos) as ConcreteObstacle_Bullet;

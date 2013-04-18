@@ -18,16 +18,17 @@ namespace SpacePirates.Obstacles
             safeTime = 0;
         }
 
-        public override void Collide(Unit unit, GameTime gameTime)
+        public override bool readyToCollide(GameTime gameTime)
         {
             double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (safeTime + temp > 500)
+            if (safeTime + temp > 100)
             {
-                base.HandleCollision(unit);
+                return true;
             }
             else
             {
                 safeTime += temp;
+                return false;
             }
         }
     }
