@@ -129,8 +129,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-   <Compile Include="Graphics\Obstacles\SpaceStation.png">
+    <Compile Include="Graphics\Obstacles\SpaceStation.png">
       <Name>SpaceStation</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuButtons\DockMenu.png">
+      <Name>DockMenu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

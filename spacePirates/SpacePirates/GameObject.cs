@@ -215,7 +215,7 @@ namespace SpacePirates
         private void addToGame(List<SpaceStation> list, SpaceStation Station)
         {
             list.Add(Station);
-            addToGame((Unit)Station);
+            //addToGame((Unit)Station);
 
         }
 
@@ -251,6 +251,11 @@ namespace SpacePirates
                     if (player.IsLocal)
                         cameraTarget = ship;
                 }
+                addToGame(spaceStations, new SpaceStation(new Vector2(200, 200)));
+
+
+
+                addToGame(spaceStations, new SpaceStation(new Vector2(1000, 1000)));
 
 	   }
 
@@ -350,6 +355,25 @@ namespace SpacePirates
                 unit.UpdateUnit(gameTime);
                 
             }
+            foreach (SpaceStation station in spaceStations)
+            {
+                station.Update(gameTime);
+            }
+            foreach (SpaceShip ship in redTeam){
+
+                if(ship.getUnitRectangle().Intersects(spaceStations.ElementAt(0).getRectangle()))
+                {
+                    spaceStations.ElementAt(0).dockShip(ship);
+                }
+            }
+            foreach (SpaceShip ship in blueTeam)
+            {
+
+                if (ship.getUnitRectangle().Intersects(spaceStations.ElementAt(1).getRectangle()))
+                {
+                    spaceStations.ElementAt(1).dockShip(ship);
+                }
+            }
 
             if (NetworkObject.Instance().getNetworked())
             {
@@ -360,6 +384,10 @@ namespace SpacePirates
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
+
+               
+
+
                 for (int j = i + 1; j < objectsInGame.Count; j++)
                 {
                     if (objectsInGame.ElementAt(i).getUnitRectangle().Intersects(objectsInGame.ElementAt(j).getUnitRectangle()))
@@ -376,6 +404,7 @@ namespace SpacePirates
 
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
+                
                 if (player.IsLocal)
                 {
                     //(cameraTarget as Unit).Draw(spriteBatch);
@@ -425,6 +454,13 @@ namespace SpacePirates
             {
                 unit.Draw(spriteBatch);
             }
+            foreach (SpaceStation station in spaceStations)
+            {
+                station.Draw(spriteBatch);
+            }
+            
+            
+           
 
         }
 
