@@ -141,6 +141,11 @@ namespace SpacePirates
             this.rotation = rotation;
         }
 
+        public void SetHealth(double health)
+        {
+            this.health = health;
+        }
+
         /// <summary>
         /// Return rotation in radians
         /// </summary>
