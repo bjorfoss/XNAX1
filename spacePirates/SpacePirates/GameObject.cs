@@ -632,6 +632,7 @@ namespace SpacePirates
 
                         Vector2 pos;
                         double rot;
+                        Vector2 vel;
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
@@ -644,6 +645,7 @@ namespace SpacePirates
                             
                             pos = packetReader.ReadVector2();
                             rot = packetReader.ReadDouble();
+                            vel = packetReader.ReadVector2();
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
@@ -654,6 +656,7 @@ namespace SpacePirates
 
                             (ship as Unit).setPosition(pos);
                             (ship as Unit).SetRotation(rot);
+                            (ship as Unit).setVelocity(vel);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
@@ -685,6 +688,7 @@ namespace SpacePirates
                 //This should be the same as is read in the read function.
                 packetWriter.Write(unit.GetPosition());
                 packetWriter.Write(unit.GetRotation());
+                packetWriter.Write(unit.getVelocity());
 
                 Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));
