@@ -96,6 +96,10 @@ namespace SpacePirates.Player
 
         public void SetDestroyed(bool destroy, double time)
         {
+            if (destroyed && !destroy)
+            {
+                GameObject.Instance().addToGame(GetShip() as Unit);
+            }
             destroyed = destroy;
             timeDied = time;
         }
