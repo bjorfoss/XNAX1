@@ -50,7 +50,7 @@ namespace SpacePirates.spaceShips
 
             this.registration = registration;
 
-            currentWeapon = ConcreteWeaponFactory.BuildWeapon("gun");
+            currentWeapon = ConcreteWeaponFactory.CreateWeapon("gun");
             currentAbility = ConcreteAbilityFactory.CreateAbility("shield");
         }
 

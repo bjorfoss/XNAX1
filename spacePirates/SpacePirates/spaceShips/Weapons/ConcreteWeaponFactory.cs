@@ -32,7 +32,7 @@ namespace SpacePirates.spaceShips.Weapons
             }
         }
 
-        public static IWeapon BuildWeapon(String weapon)
+        public static IWeapon CreateWeapon(String weapon)
         {
             return Instance().factories[weapon].CreateWeapon();
         }
