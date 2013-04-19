@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace SpacePirates.Utilities
 {
@@ -16,8 +17,7 @@ namespace SpacePirates.Utilities
 
         private Dictionary<String, Texture2D> graphics;
         private Dictionary<String, SpriteFont> fonts;
-        Texture2D bullet;
-        Texture2D fighter;
+        private Dictionary<String, SoundEffect> sounds;
 
         private GraphicBank()
         {
@@ -33,6 +33,12 @@ namespace SpacePirates.Utilities
 
             fonts = new Dictionary<String, SpriteFont>();
             fonts.Add("Menutext", content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"));
+
+            sounds = new Dictionary<string, SoundEffect>();
+            sounds.Add("boom1", content.Load<SoundEffect>("Sound/Effects/boom1"));
+            sounds.Add("boom2", content.Load<SoundEffect>("Sound/Effects/boom2"));
+            sounds.Add("boom3", content.Load<SoundEffect>("Sound/Effects/boom3"));
+            sounds.Add("boom4", content.Load<SoundEffect>("Sound/Effects/boom4"));
         }
 
         public static GraphicBank getInstance()
@@ -55,6 +61,11 @@ namespace SpacePirates.Utilities
         public Texture2D getGraphic(String name)
         {
             return graphics[name];
+        }
+
+        public SoundEffect getSound(String name)
+        {
+            return sounds[name];
         }
     }
 }
