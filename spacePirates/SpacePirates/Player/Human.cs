@@ -126,6 +126,7 @@ namespace SpacePirates.Player
 
             (ship as SpaceShip).setPosition(spawn);
             (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());
+            GameObject.Instance().addToGame(ship as Unit);
         }
 
         /// <summary>

@@ -270,6 +270,11 @@ namespace SpacePirates
             explosions.Remove(explosion);
         }
 
+        public void removeFromObjects(Unit unit)
+        {
+            objectsInGame.Remove(unit);
+        }
+
         public Vector2 getRedSpawn()
         {
             return redSpaceStationPos;
@@ -522,7 +527,7 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
-
+            /*
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
                 
@@ -579,7 +584,7 @@ namespace SpacePirates
                     }
                 }
             }
-
+            */
             foreach (Explosion explosion in explosions)
             {
                 explosion.Draw(spriteBatch);
