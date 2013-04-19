@@ -7,7 +7,7 @@ using SpacePirates.Player;
 
 namespace SpacePirates.spaceShips
 {
-    interface IShipFactory
+    public interface IShipFactory
     {
         /// <summary>
         /// Builds a spaceship.

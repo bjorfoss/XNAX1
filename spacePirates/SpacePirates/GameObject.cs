@@ -44,8 +44,6 @@ namespace SpacePirates
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
         
-        //Hashtable with all spaceships
-        private Dictionary<String, IShipFactory> shipFactoryCollection;
 
         //Hashtable with obstacle types
         private Dictionary<String, ObstacleFactory> obstacleFactoryCollection;
@@ -113,10 +111,7 @@ namespace SpacePirates
             self.explosions = new List<Explosion>();
 
             maxSpeed = 300;
-
-            shipFactoryCollection = new Dictionary<String, IShipFactory>();
-            shipFactoryCollection.Add("fighter", new Factory_Fighter());
-            shipFactoryCollection.Add("eightwing", new Factory_Eightwing());
+            
 
             obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
             obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
@@ -180,9 +175,10 @@ namespace SpacePirates
             }
         }
 
+        [Obsolete("Use method in ConcreteShipFactory instead.")]
         public Dictionary<String, IShipFactory> GetShipCollection()
         {
-            return shipFactoryCollection;
+            return ConcreteShipFactory.GetFactories();
         }
 
         public double GetRespawnCooldown()
@@ -207,7 +203,7 @@ namespace SpacePirates
             registration.SetOwner(controller);
             controller.SetOwnerShip(registration);
 
-            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
+            ISpaceShip ship = ConcreteShipFactory.BuildSpaceship(shipType, registration, position, 0);
 
             registration.SetShip(ship);
             return ship;
