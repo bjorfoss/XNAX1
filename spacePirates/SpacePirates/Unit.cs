@@ -533,6 +533,7 @@ namespace SpacePirates
                 String text = "X: " + Math.Round(position.X) + " -- Y: " +
                         Math.Round(position.Y);
                 batch.DrawString(font, text, screenPos + new Vector2(0, 200), Color.Wheat);
+                batch.DrawString(font, "HP: " + ((int)health).ToString() + "/" + ((int)maxHealth).ToString() + " (" + ((int)((health * 100)/maxHealth)).ToString() + "%)", screenPos + new Vector2(0, 180), Color.White);
                 batch.DrawString(font, GameObject.Instance().getVictoryText(), screenPos + new Vector2(-300, 0), Color.Gold);
 
                 if (outOfBounds)
