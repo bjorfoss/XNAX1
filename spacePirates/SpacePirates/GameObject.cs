@@ -640,7 +640,7 @@ namespace SpacePirates
                                 + Math.Pow((ship as Unit).getVelocity().Y, 2));
                             //If the difference between the local ship's position and the position of the sending ship
                             //is larger than 10, update the position
-                            if (totPos1 - totPos2 > 10 || totPos1 - totPos2 < -10)
+                            if (totPos1 - totPos2 > 5 || totPos1 - totPos2 < -5)
                             {
                                 (ship as Unit).setPosition(pos);
                             }
