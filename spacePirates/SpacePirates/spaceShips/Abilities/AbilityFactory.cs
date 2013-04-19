@@ -7,6 +7,6 @@ namespace SpacePirates.spaceShips.Abilities
 {
     interface AbilityFactory
     {
-        IAbility createAbility();
+        IAbility CreateAbility();
     }
 }
