@@ -460,17 +460,17 @@ namespace SpacePirates
             List<Explosion> exClone = Extensions.CloneExplosions(explosions);
             foreach (Explosion ex in exClone)
             {
-                foreach (Unit unit in objectsInGame)
+                if (ex.update(gameTime))
                 {
-                    if (ex.update(gameTime))
+                    ex.playSound();
+                    foreach (Unit unit in objectsInGame)
                     {
-                        ex.playSound();
-                        if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
-                        {
-                            unit.damage(ex.getDamage());
+                            if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
+                            {
+                                unit.damage(ex.getDamage());
+                            }
                         }
                     }
-                }
             }
 
             generateAstroids(gameTime);
