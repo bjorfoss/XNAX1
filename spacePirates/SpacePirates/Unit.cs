@@ -229,7 +229,7 @@ namespace SpacePirates
             {
                 if (ableToCollide(unit) && unit.ableToCollide(this))
                 {
-                    HandleCollision(unit);
+                    HandleCollision(unit, gameTime);
                     addCd(new CollisionCd(unit));
                     unit.addCd(new CollisionCd(this));
                 }
