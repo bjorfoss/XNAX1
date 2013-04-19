@@ -43,10 +43,6 @@ namespace SpacePirates
 
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
-        
-
-        //Hashtable with obstacle types
-        private Dictionary<String, ObstacleFactory> obstacleFactoryCollection;
 
         private bool gameSetup;
 
@@ -110,12 +106,7 @@ namespace SpacePirates
             // Holds the explosions in the game
             self.explosions = new List<Explosion>();
 
-            maxSpeed = 300;
-            
-
-            obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
-            obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
-            obstacleFactoryCollection.Add("bullet", new Factory_Bullet());
+            maxSpeed = 300;           
 
             self.goalLimit = goalsToWin;
             self.redScore = 0;
@@ -388,7 +379,7 @@ namespace SpacePirates
                     astroidVelocity.X = random.Next(astroidMinSpeed / 5, astroidMaxSpeed / 5);
                 }
 
-                IObstacle asteroid = obstacleFactoryCollection[obstacleType].CreateObstacle(astroidStart, astroidVelocity);
+                IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle("asteroid", astroidStart, astroidVelocity);
                 addToGame(obstacles, asteroid);
 
                 Console.WriteLine("Created astroid with position " + astroidStart.X + "," + astroidStart.Y + " and velocity " + astroidVelocity.X + "," + astroidVelocity.Y);
@@ -717,9 +708,12 @@ namespace SpacePirates
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
 	}
-        public ObstacleFactory getOFactory(String name)
+
+        [Obsolete("This method is obsolete, use methods in ConcreteObstacleFactory instead")]
+        public IObstacleFactory getOFactory(String name)
         {
-            return obstacleFactoryCollection[name];
+            Dictionary<String, IObstacleFactory> f = ConcreteObstacleFactory.GetFactories();
+            return f[name];
         }
     }
 }
