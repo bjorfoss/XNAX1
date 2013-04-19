@@ -39,7 +39,7 @@ namespace SpacePirates
         private Level level;
 
         //percent chance of astroid spawning per second
-        private int chanceOfAstroidPerSecond = 5;
+        private float chanceOfAstroidPerSecond = 0;
 
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
@@ -306,23 +306,72 @@ namespace SpacePirates
 
             // chance of Asteroid being created
             Random random = new Random();
-            int randomNumber = random.Next(0, 100);
-
-            float chance = randomNumber * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             
-
-            if (chance < chanceOfAstroidPerSecond)
+            chanceOfAstroidPerSecond += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
+            if (chanceOfAstroidPerSecond > 10)
             {
-
+                chanceOfAstroidPerSecond = 0;
                 // Generate outside level limit with a directional velocity that will make it go across the level
 
-                Vector2 position = new Vector2(0);
+                int astroidMaxSpeed = 120;
+                int astroidMinSpeed = 80;
 
-                Vector2 velocity = new Vector2(0);
+                Vector2 astroidStart;
+                Vector2 astroidVelocity;
 
-                IObstacle asteroid = obstacleFactoryCollection[obstacleType].CreateObstacle(position, velocity);
+                Rectangle levelBounds = level.GetLevelBounds();
 
+                bool sideOrTop = new Random().Next() % 2 == 0 ? true : false;
+                bool leftOrRight = new Random().Next() % 2 == 0 ? true : false;
+
+                if (sideOrTop)
+                {
+                    // Astroid is placed on the sides of the rectangle
+                    astroidStart.X = levelBounds.Width / 2;
+                    astroidStart.Y = random.Next(0, levelBounds.Height);
+
+                    if (leftOrRight)
+                    {
+                        // Astroid is placed on the left side
+                        astroidVelocity.X = random.Next(astroidMinSpeed, astroidMaxSpeed);
+                        astroidStart.X = levelBounds.Center.X - astroidStart.X;
+                    }
+                    else
+                    {
+                        // Astroid is placed on the right side
+                        astroidVelocity.X = random.Next(astroidMinSpeed, astroidMaxSpeed) * -1;
+                        astroidStart.X = levelBounds.Center.X + astroidStart.X;
+                    }
+
+                    astroidVelocity.Y = random.Next(astroidMinSpeed / 5, astroidMaxSpeed / 5);
+                }
+                else
+                {
+                    // Asroid is place over or under rectangle
+                    astroidStart.X = random.Next(0, levelBounds.Height);
+                    astroidStart.Y = levelBounds.Height  / 2;
+
+                    if (leftOrRight)
+                    {
+                        // Astroid is placed under rectangle
+                        astroidVelocity.Y = random.Next(astroidMinSpeed, astroidMaxSpeed);
+                        astroidStart.Y = levelBounds.Center.Y - astroidStart.Y;
+                    }
+                    else
+                    {
+                        // Astroid is placed over rectangle
+                        astroidVelocity.Y = random.Next(astroidMinSpeed, astroidMaxSpeed) * -1;
+                        astroidStart.Y = levelBounds.Center.Y + astroidStart.Y;
+                    }
+
+                    astroidVelocity.X = random.Next(astroidMinSpeed / 5, astroidMaxSpeed / 5);
+                }
+
+                IObstacle asteroid = obstacleFactoryCollection[obstacleType].CreateObstacle(astroidStart, astroidVelocity);
+                addToGame(obstacles, asteroid);
+
+                Console.WriteLine("Created astroid with position " + astroidStart.X + "," + astroidStart.Y + " and velocity " + astroidVelocity.X + "," + astroidVelocity.Y);
             }
 
 
@@ -398,6 +447,8 @@ namespace SpacePirates
                     }
                 }
             }
+
+            generateAstroids(gameTime);
 
             //Updates all the units in the game
             for (int i = 0; i < objectsInGame.Count; i++)

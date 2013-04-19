@@ -24,6 +24,7 @@ namespace SpacePirates.Utilities
             content = GameObject.GetContentManager();
             graphics = new Dictionary<String, Texture2D>();
             graphics.Add("bullet", content.Load<Texture2D>("Graphics/Obstacles/Projectile01"));
+            graphics.Add("astroid", content.Load<Texture2D>("Graphics/Obstacles/astroid"));
             graphics.Add("fighter", content.Load<Texture2D>("Graphics/Ships/NFighterSheeth"));
             graphics.Add("station", content.Load<Texture2D>("Graphics/Obstacles/SpaceStation"));
             graphics.Add("dockMenu", content.Load<Texture2D>("MenuButtons/DockMenu"));
