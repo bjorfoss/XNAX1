@@ -260,8 +260,8 @@ namespace SpacePirates
             double ratio = 1;
             double moveEnergy = 0.2; //The percentage of energy involved in movement
 
-            damage(1000);
-            unit.damage(1000);
+            damage(500);
+            unit.damage(500);
 
             if (health <= 0)
             {
@@ -311,13 +311,18 @@ namespace SpacePirates
             }
 
             //End of movement calculations
+            /*
             double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
             double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
             double vel1y = (moveEnergy * velocity.Y * (mass - unitMass) + 2 * unitMass * velocityUnit.Y) / (mass + unitMass);
             double vel2y = (moveEnergy * velocityUnit.Y * (unitMass - mass) + 2 * mass * velocity.Y) / (mass + unitMass);
+            */
 
-            setVelocity(new Vector2((float)vel1x, (float)vel1y));
-            unit.setVelocity(new Vector2((float)vel2x, (float)vel2y));
+            double velx = ((mass * velocity.X + unitMass * velocityUnit.X) / (mass + unitMass));
+            double vely = ((mass * velocity.Y + unitMass * velocityUnit.Y) / (mass + unitMass));
+
+            setVelocity(new Vector2((float)velx, (float)vely));
+            unit.setVelocity(new Vector2((float)velx, (float)vely));
 
             Log.getLog().addEvent("Unit at (" + position.X + ", " + position.Y + ") collided with unit at (" + positionUnit.X + ", " + positionUnit.Y + ")");
             bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
@@ -358,8 +363,10 @@ namespace SpacePirates
         {
             if (GameObject.GetLevel().IsOutsideLevel(this))
             {
-               health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-               outOfBounds = true;
+                double damage = maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (damage < 1) { damage = 1; }
+                health -= damage; 
+                outOfBounds = true;
             } else {
                outOfBounds = false;
             }
