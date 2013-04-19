@@ -637,6 +637,11 @@ namespace SpacePirates
                         bool firing;
                         bool destroyed;
 
+                        bool shipNextWep;
+                        bool shipPreviousWep;
+                        bool shipNextAbility;
+                        bool shipPrevAbility;
+
                         try
                         {
                             //This should be the same as was is sent in the send function.
@@ -653,6 +658,11 @@ namespace SpacePirates
 
                             firing = packetReader.ReadBoolean();
                             destroyed = packetReader.ReadBoolean();
+ 
+                            shipNextWep = packetReader.ReadBoolean();
+                            shipPreviousWep = packetReader.ReadBoolean();
+                            shipNextAbility = packetReader.ReadBoolean();
+                            shipPrevAbility = packetReader.ReadBoolean();
 
                             double totPos1 = Math.Sqrt(Math.Pow(pos.X, 2) + Math.Pow(pos.Y, 2));
                             double totPos2 = Math.Sqrt(Math.Pow((ship as Unit).getVelocity().X, 2) 
@@ -674,6 +684,15 @@ namespace SpacePirates
                                 ship.Fire(gameTime);
 
                             senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
+
+                            if (shipNextWep)
+                                ship.NextWeapon();
+                            if (shipPreviousWep)
+                                ship.PreviousWeapon();
+                            if (shipNextAbility)
+                                ship.NextAbility();
+                            if (shipPreviousWep)
+                                ship.PreviousAbility();
 
                         }
                         catch (EndOfStreamException)
@@ -709,6 +728,11 @@ namespace SpacePirates
                 me.ShipFired();
 
                 packetWriter.Write(me.GetDestroyed());
+
+                packetWriter.Write(me.GetNextWeaponChange());
+                packetWriter.Write(me.GetPrevWeaponChange());
+                packetWriter.Write(me.GetNextAbilityChange());
+                packetWriter.Write(me.GetPrevAbilityChange());
 
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }

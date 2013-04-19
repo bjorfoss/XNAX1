@@ -24,6 +24,12 @@ namespace SpacePirates.Player
         private bool destroyed = false;
         private double timeDied = 0;
 
+        //Changes for weapons and abilities.
+        private bool shipNextAbility = false;
+        private bool shipPrevAbility = false;
+        private bool shipNextWep = false;
+        private bool shipPreviousWep = false;
+
         public Human(string name)
         {
             this.hud = new Hud(this);
@@ -94,6 +100,46 @@ namespace SpacePirates.Player
         public void ShipFired()
         {
             shipFires = false;
+        }
+
+        //Getter for network. Just set the bool to false at the end anyway.
+        public bool GetNextWeaponChange()
+        {
+            bool ret = shipNextWep;
+
+            shipNextWep = false;
+
+            return ret;
+        }
+
+        //Getter for network. Just set the bool to false at the end anyway.
+        public bool GetPrevWeaponChange()
+        {
+            bool ret = shipPreviousWep;
+
+            shipPreviousWep = false;
+
+            return ret;
+        }
+
+        //Getter for network. Just set the bool to false at the end anyway.
+        public bool GetNextAbilityChange()
+        {
+            bool ret = shipNextAbility;
+
+            shipNextAbility = false;
+
+            return ret;
+        }
+
+        //Getter for network. Just set the bool to false at the end anyway.
+        public bool GetPrevAbilityChange()
+        {
+            bool ret = shipPrevAbility;
+
+            shipPrevAbility = false;
+
+            return ret;
         }
 
         public bool GetDestroyed()
@@ -229,22 +275,26 @@ namespace SpacePirates.Player
             }
 
             // Browse features
-            if (newState.IsKeyDown(Keys.I))
+            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I))
             {
-
+                shipNextAbility = true;
+                ship.NextAbility();
             }
-            else if (newState.IsKeyDown(Keys.J))
+            else if (newState.IsKeyDown(Keys.J) && oldState.IsKeyUp(Keys.J))
             {
-
+                shipPrevAbility = true;
+                ship.PreviousAbility();
             }
 
             // Browse weapons
             if (newState.IsKeyDown(Keys.O) && oldState.IsKeyUp(Keys.O))
             {
+                shipNextWep = true;
                 ship.NextWeapon();
             }
             else if (newState.IsKeyDown(Keys.K) && oldState.IsKeyUp(Keys.K))
             {
+                shipPreviousWep = true;
                 ship.PreviousWeapon();
             }
 
