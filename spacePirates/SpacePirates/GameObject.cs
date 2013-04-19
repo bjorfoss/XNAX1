@@ -547,8 +547,7 @@ namespace SpacePirates
                     {
                         unit.Draw(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
-                        screenPos -= new Vector2(50,150);
-                        spriteBatch.DrawString(spritefont, player.Gamertag, Unit.WorldPosToScreenPos(pos), col);
+                        spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag) / 2, 1f, SpriteEffects.None, 0f);
                     }
                 }
                 else
@@ -575,8 +574,7 @@ namespace SpacePirates
                         {
                             unit.Draw(spriteBatch);
                             Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
-                            screenPos -= new Vector2(50, 150);
-                            spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col);
+                            spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag)/2, 1f, SpriteEffects.None, 0f);
                         }
                     }
                 }
