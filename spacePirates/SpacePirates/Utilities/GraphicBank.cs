@@ -6,9 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
+
 namespace SpacePirates.Utilities
 {
-    class GraphicBank
+    class GraphicBank : Microsoft.Xna.Framework.Game
     {
         private static GraphicBank instance;
         static readonly object padlock = new Object();
@@ -31,8 +32,20 @@ namespace SpacePirates.Utilities
             graphics.Add("eightwing", content.Load<Texture2D>("Graphics/Ships/Eightwing"));
             graphics.Add("explosion", content.Load<Texture2D>("Graphics/explosion01"));
 
+
+
+            Texture2D texture = new Texture2D(GameObject.Instance().graphicsDevice, 1, 1);
+            texture.SetData(new Color[] { Color.White });
+            graphics.Add("box", texture);
+
             fonts = new Dictionary<String, SpriteFont>();
             fonts.Add("Menutext", content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"));
+            fonts.Add("Weapon", content.Load<SpriteFont>("Graphics/SpriteFonts/Weapon"));
+            fonts.Add("Utility", content.Load<SpriteFont>("Graphics/SpriteFonts/Utility"));
+            fonts.Add("Armor", content.Load<SpriteFont>("Graphics/SpriteFonts/Armor"));
+            fonts.Add("Health", content.Load<SpriteFont>("Graphics/SpriteFonts/Health"));
+            fonts.Add("KillCount", content.Load<SpriteFont>("Graphics/SpriteFonts/KillCount"));
+            fonts.Add("TeamScore", content.Load<SpriteFont>("Graphics/SpriteFonts/TeamScore"));
         }
 
         public static GraphicBank getInstance()

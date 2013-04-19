@@ -399,6 +399,14 @@ namespace SpacePirates
         {
             return health;
         }
+        public double getArmorThreshold()
+        {
+            return armorThreshold;
+        }
+        public double getArmorEffectiveness()
+        {
+            return armorEffectiveness;
+        }
         public Rectangle getUnitRectangle()
         {
             return new Rectangle((int)(position.X - (double)animationFrame.Width / 2), 

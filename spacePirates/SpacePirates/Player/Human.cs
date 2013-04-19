@@ -18,11 +18,18 @@ namespace SpacePirates.Player
         bool pickedTeam = false;
         private string shipSelection = "fighter";
         bool shipFires = false;
+        Hud hud;
+        
 
         public Human(string name)
         {
+            this.hud = new Hud(this);
             this.name = name;
 
+        }
+
+        public Hud getHud() {
+            return hud;
         }
 
         public String GetName()

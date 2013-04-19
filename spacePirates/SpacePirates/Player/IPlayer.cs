@@ -27,6 +27,10 @@ namespace SpacePirates.Player
         /// <returns></returns>
         String GetName();
 
+
+        
+
+
        // IPlayer createController();
     }
 }

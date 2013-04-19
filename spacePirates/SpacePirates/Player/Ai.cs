@@ -52,10 +52,7 @@ namespace SpacePirates.Player
         {
         }
 
-
-
-
-        public static IPlayer createController()
+         public static IPlayer createController()
         {
             return new Ai("nocomputer"); 
             //throw new NotImplementedException();

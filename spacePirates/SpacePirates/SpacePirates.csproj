@@ -121,6 +121,7 @@
     <Compile Include="Obstacles\IObstacle.cs" />
     <Compile Include="Obstacles\ObstacleFactory.cs" />
     <Compile Include="Player\Ai.cs" />
+    <Compile Include="Player\Hud.cs" />
     <Compile Include="Player\Human.cs" />
     <Compile Include="Player\IPlayer.cs" />
     <Compile Include="Player\Ownership.cs" />

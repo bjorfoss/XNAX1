@@ -102,6 +102,36 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\SpriteFonts\Weapon.spritefont">
+      <Name>Weapon</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\SpriteFonts\Utility.spritefont">
+      <Name>Utility</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\SpriteFonts\Health.spritefont">
+      <Name>Health</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\SpriteFonts\Armor.spritefont">
+      <Name>Armor</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\SpriteFonts\KillCount.spritefont">
+      <Name>KillCount</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="Graphics\SpriteFonts\TeamScore.spritefont">
+      <Name>TeamScore</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="Text\AiNames.txt">
       <Name>AiNames</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

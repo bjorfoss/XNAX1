@@ -27,6 +27,7 @@ namespace SpacePirates
         // private ContentManager Content; //Inherited
 
         public static int numberOfShips = 10;
+        public GraphicsDevice graphicsDevice;
 
         ISpaceShip[] spaceShips = new ISpaceShip[10];
 
@@ -80,13 +81,14 @@ namespace SpacePirates
         private PacketReader packetReader = new PacketReader();
         private PacketWriter packetWriter = new PacketWriter();
 
-        private GameObject(int w, int h, ContentManager Content, int goalsToWin)
+        private GameObject(int w, int h, ContentManager Content, int goalsToWin, GraphicsDevice graphicsDevice)
         {
             GameObject self = this;
             this.Content = Content;
             self.windowWidth = w;
             self.windowHeight = h;
             screenArea = new Rectangle(0, 0, w, h);
+            self.graphicsDevice = graphicsDevice;
 
             self.gameSetup = true;
 
@@ -154,11 +156,11 @@ namespace SpacePirates
         /// <param name="Content"></param>
         /// <param name="defaultGoalLimit"></param>
         /// <returns></returns>
-        public static GameObject Instance(int w, int h, ContentManager Content, int defaultGoalLimit=25)
+        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=25)
         {
             lock (padlock) {
                 if (instance == null) {
-                    instance = new GameObject(w, h, Content, defaultGoalLimit);
+                    instance = new GameObject(w, h, Content, defaultGoalLimit, graphicsDevice);
                 }
                 return instance;
             }
@@ -514,6 +516,8 @@ namespace SpacePirates
                     //IPlayer human = player.Tag as Human;
                     Human human = NetworkObject.Instance().getPlayer();
 
+                    
+
                     ISpaceShip ship = human.GetShip();
 
                     Vector2 pos = new Vector2(300, 600);
@@ -529,6 +533,7 @@ namespace SpacePirates
 
                     if (unit.getHealth() > 0)
                     {
+                        human.getHud().executeDraw(spriteBatch, screenArea);
                         unit.Draw(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
                         screenPos -= new Vector2(50,150);

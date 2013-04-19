@@ -19,6 +19,9 @@ namespace SpacePirates
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+
+        public GraphicsDevice graphicsDevice;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -32,6 +35,7 @@ namespace SpacePirates
 
         public Game1()
         {
+            
             graphics = new GraphicsDeviceManager(this);
             Components.Add(new GamerServicesComponent(this));
 
@@ -71,7 +75,7 @@ namespace SpacePirates
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            gameObject = GameObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
+            gameObject = GameObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content, GraphicsDevice);
             menuObject = MenuObject.Instance(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, Content);
 
             networkObject = NetworkObject.Instance();
