@@ -46,15 +46,16 @@ namespace SpacePirates
             timeToLive -= gameTime.ElapsedGameTime.TotalMilliseconds;
 
             animationTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (animationTime >= 200)
+            if (animationTime >= 84)
             {
-
-                //This is where the animation cycles between the two last frames at the height of the thrust
-                if (animationFrame.X / 32 >= 2 && animationFrame.Y / 32 >= 1)
+                // jumps from line 2 to line 3
+                if (animationFrame.X / 32 >= 3 && animationFrame.Y / 32 >= 2)
                 {
-                    animationFrame.X -= 32;
+                    animationFrame.X = 0;
+                    animationFrame.Y += 32;
                 }
-                //This is where the animation switches to a lower line of frames
+                
+                //This is where the animation switches to line 2
                 else if (animationFrame.X / 32 >= 3)
                 {
                     animationFrame.X = 0;
@@ -80,7 +81,7 @@ namespace SpacePirates
             
             batch.Draw(graphic, Unit.WorldPosToScreenPos(position), animationFrame, Color.White, 0,
                     new Vector2(animationFrame.Width / 2, animationFrame.Height / 2), 
-                    size.X/graphic.Width, SpriteEffects.None, 0f);
+                    size.X/animationFrame.Width, SpriteEffects.None, 0f);
         }
 
         public void playSound()
