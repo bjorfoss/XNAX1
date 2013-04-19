@@ -346,8 +346,8 @@ namespace SpacePirates
 
                 Rectangle levelBounds = level.GetLevelBounds();
 
-                bool sideOrTop = new Random().Next() % 2 == 0 ? true : false;
-                bool leftOrRight = new Random().Next() % 2 == 0 ? true : false;
+                bool sideOrTop = random.Next(1, 3) % 2 == 0 ? true : false;
+                bool leftOrRight = random.Next(1, 3) % 2 == 0 ? true : false;
 
                 if (sideOrTop)
                 {
@@ -601,10 +601,7 @@ namespace SpacePirates
             foreach (SpaceStation station in spaceStations)
             {
                 station.Draw(spriteBatch);
-            }
-            
-            
-           
+            }          
 
         }
 
