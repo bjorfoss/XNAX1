@@ -625,7 +625,7 @@ namespace SpacePirates
                             //This should be the same as was is sent in the send function.
                             
                             
-                            //pos = packetReader.ReadVector2();
+                            pos = packetReader.ReadVector2();
                             rot = packetReader.ReadDouble();
                             vel = packetReader.ReadVector2();
 
@@ -635,7 +635,15 @@ namespace SpacePirates
 
                             firing = packetReader.ReadBoolean();
 
-                            //(ship as Unit).setPosition(pos);
+                            double totPos1 = Math.Sqrt(Math.Pow(pos.X, 2) + Math.Pow(pos.Y, 2));
+                            double totPos2 = Math.Sqrt(Math.Pow((ship as Unit).getVelocity().X, 2) 
+                                + Math.Pow((ship as Unit).getVelocity().Y, 2));
+                            //If the difference between the local ship's position and the position of the sending ship
+                            //is larger than 10, update the position
+                            if (totPos1 - totPos2 > 10 || totPos1 - totPos2 < -10)
+                            {
+                                (ship as Unit).setPosition(pos);
+                            }
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
 
@@ -664,7 +672,7 @@ namespace SpacePirates
                 Human me = gamer.Tag as Human;
                 Unit unit = (me.GetShip() as Unit);
                 //This should be the same as is read in the read function.
-                //packetWriter.Write(unit.GetPosition());
+                packetWriter.Write(unit.GetPosition());
                 packetWriter.Write(unit.GetRotation());
                 packetWriter.Write(unit.getVelocity());
 
