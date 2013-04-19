@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using SpacePirates.Obstacles;
 using SpacePirates.Utilities;
+using SpacePirates.Player;
+using SpacePirates.spaceShips;
 
 namespace SpacePirates
 {
@@ -251,7 +253,8 @@ namespace SpacePirates
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        protected void HandleCollision(Unit unit) {
+        protected void HandleCollision(Unit unit, GameTime gameTime)
+        {
 
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
@@ -262,11 +265,11 @@ namespace SpacePirates
 
             if (health <= 0)
             {
-                OnDestroy();
+                OnDestroy(gameTime, true);
             }
             if (unit.getHealth() <= 0)
             {
-                unit.OnDestroy();
+                unit.OnDestroy(gameTime, true);
             }
 
             Vector2 velocityUnit = unit.getVelocity();
@@ -363,21 +366,65 @@ namespace SpacePirates
 
             if (health <= 0)
             {
-                OnDestroy();
+                if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+                {
+                    IPlayer player = (this as SpaceShip).GetOwner();
+
+                    if(!(player as Human).GetDestroyed())
+                        OnDestroy(gameTime, false);
+                }
+                else
+                    OnDestroy(gameTime, false);
             }
         }
         /// <summary>
         /// TODO: create a blast if there should be one
         /// TODO: position the blast according to blastradius, shipsize and shipposition.
         /// </summary>
-        void OnDestroy() 
+        void OnDestroy(GameTime gameTime, bool awardPoint=false) 
         {
             if (blastDamage > 0)
             {
                 GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage));
                 //something.CreateBlast(position, blastradius, blastdamage);
             }
-            GameObject.Instance().removeFromGame(this);
+
+            if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+            {
+                    IPlayer died = (this as SpaceShip).GetOwner();
+
+                    Human dead = died as Human;
+
+                    velocity = Vector2.Zero;
+                    acceleration = Vector2.Zero;
+
+                    if (!dead.GetDestroyed())
+                    {
+                        dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
+                    }
+            }
+            else
+                GameObject.Instance().removeFromGame(this);
+
+            if (awardPoint)
+            {
+                if(this is SpaceShip)
+                {
+                    if ((this as SpaceShip).GetOwner() != null)
+                    {
+                        IPlayer died = (this as SpaceShip).GetOwner();
+
+                        int teamloss = (died as Human).GetTeam();
+
+                        if (teamloss == 1)
+                            GameObject.Instance().blueScored();
+                        else
+                            GameObject.Instance().redScored();
+                    }
+                }
+            }
+
+
         }
 
 
@@ -398,6 +445,13 @@ namespace SpacePirates
         public double getHealth()
         {
             return health;
+        }
+        public void RestoreHealth(double heal)
+        {
+            if (heal > maxHealth)
+                heal = maxHealth;
+
+            health = heal;
         }
         public Rectangle getUnitRectangle()
         {
@@ -476,10 +530,12 @@ namespace SpacePirates
                 }
             }
 
-            batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
-                    new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
-                    1.0f, SpriteEffects.None, 0f);
-            
+            if (health > 0)
+            {
+                batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
+                        new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
+                        1.0f, SpriteEffects.None, 0f);
+            }
           
             
         }

@@ -19,6 +19,9 @@ namespace SpacePirates.Player
         private string shipSelection = "fighter";
         bool shipFires = false;
 
+        private bool destroyed = false;
+        private double timeDied = 0;
+
         public Human(string name)
         {
             this.name = name;
@@ -86,6 +89,45 @@ namespace SpacePirates.Player
             shipFires = false;
         }
 
+        public bool GetDestroyed()
+        {
+            return destroyed;
+        }
+
+        public void SetDestroyed(bool destroy, double time)
+        {
+            destroyed = destroy;
+            timeDied = time;
+        }
+
+        public bool ReadyToRespawn(double time)
+        {
+            bool answer = false;
+
+            double elapsed = time - timeDied;
+
+            if (elapsed >= GameObject.Instance().GetRespawnCooldown())
+                answer = true;
+
+            return answer;
+        }
+
+        public void Respawn()
+        {
+            destroyed = false;
+            ISpaceShip ship = GetShip();
+
+            Vector2 spawn;
+
+            if (team == 1)
+                spawn = GameObject.Instance().getRedSpawn();
+            else
+                spawn = GameObject.Instance().getBlueSpawn();
+
+            (ship as SpaceShip).setPosition(spawn);
+            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());
+        }
+
         /// <summary>
         /// Handle input logic and call Spaceship interface methods.
         /// </summary>
@@ -93,9 +135,16 @@ namespace SpacePirates.Player
         public void HandleInput(KeyboardState newState, GameTime gameTime)
         {
             //allow ship control only if ship still alive
-            if ((ownerLink.GetShip() as Unit).getHealth() > 0) {
+            if ((ownerLink.GetShip() as Unit).getHealth() > 0)
+            {
                 HandleShipInput(newState, gameTime);
             }
+            else
+            {
+                if (ReadyToRespawn(gameTime.TotalGameTime.TotalSeconds))
+                    Respawn();
+            }
+
             oldState = newState;
         }
 

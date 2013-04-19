@@ -74,6 +74,9 @@ namespace SpacePirates
         private int goalLimit;
         private int redScore;
         private int blueScore;
+        private double respawnCooldown = 15.0;
+        private Vector2 redSpaceStationPos = new Vector2(200, 200);
+        private Vector2 blueSpaceStationPos = new Vector2(1000, 1000);
 
         SpriteFont spritefont;
 
@@ -181,6 +184,11 @@ namespace SpacePirates
             return shipFactoryCollection;
         }
 
+        public double GetRespawnCooldown()
+        {
+            return respawnCooldown;
+        }
+
 
         // TODO: make ship selection random
 
@@ -262,6 +270,16 @@ namespace SpacePirates
             explosions.Remove(explosion);
         }
 
+        public Vector2 getRedSpawn()
+        {
+            return redSpaceStationPos;
+        }
+
+        public Vector2 getBlueSpawn()
+        {
+            return blueSpaceStationPos;
+        }
+
         public void setUpGame()
         {
             gameSetup = false;
@@ -276,23 +294,23 @@ namespace SpacePirates
 
                     if (nTeam == 1)
                     {
-                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(300, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, redSpaceStationPos);
                         addToGame(redTeam, ship);
                     }
                     else
                     {
-                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(500, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, blueSpaceStationPos);
                         addToGame(blueTeam, ship);
                     }
 
                     if (player.IsLocal)
                         cameraTarget = ship;
                 }
-                addToGame(spaceStations, new SpaceStation(new Vector2(200, 200)));
+                addToGame(spaceStations, new SpaceStation(redSpaceStationPos, Color.Red));
 
 
 
-                addToGame(spaceStations, new SpaceStation(new Vector2(1000, 1000)));
+                addToGame(spaceStations, new SpaceStation(blueSpaceStationPos, Color.Aqua));
 
 	   }
 
@@ -459,9 +477,7 @@ namespace SpacePirates
                 
                 if (player.IsLocal)
                 {
-                    //(cameraTarget as Unit).Draw(spriteBatch);
-                    //IPlayer human = player.Tag as Human;
-                    Human human = NetworkObject.Instance().getPlayer();
+                    Human human = player.Tag as Human;
 
                     ISpaceShip ship = human.GetShip();
 
@@ -476,7 +492,7 @@ namespace SpacePirates
 
                     Unit unit = (ship as Unit);
 
-                    if (unit.getHealth() > 0)
+                    if (unit.getHealth() > 0 && !(player.Tag as Human).GetDestroyed())
                     {
                         unit.Draw(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
@@ -501,7 +517,8 @@ namespace SpacePirates
                         }
 
                         Unit unit = (ship as Unit);
-                        if (unit.getHealth() > 0)
+                        //if (unit.getHealth() > 0)
+                        if(!human.GetDestroyed())
                         {
                             unit.Draw(spriteBatch);
                             Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
@@ -567,6 +584,7 @@ namespace SpacePirates
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
+                        bool destroyed;
 
                         try
                         {
@@ -581,14 +599,18 @@ namespace SpacePirates
                             
 
                             firing = packetReader.ReadBoolean();
+                            destroyed = packetReader.ReadBoolean();
 
                             (ship as Unit).setPosition(pos);
                             (ship as Unit).SetRotation(rot);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
+
                             if (firing)
                                 ship.Fire(gameTime);
+
+                            senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
 
                         }
                         catch (EndOfStreamException)
@@ -618,7 +640,10 @@ namespace SpacePirates
                 packetWriter.Write(new Vector2(anim.Width, anim.Height));
 
                 packetWriter.Write(me.GetFiring());
+                //Regardless of whether we fired or not, set the bool to false.
                 me.ShipFired();
+
+                packetWriter.Write(me.GetDestroyed());
                 
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
