@@ -643,7 +643,7 @@ namespace SpacePirates
                             //This should be the same as was is sent in the send function.
                             
                             
-                            pos = packetReader.ReadVector2();
+                            //pos = packetReader.ReadVector2();
                             rot = packetReader.ReadDouble();
                             vel = packetReader.ReadVector2();
 
@@ -654,7 +654,7 @@ namespace SpacePirates
                             firing = packetReader.ReadBoolean();
                             destroyed = packetReader.ReadBoolean();
 
-                            (ship as Unit).setPosition(pos);
+                            //(ship as Unit).setPosition(pos);
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
 
@@ -686,7 +686,7 @@ namespace SpacePirates
                 Human me = gamer.Tag as Human;
                 Unit unit = (me.GetShip() as Unit);
                 //This should be the same as is read in the read function.
-                packetWriter.Write(unit.GetPosition());
+                //packetWriter.Write(unit.GetPosition());
                 packetWriter.Write(unit.GetRotation());
                 packetWriter.Write(unit.getVelocity());
 
