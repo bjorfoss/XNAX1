@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using SpacePirates.Utilities;
 
 namespace SpacePirates
 {
@@ -27,15 +28,16 @@ namespace SpacePirates
         NetworkObject networkObject;
 
         GameStates currentState;
-        
-        Song song;
+
+        double muteCd;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Components.Add(new GamerServicesComponent(this));
 
-            Content.RootDirectory = "Content";            
+            Content.RootDirectory = "Content";
+            muteCd = 500;
         }
 
         /// <summary>
@@ -82,8 +84,7 @@ namespace SpacePirates
 
             // TODO: use this.Content to load your game content here
 
-            song = Content.Load<Song>("Sound/Stratospheres");
-            MediaPlayer.Play(song);
+            MediaPlayer.Play((Content.Load<Song>("Sound/Stratospheres")));
             MediaPlayer.IsRepeating = true;
         }
 
@@ -125,6 +126,14 @@ namespace SpacePirates
 
             currentState.executeGameLogic(gameTime);
 
+            if(Keyboard.GetState().IsKeyDown(Keys.M) && muteCd <= 0){
+                MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
+                muteCd = 500;
+            }
+            else if (muteCd > 0)
+            {
+                muteCd -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
             base.Update(gameTime);
         }
 
