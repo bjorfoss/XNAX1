@@ -315,7 +315,7 @@ namespace SpacePirates
         private void generateAstroids(GameTime gameTime)
         {
 
-            String obstacleType = "astroid";
+            String obstacleType = "asteroid";
 
             // chance of Asteroid being created
             Random random = new Random();
@@ -327,8 +327,8 @@ namespace SpacePirates
                 chanceOfAstroidPerSecond = 0;
                 // Generate outside level limit with a directional velocity that will make it go across the level
 
-                int astroidMaxSpeed = 120;
-                int astroidMinSpeed = 80;
+                int astroidMaxSpeed = 240;
+                int astroidMinSpeed = 160;
 
                 Vector2 astroidStart;
                 Vector2 astroidVelocity;
@@ -381,7 +381,7 @@ namespace SpacePirates
                     astroidVelocity.X = random.Next(astroidMinSpeed / 5, astroidMaxSpeed / 5);
                 }
 
-                IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle("asteroid", astroidStart, astroidVelocity);
+                IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle(obstacleType, astroidStart, astroidVelocity);
                 addToGame(obstacles, asteroid);
 
                 Console.WriteLine("Created astroid with position " + astroidStart.X + "," + astroidStart.Y + " and velocity " + astroidVelocity.X + "," + astroidVelocity.Y);
