@@ -260,6 +260,11 @@ namespace SpacePirates
             explosions.Remove(explosion);
         }
 
+        public void removeFromObjects(Unit unit)
+        {
+            objectsInGame.Remove(unit);
+        }
+
         public Vector2 getRedSpawn()
         {
             return redSpaceStationPos;
@@ -449,19 +454,21 @@ namespace SpacePirates
                 }
             }
             
+            //Update all explosions
             List<Explosion> exClone = Extensions.CloneExplosions(explosions);
             foreach (Explosion ex in exClone)
             {
-                foreach (Unit unit in objectsInGame)
+                if (ex.update(gameTime))
                 {
-                    if (ex.update(gameTime))
+                    ex.playSound();
+                    foreach (Unit unit in objectsInGame)
                     {
-                        if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
-                        {
-                            unit.damage(ex.getDamage());
+                            if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
+                            {
+                                unit.damage(ex.getDamage());
+                            }
                         }
                     }
-                }
             }
 
             generateAstroids(gameTime);
@@ -501,10 +508,6 @@ namespace SpacePirates
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
-
-               
-
-
                 for (int j = i + 1; j < objectsInGame.Count; j++)
                 {
                     if (objectsInGame.ElementAt(i).getUnitRectangle().Intersects(objectsInGame.ElementAt(j).getUnitRectangle()))
@@ -520,7 +523,7 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
-
+            
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
                 
@@ -532,12 +535,11 @@ namespace SpacePirates
 
                     ISpaceShip ship = human.GetShip();
 
-                    Vector2 pos = new Vector2(300, 600);
+                    Vector2 pos = new Vector2((ship as Unit).GetPosition().X, (ship as Unit).GetPosition().Y - (float)((ship as Unit).getUnitRectangle().Height/(1.5)));
                     Color col = Color.OrangeRed;
 
                     if (blueTeam.Contains(ship))
                     {
-                        pos = new Vector2(500, 600);
                         col = Color.LightBlue;
                     }
 
@@ -548,8 +550,7 @@ namespace SpacePirates
                         human.getHud().executeDraw(spriteBatch, screenArea);
                         unit.Draw(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
-                        screenPos -= new Vector2(50,150);
-                        spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                        spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag) / 2, 1f, SpriteEffects.None, 0f);
                     }
                 }
                 else
@@ -559,12 +560,14 @@ namespace SpacePirates
                     {
                         ISpaceShip ship = human.GetShip();
 
-                        Vector2 pos = new Vector2(300, 600);
+                        Vector2 pos = new Vector2((ship as Unit).GetPosition().X, (ship as Unit).GetPosition().Y - (float)((ship as Unit).getUnitRectangle().Height / (1.5)));
+
+                        
                         Color col = Color.OrangeRed;
 
                         if (blueTeam.Contains(ship))
                         {
-                            pos = new Vector2(500, 600);
+                            
                             col = Color.LightBlue;
                         }
 
@@ -574,13 +577,12 @@ namespace SpacePirates
                         {
                             unit.Draw(spriteBatch);
                             Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
-                            screenPos -= new Vector2(50, 150);
-                            spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col);
+                            spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag)/2, 1f, SpriteEffects.None, 0f);
                         }
                     }
                 }
             }
-
+            
             foreach (Explosion explosion in explosions)
             {
                 explosion.Draw(spriteBatch);
@@ -588,7 +590,17 @@ namespace SpacePirates
 
             foreach (Unit unit in objectsInGame)
             {
-                unit.Draw(spriteBatch);
+                if (unit is ISpaceShip)
+                {
+                    if (!((unit as ISpaceShip).GetOwner() is Human))
+                    {
+                        unit.Draw(spriteBatch);
+                    }
+                }
+                else
+                {
+                    unit.Draw(spriteBatch);
+                }
             }
             foreach (SpaceStation station in spaceStations)
             {

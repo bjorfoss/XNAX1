@@ -40,18 +40,22 @@ namespace SpacePirates.Utilities
 
             fonts = new Dictionary<String, SpriteFont>();
             fonts.Add("Menutext", content.Load<SpriteFont>("Graphics/SpriteFonts/Menutext"));
+<<<<<<< HEAD
             fonts.Add("Weapon", content.Load<SpriteFont>("Graphics/SpriteFonts/Weapon"));
             fonts.Add("Utility", content.Load<SpriteFont>("Graphics/SpriteFonts/Utility"));
             fonts.Add("Armor", content.Load<SpriteFont>("Graphics/SpriteFonts/Armor"));
             fonts.Add("Health", content.Load<SpriteFont>("Graphics/SpriteFonts/Health"));
             fonts.Add("KillCount", content.Load<SpriteFont>("Graphics/SpriteFonts/KillCount"));
             fonts.Add("TeamScore", content.Load<SpriteFont>("Graphics/SpriteFonts/TeamScore"));
+||||||| merged common ancestors
+=======
 
             sounds = new Dictionary<string, SoundEffect>();
             sounds.Add("boom1", content.Load<SoundEffect>("Sound/Effects/boom1"));
             sounds.Add("boom2", content.Load<SoundEffect>("Sound/Effects/boom2"));
             sounds.Add("boom3", content.Load<SoundEffect>("Sound/Effects/boom3"));
             sounds.Add("boom4", content.Load<SoundEffect>("Sound/Effects/boom4"));
+>>>>>>> origin/fighting4
         }
 
         public static GraphicBank getInstance()

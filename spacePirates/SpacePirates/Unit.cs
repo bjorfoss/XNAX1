@@ -411,6 +411,8 @@ namespace SpacePirates
                     velocity = Vector2.Zero;
                     acceleration = Vector2.Zero;
 
+                    GameObject.Instance().removeFromObjects(this);
+
                     if (!dead.GetDestroyed())
                     {
                         dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);

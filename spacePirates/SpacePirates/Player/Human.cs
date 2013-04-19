@@ -103,6 +103,10 @@ namespace SpacePirates.Player
 
         public void SetDestroyed(bool destroy, double time)
         {
+            if (destroyed && !destroy)
+            {
+                GameObject.Instance().addToGame(GetShip() as Unit);
+            }
             destroyed = destroy;
             timeDied = time;
         }
@@ -133,6 +137,7 @@ namespace SpacePirates.Player
 
             (ship as SpaceShip).setPosition(spawn);
             (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());
+            GameObject.Instance().addToGame(ship as Unit);
         }
 
         /// <summary>
@@ -255,7 +260,7 @@ namespace SpacePirates.Player
             }
 
             // Fire weapon
-            if (newState.IsKeyDown(Keys.F))
+            if (newState.IsKeyDown(Keys.F) || newState.IsKeyDown(Keys.Space))
             {
                 shipFires = true;
                 ship.Fire(gameTime);
