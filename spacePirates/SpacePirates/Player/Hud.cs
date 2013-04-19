@@ -63,9 +63,9 @@ namespace SpacePirates.Player
             batch.Draw(GraphicBank.getInstance().getGraphic("box"), maxArmor, Color.DarkBlue);
             batch.Draw(GraphicBank.getInstance().getGraphic("box"), currentArmor, Color.Blue);
 
-            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Armor:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
         
-            batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", new Vector2(0.0f,30.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Armor:", new Vector2(0.0f,30.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
         }
 
         

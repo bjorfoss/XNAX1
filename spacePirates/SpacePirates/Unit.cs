@@ -49,6 +49,7 @@ namespace SpacePirates
             this.velocity = velocity;
             this.acceleration = acceleration;
             this.mass = mass;
+            Console.WriteLine("Created something at:"  + position.X + "," + position.Y);
             this.position = position;
             this.rotation = rotation;
             this.rotationSpeed = rotationSpeed;
@@ -466,6 +467,7 @@ namespace SpacePirates
         public double getArmorEffectiveness()
         {
             return armorEffectiveness;
+        }
 
         public void RestoreHealth(double heal)
         {
