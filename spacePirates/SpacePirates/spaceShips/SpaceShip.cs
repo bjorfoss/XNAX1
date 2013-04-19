@@ -49,9 +49,14 @@ namespace SpacePirates.spaceShips
             currentThrust = 0;
 
             this.registration = registration;
+            weapons = new IWeapon[2];
+            weapons[0] = ConcreteWeaponFactory.CreateWeapon("gun");
+            weapons[1] = ConcreteWeaponFactory.CreateWeapon("rapidgun");
+            currentWeapon = weapons[0];
 
-            currentWeapon = ConcreteWeaponFactory.CreateWeapon("gun");
-            currentAbility = ConcreteAbilityFactory.CreateAbility("shield");
+            abilities = new IAbility[1];
+            abilities[0] = ConcreteAbilityFactory.CreateAbility("shield");
+            currentAbility = abilities[0];
         }
 
         /// <summary>

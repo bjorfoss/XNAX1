@@ -239,19 +239,19 @@ namespace SpacePirates.Player
             }
 
             // Browse weapons
-            if (newState.IsKeyDown(Keys.O))
+            if (newState.IsKeyDown(Keys.O) && oldState.IsKeyUp(Keys.O))
             {
-
+                ship.NextWeapon();
             }
-            else if (newState.IsKeyDown(Keys.K))
+            else if (newState.IsKeyDown(Keys.K) && oldState.IsKeyUp(Keys.K))
             {
-
+                ship.PreviousWeapon();
             }
 
             // Execute feature
             if (newState.IsKeyDown(Keys.E))
             {
-
+                ship.UseAbility();
             }
 
             // Fire weapon
