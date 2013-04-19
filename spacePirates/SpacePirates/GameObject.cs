@@ -74,9 +74,10 @@ namespace SpacePirates
         private int goalLimit;
         private int redScore;
         private int blueScore;
+        private string victoryText = "";
         private double respawnCooldown = 15.0;
         private Vector2 redSpaceStationPos = new Vector2(200, 200);
-        private Vector2 blueSpaceStationPos = new Vector2(1000, 1000);
+        private Vector2 blueSpaceStationPos = new Vector2(1000, 1000);       
 
         SpriteFont spritefont;
 
@@ -280,6 +281,11 @@ namespace SpacePirates
             return blueSpaceStationPos;
         }
 
+        public string getVictoryText()
+        {
+            return victoryText;
+        }
+
         public void setUpGame()
         {
             gameSetup = false;
@@ -411,9 +417,12 @@ namespace SpacePirates
             {
                 //Show victory red team.
                 //Should perhaps show score screen of some manner before setting gameobject as false and going back to the menu?
+                victoryText = "Red Team Victorious!";
+
             } else if (blueScore >= goalLimit)
             {
                 //Show victory blue team.
+                victoryText = "Blue Team Victorious!";
             }
 
             if (NetworkObject.Instance().getNetworked())
