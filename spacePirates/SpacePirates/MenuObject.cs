@@ -491,7 +491,7 @@ namespace SpacePirates
                         Human senderHuman = sender.Tag as Human;
 
                         //This should be the same as was is sent in the send function.
-                        senderHuman.SetTeam(packetReader.ReadInt16());
+                        senderHuman.SetTeam(packetReader.ReadInt32());
                         senderHuman.SetSelectedShip(packetReader.ReadString());
 
                     }

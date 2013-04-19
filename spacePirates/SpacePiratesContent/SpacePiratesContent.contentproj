@@ -143,6 +143,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\explosion01.png">
+      <Name>explosion01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Graphics\Obstacles\astroid.png">
       <Name>astroid</Name>
       <Importer>TextureImporter</Importer>

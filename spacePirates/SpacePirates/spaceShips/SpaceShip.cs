@@ -10,7 +10,7 @@ using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
-    public class SpaceShip : Unit
+    public class SpaceShip : Unit, ISpaceShip
     {
         protected double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
         protected double maxThrust = 50000; //maximum force in Newtons output by the ship's engine(s)
@@ -161,31 +161,37 @@ namespace SpacePirates.spaceShips
             return registration.GetOwner();
         }
 
+        [Obsolete("Use GetPosition in Unit instead")]
         public Vector2 GetShipPosition()
         {
             return position;
         }
 
+        [Obsolete("Use SetPosition in Unit instead")]
         public void SetShipPosition(Vector2 pos)
         {
             position = pos;
         }
 
+        [Obsolete("Use GetRotation in Unit instead")]
         public double GetRotation()
         {
             return rotation;
         }
 
+        [Obsolete("Use SetRotation in Unit instead")]
         public void SetRotation(double rot)
         {
             rotation = rot;
         }
 
+        [Obsolete("Use GetAnimationFrame in Unit instead")]
         public Rectangle GetAnimationFrame()
         {
             return animationFrame;
         }
 
+        [Obsolete("Use SetAnimationFrame in Unit instead")]
         public void SetAnimationFrame(Rectangle anim)
         {
             animationFrame = anim;

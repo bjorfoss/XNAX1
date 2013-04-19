@@ -13,7 +13,7 @@ namespace SpacePirates.spaceShips
     {
 
         private String team;
-        private List<SpaceShip> dockedShips;
+        private List<ISpaceShip> dockedShips;
         private Vector2 position;
         protected Texture2D graphics;
         //protected Rectangle animationFrame;
@@ -34,7 +34,7 @@ namespace SpacePirates.spaceShips
             rotationSpeed = MathHelper.Pi / 16;
 
 
-            dockedShips = new List<SpaceShip>();
+            dockedShips = new List<ISpaceShip>();
             //animationFrame = new Rectangle(0, 0, 256, 256);
         }
 
@@ -53,7 +53,7 @@ namespace SpacePirates.spaceShips
         /// dock a spaceship
         /// </summary>
         /// <param name="ship"></param>
-        public void dockShip(SpaceShip ship)
+        public void dockShip(ISpaceShip ship)
         {
 
             if (!dockedShips.Contains(ship))
@@ -72,9 +72,9 @@ namespace SpacePirates.spaceShips
         /// TODO : buy repair from the shop? 
         /// </summary>
         /// <param name="ship"></param>
-        public void repairShip(SpaceShip ship)
+        public void repairShip(ISpaceShip ship)
         {
-            double maxhealth = ship.getMaxHealth();
+            double maxhealth = (ship as Unit).getMaxHealth();
 
         }
 
@@ -84,7 +84,7 @@ namespace SpacePirates.spaceShips
         /// TODO : make shop interface in a different class ?
         /// </summary>
         /// <param name="ship">the ship that wishes to shop</param>
-        public void shop(SpaceShip ship)
+        public void shop(ISpaceShip ship)
         {
 
             

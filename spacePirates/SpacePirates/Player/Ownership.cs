@@ -13,15 +13,15 @@ namespace SpacePirates.Player
     public class Ownership
     {
         private IPlayer owner;
-        private SpaceShip spaceShip;
+        private ISpaceShip spaceShip;
 
         public Ownership() {}
 
-        public SpaceShip GetShip() {
+        public ISpaceShip GetShip() {
             return spaceShip;
         }
 
-        public void SetShip(SpaceShip ship)
+        public void SetShip(ISpaceShip ship)
         {
             this.spaceShip = ship;    
         }

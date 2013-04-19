@@ -12,7 +12,7 @@ namespace SpacePirates.Obstacles
     {
         double safeTime;
 
-        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 500, 0, 0, 0, 0, 0, 0, 0, GraphicBank.getInstance().getGraphic("bullet"))
+        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 32, 500, GraphicBank.getInstance().getGraphic("bullet"))
         {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
             safeTime = 0;
