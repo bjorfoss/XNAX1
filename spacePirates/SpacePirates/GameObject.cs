@@ -717,7 +717,7 @@ namespace SpacePirates
                 me.ShipFired();
 
                 packetWriter.Write(me.GetDestroyed());
-                
+
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
 	}
