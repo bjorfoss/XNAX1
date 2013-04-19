@@ -16,14 +16,15 @@ namespace SpacePirates.spaceShips
         private List<ISpaceShip> dockedShips;
         private Vector2 position;
         protected Texture2D graphics;
+        protected Color spacestationColor;
         //protected Rectangle animationFrame;
         protected double rotation;
         protected double rotationSpeed;
 
         protected Texture2D dockMenu;
 
-        
-        public SpaceStation(Vector2 position)
+
+        public SpaceStation(Vector2 position, Color stationColor)
             //: base(position, 0, Vector2.Zero, new Vector2(0), 100000, MathHelper.Pi/16, 10000, 10000, 50, 100, 30, 40, GraphicBank.getInstance().getGraphic("station"))
         
         {
@@ -33,8 +34,10 @@ namespace SpacePirates.spaceShips
             rotation = 0;
             rotationSpeed = MathHelper.Pi / 16;
 
+            spacestationColor = stationColor;
 
             dockedShips = new List<ISpaceShip>();
+
             //animationFrame = new Rectangle(0, 0, 256, 256);
         }
 
@@ -176,7 +179,7 @@ namespace SpacePirates.spaceShips
             Vector2 screenPos = WorldPosToScreenPos(position);
             SpriteFont font = GraphicBank.getInstance().GetFont("Menutext");
 
-            batch.Draw(graphics, screenPos, graphics.Bounds, Color.White, (float)rotation,
+            batch.Draw(graphics, screenPos, graphics.Bounds, spacestationColor, (float)rotation,
                   new Vector2(graphics.Bounds.Width / 2, graphics.Bounds.Height / 2),
                   1.0f, SpriteEffects.None, 0f);
             

@@ -24,6 +24,7 @@ namespace SpacePirates
         private PacketWriter packetWriter = new PacketWriter();
 
         private bool networkEnabled = true;
+        private string networkDebug = "";
 
         private Human player;
 
@@ -46,16 +47,38 @@ namespace SpacePirates
             }
         }
 
-        public void CreateSession()
+        public string getDebugString()
         {
-            int maxLocalGamers = 1;
-            int maxGamers = 10;
-            int privateGamerSlots = 2;
-            networkSession = NetworkSession.Create(NetworkSessionType.SystemLink, maxLocalGamers, maxGamers, privateGamerSlots, null);
-            networkSession.AllowHostMigration = true;
-            networkSession.AllowJoinInProgress = false;
+            return networkDebug;
+        }
 
-            HookSessionEvents();
+        public void setDebugString(string debug)
+        {
+            networkDebug = debug;
+        }
+
+        public bool CreateSession()
+        {
+            try
+            {
+                int maxLocalGamers = 1;
+                int maxGamers = 10;
+                int privateGamerSlots = 2;
+                networkSession = NetworkSession.Create(NetworkSessionType.SystemLink, maxLocalGamers, maxGamers, privateGamerSlots, null);
+                networkSession.AllowHostMigration = true;
+                networkSession.AllowJoinInProgress = false;
+
+                HookSessionEvents();
+                networkDebug = "";
+            }
+            catch (NetworkNotAvailableException)
+            {
+                //networkEnabled = false;
+                networkDebug = "Could not create session. No connection to Windows Live.";
+                return false;
+            }
+
+            return true;
         }
 
         private void HookSessionEvents()

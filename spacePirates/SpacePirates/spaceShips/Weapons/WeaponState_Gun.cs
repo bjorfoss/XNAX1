@@ -35,8 +35,7 @@ namespace SpacePirates.spaceShips
                 vel.X += ship.getVelocity().X;
                 vel.Y += ship.getVelocity().Y;
 
-                Factory_Bullet factory = GameObject.Instance().getOFactory("bullet") as Factory_Bullet;
-                ConcreteObstacle_Bullet bullet = factory.CreateObstacle(vel, pos) as ConcreteObstacle_Bullet;
+                ConcreteObstacle_Bullet  bullet = (ConcreteObstacleFactory.CreateObstacle("bullet", pos, vel)) as ConcreteObstacle_Bullet;
 
                 GameObject.Instance().addToGame(bullet);
 

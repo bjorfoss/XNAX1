@@ -6,21 +6,81 @@ using Microsoft.Xna.Framework;
 
 namespace SpacePirates.Obstacles
 {
-    public class Factory_Bullet : ObstacleFactory
-    { 
-
-        public IObstacle CreateObstacle(Vector2 velocity, Vector2 position)
-        {
-            return new ConcreteObstacle_Bullet(velocity, position);
-        }
-    }
-
-    public class Factory_Asteroid : ObstacleFactory
+    public class ConcreteObstacleFactory
     {
+        private Dictionary<String, IObstacleFactory> factories;
+        private static ConcreteObstacleFactory instance;
+        static readonly object padlock = new Object();
 
-        public IObstacle CreateObstacle(Vector2 velocity, Vector2 position)
+        private ConcreteObstacleFactory()
         {
-            return new ConcreteObstacle_Asteroid(velocity, position);
+            factories = new Dictionary<string, IObstacleFactory>();
+            factories.Add("asteroid", new Factory_Asteroid());
+            factories.Add("bullet", new Factory_Bullet());
+        }
+
+        /// <summary>
+        /// Get an instance of the factory
+        /// </summary>
+        /// <returns></returns>
+        public static ConcreteObstacleFactory Instance()
+        {
+            lock (padlock)
+            {
+                if (instance == null)
+                {
+                    instance = new ConcreteObstacleFactory();
+                }
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Create the obstacle
+        /// </summary>
+        /// <param name="type">Obstacle type</param>
+        /// <param name="position">Where to spawn</param>
+        /// <param name="velocity">How it moves</param>
+        /// <returns></returns>
+        public static IObstacle CreateObstacle(String type, Vector2 position, Vector2 velocity) {
+            return Instance().factories[type].CreateObstacle(position, velocity);
+        }
+
+        /// <summary>
+        /// Get the factories available.
+        /// Consider using GetObstacleTypes and CreateObstacle instead.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<String, IObstacleFactory> GetFactories()
+        {
+            return Instance().factories;
+        }
+
+        /// <summary>
+        /// Get a list of available ship types.
+        /// </summary>
+        /// <returns></returns>
+        public static List<String> GetObstacleTypes()
+        {
+            return Instance().factories.Keys.ToList();
+        }
+
+        class Factory_Bullet : IObstacleFactory
+        {
+
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity)
+            {
+                return new ConcreteObstacle_Bullet(velocity, position);
+            }
+        }
+
+        class Factory_Asteroid : IObstacleFactory
+        {
+
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity)
+            {
+                return new ConcreteObstacle_Asteroid(velocity, position);
+            }
         }
     }
 }

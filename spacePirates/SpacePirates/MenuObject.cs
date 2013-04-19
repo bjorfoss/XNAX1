@@ -121,7 +121,8 @@ namespace SpacePirates
                     currentMenu = createdlobby;
                     if (NetworkObject.Instance().getNetworked())
                     {
-                            NetworkObject.Instance().CreateSession();          
+                        if (!NetworkObject.Instance().CreateSession())
+                            currentMenu = mainmenu;
                     }
                 }
                 else if (newKeyState.IsKeyDown(Keys.J) && !oldKeyState.IsKeyDown(Keys.J))//Join Session.
@@ -370,6 +371,7 @@ namespace SpacePirates
                 spriteBatch.Draw(newSession, newSessionPos, Color.White);
                 spriteBatch.Draw(joinSession, joinSessionPos, Color.White);
                 spriteBatch.Draw(quitSession, quitSessionPos, Color.White);
+                spriteBatch.DrawString(text, NetworkObject.Instance().getDebugString(), quitSessionPos + new Vector2(0, quitSession.Height + 40), Color.OrangeRed);
             }
             else if (currentMenu == createdlobby)
             {
@@ -479,6 +481,7 @@ namespace SpacePirates
         //Receive network data for the lobby screen. Shows player choices and readiness.
         private void ReceiveNetworkData()
         {
+
             foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
             {
                 while (gamer.IsDataAvailable)
@@ -497,20 +500,28 @@ namespace SpacePirates
                     }
                 }
             }
+
         }
 
         //Send the network data needed to show the selection between players in the lobby menu.
         private void SendNetworkData()
         {
-            foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+            try
             {
-                Human me = gamer.Tag as Human;
+                foreach (LocalNetworkGamer gamer in NetworkObject.Instance().getNetworksession().LocalGamers)
+                {
+                    Human me = gamer.Tag as Human;
 
-                //This should be the same as is read in the read function.
-                packetWriter.Write(me.GetTeam());
-                packetWriter.Write(me.GetShipSelection());
+                    //This should be the same as is read in the read function.
+                    packetWriter.Write(me.GetTeam());
+                    packetWriter.Write(me.GetShipSelection());
 
-                gamer.SendData(packetWriter, SendDataOptions.None);
+                    gamer.SendData(packetWriter, SendDataOptions.None);
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //Debug!
             }
         }
     }

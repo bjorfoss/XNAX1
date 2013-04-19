@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SpacePirates.Player;
 using SpacePirates.Utilities;
+using SpacePirates.spaceShips.Weapons;
+using SpacePirates.spaceShips.Abilities;
 
 namespace SpacePirates.spaceShips
 {
@@ -48,7 +50,8 @@ namespace SpacePirates.spaceShips
 
             this.registration = registration;
 
-            currentWeapon = new WeaponState_Gun();
+            currentWeapon = ConcreteWeaponFactory.CreateWeapon("gun");
+            currentAbility = ConcreteAbilityFactory.CreateAbility("shield");
         }
 
         /// <summary>

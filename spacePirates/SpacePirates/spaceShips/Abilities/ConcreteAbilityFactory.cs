@@ -5,11 +5,49 @@ using System.Text;
 
 namespace SpacePirates.spaceShips.Abilities
 {
-    class ConcreteAbilityFactory
+    public class ConcreteAbilityFactory
     {
-        public class Factory_Shield : AbilityFactory
+        private Dictionary<String, AbilityFactory> factories;
+        private static ConcreteAbilityFactory instance;
+        static readonly object padlock = new Object();
+
+        private ConcreteAbilityFactory()
         {
-            IAbility AbilityFactory.createAbility()
+            factories = new Dictionary<string, AbilityFactory>();
+            factories.Add("shield", new Factory_Shield());
+        }
+
+        /// <summary>
+        /// Get an instance of the factory
+        /// </summary>
+        /// <returns></returns>
+        public static ConcreteAbilityFactory Instance()
+        {
+            lock (padlock)
+            {
+                if (instance == null)
+                {
+                    instance = new ConcreteAbilityFactory();
+                }
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Create an ability
+        /// </summary>
+        /// <param name="ability">The ability type</param>
+        /// <returns>The created ability</returns>
+        public static IAbility CreateAbility(String ability)
+        {
+            return Instance().factories[ability].CreateAbility();
+        }
+
+        class Factory_Shield : AbilityFactory
+        {
+            public Factory_Shield() { }
+
+            IAbility AbilityFactory.CreateAbility()
             {
                 double duration = 5000;
                 double cooldown = 15000;

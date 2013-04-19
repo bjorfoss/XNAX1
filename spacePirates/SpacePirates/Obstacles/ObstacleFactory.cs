@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace SpacePirates.Obstacles
 {
-    interface ObstacleFactory
+    public interface IObstacleFactory
     {
         IObstacle CreateObstacle(Vector2 velocity, Vector2 position);
     }

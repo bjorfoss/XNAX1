@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using SpacePirates.Obstacles;
 using SpacePirates.Utilities;
+using SpacePirates.Player;
+using SpacePirates.spaceShips;
 
 namespace SpacePirates
 {
@@ -139,6 +141,11 @@ namespace SpacePirates
             this.rotation = rotation;
         }
 
+        public void SetHealth(double health)
+        {
+            this.health = health;
+        }
+
         /// <summary>
         /// Return rotation in radians
         /// </summary>
@@ -222,7 +229,7 @@ namespace SpacePirates
             {
                 if (ableToCollide(unit) && unit.ableToCollide(this))
                 {
-                    HandleCollision(unit);
+                    HandleCollision(unit, gameTime);
                     addCd(new CollisionCd(unit));
                     unit.addCd(new CollisionCd(this));
                 }
@@ -251,22 +258,23 @@ namespace SpacePirates
         /// Call OnDestroy/OnDeath and do blast damage (if applicable)
         /// </summary>
         /// <param name="unit"></param>
-        protected void HandleCollision(Unit unit) {
+        protected void HandleCollision(Unit unit, GameTime gameTime)
+        {
 
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
             double moveEnergy = 0.2; //The percentage of energy involved in movement
 
-            damage(1000);
-            unit.damage(1000);
+            damage(500);
+            unit.damage(500);
 
             if (health <= 0)
             {
-                OnDestroy();
+                OnDestroy(gameTime, true);
             }
             if (unit.getHealth() <= 0)
             {
-                unit.OnDestroy();
+                unit.OnDestroy(gameTime, true);
             }
 
             Vector2 velocityUnit = unit.getVelocity();
@@ -308,13 +316,18 @@ namespace SpacePirates
             }
 
             //End of movement calculations
+            /*
             double vel1x = (moveEnergy * velocity.X * (mass - unitMass) + 2 * unitMass * velocityUnit.X) / (mass + unitMass);
             double vel2x = (moveEnergy * velocityUnit.X * (unitMass - mass) + 2 * mass * velocity.X) / (mass + unitMass);
             double vel1y = (moveEnergy * velocity.Y * (mass - unitMass) + 2 * unitMass * velocityUnit.Y) / (mass + unitMass);
             double vel2y = (moveEnergy * velocityUnit.Y * (unitMass - mass) + 2 * mass * velocity.Y) / (mass + unitMass);
+            */
 
-            setVelocity(new Vector2((float)vel1x, (float)vel1y));
-            unit.setVelocity(new Vector2((float)vel2x, (float)vel2y));
+            double velx = ((mass * velocity.X + unitMass * velocityUnit.X) / (mass + unitMass));
+            double vely = ((mass * velocity.Y + unitMass * velocityUnit.Y) / (mass + unitMass));
+
+            setVelocity(new Vector2((float)velx, (float)vely));
+            unit.setVelocity(new Vector2((float)velx, (float)vely));
 
             Log.getLog().addEvent("Unit at (" + position.X + ", " + position.Y + ") collided with unit at (" + positionUnit.X + ", " + positionUnit.Y + ")");
             bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
@@ -355,29 +368,75 @@ namespace SpacePirates
         {
             if (GameObject.GetLevel().IsOutsideLevel(this))
             {
-               health -= maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-               outOfBounds = true;
+                double damage = maxHealth * 0.05 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (damage < 1) { damage = 1; }
+                health -= damage; 
+                outOfBounds = true;
             } else {
                outOfBounds = false;
             }
 
             if (health <= 0)
             {
-                OnDestroy();
+                if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+                {
+                    IPlayer player = (this as SpaceShip).GetOwner();
+
+                    if(!(player as Human).GetDestroyed())
+                        OnDestroy(gameTime, false);
+                }
+                else
+                    OnDestroy(gameTime, false);
             }
         }
         /// <summary>
         /// TODO: create a blast if there should be one
         /// TODO: position the blast according to blastradius, shipsize and shipposition.
         /// </summary>
-        void OnDestroy() 
+        void OnDestroy(GameTime gameTime, bool awardPoint=false) 
         {
             if (blastDamage > 0)
             {
                 GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage));
                 //something.CreateBlast(position, blastradius, blastdamage);
             }
-            GameObject.Instance().removeFromGame(this);
+
+            if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+            {
+                    IPlayer died = (this as SpaceShip).GetOwner();
+
+                    Human dead = died as Human;
+
+                    velocity = Vector2.Zero;
+                    acceleration = Vector2.Zero;
+
+                    if (!dead.GetDestroyed())
+                    {
+                        dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
+                    }
+            }
+            else
+                GameObject.Instance().removeFromGame(this);
+
+            if (awardPoint)
+            {
+                if(this is SpaceShip)
+                {
+                    if ((this as SpaceShip).GetOwner() != null)
+                    {
+                        IPlayer died = (this as SpaceShip).GetOwner();
+
+                        int teamloss = (died as Human).GetTeam();
+
+                        if (teamloss == 1)
+                            GameObject.Instance().blueScored();
+                        else
+                            GameObject.Instance().redScored();
+                    }
+                }
+            }
+
+
         }
 
 
@@ -399,6 +458,7 @@ namespace SpacePirates
         {
             return health;
         }
+
         public double getArmorThreshold()
         {
             return armorThreshold;
@@ -406,6 +466,14 @@ namespace SpacePirates
         public double getArmorEffectiveness()
         {
             return armorEffectiveness;
+
+        public void RestoreHealth(double heal)
+        {
+            if (heal > maxHealth)
+                heal = maxHealth;
+
+            health = heal;
+
         }
         public Rectangle getUnitRectangle()
         {
@@ -475,6 +543,8 @@ namespace SpacePirates
                 String text = "X: " + Math.Round(position.X) + " -- Y: " +
                         Math.Round(position.Y);
                 batch.DrawString(font, text, screenPos + new Vector2(0, 200), Color.Wheat);
+                batch.DrawString(font, "HP: " + ((int)health).ToString() + "/" + ((int)maxHealth).ToString() + " (" + ((int)((health * 100)/maxHealth)).ToString() + "%)", screenPos + new Vector2(0, 180), Color.White);
+                batch.DrawString(font, GameObject.Instance().getVictoryText(), screenPos + new Vector2(-300, 0), Color.Gold);
 
                 if (outOfBounds)
                 {
@@ -484,10 +554,12 @@ namespace SpacePirates
                 }
             }
 
-            batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
-                    new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
-                    1.0f, SpriteEffects.None, 0f);
-            
+            if (health > 0)
+            {
+                batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
+                        new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
+                        1.0f, SpriteEffects.None, 0f);
+            }
           
             
         }

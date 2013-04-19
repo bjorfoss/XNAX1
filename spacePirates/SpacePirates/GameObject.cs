@@ -44,12 +44,6 @@ namespace SpacePirates
 
         // Holds the player unit : spaceship
         private ISpaceShip cameraTarget;
-        
-        //Hashtable with all spaceships
-        private Dictionary<String, IShipFactory> shipFactoryCollection;
-
-        //Hashtable with obstacle types
-        private Dictionary<String, ObstacleFactory> obstacleFactoryCollection;
 
         private bool gameSetup;
 
@@ -75,6 +69,10 @@ namespace SpacePirates
         private int goalLimit;
         private int redScore;
         private int blueScore;
+        private string victoryText = "";
+        private double respawnCooldown = 15.0;
+        private Vector2 redSpaceStationPos = new Vector2(200, 200);
+        private Vector2 blueSpaceStationPos = new Vector2(1000, 1000);       
 
         SpriteFont spritefont;
 
@@ -110,15 +108,7 @@ namespace SpacePirates
             // Holds the explosions in the game
             self.explosions = new List<Explosion>();
 
-            maxSpeed = 300;
-
-            shipFactoryCollection = new Dictionary<String, IShipFactory>();
-            shipFactoryCollection.Add("fighter", new Factory_Fighter());
-            shipFactoryCollection.Add("eightwing", new Factory_Eightwing());
-
-            obstacleFactoryCollection = new Dictionary<String, ObstacleFactory>();
-            obstacleFactoryCollection.Add("astroid", new Factory_Asteroid());
-            obstacleFactoryCollection.Add("bullet", new Factory_Bullet());
+            maxSpeed = 300;           
 
             self.goalLimit = goalsToWin;
             self.redScore = 0;
@@ -178,9 +168,15 @@ namespace SpacePirates
             }
         }
 
+        [Obsolete("Use method in ConcreteShipFactory instead.")]
         public Dictionary<String, IShipFactory> GetShipCollection()
         {
-            return shipFactoryCollection;
+            return ConcreteShipFactory.GetFactories();
+        }
+
+        public double GetRespawnCooldown()
+        {
+            return respawnCooldown;
         }
 
 
@@ -200,7 +196,7 @@ namespace SpacePirates
             registration.SetOwner(controller);
             controller.SetOwnerShip(registration);
 
-            ISpaceShip ship = shipFactoryCollection[shipType].BuildSpaceship(registration, position, 0);
+            ISpaceShip ship = ConcreteShipFactory.BuildSpaceship(shipType, registration, position, 0);
 
             registration.SetShip(ship);
             return ship;
@@ -264,6 +260,21 @@ namespace SpacePirates
             explosions.Remove(explosion);
         }
 
+        public Vector2 getRedSpawn()
+        {
+            return redSpaceStationPos;
+        }
+
+        public Vector2 getBlueSpawn()
+        {
+            return blueSpaceStationPos;
+        }
+
+        public string getVictoryText()
+        {
+            return victoryText;
+        }
+
         public void setUpGame()
         {
             gameSetup = false;
@@ -278,23 +289,23 @@ namespace SpacePirates
 
                     if (nTeam == 1)
                     {
-                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(300, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, redSpaceStationPos);
                         addToGame(redTeam, ship);
                     }
                     else
                     {
-                        ship = setUpShip((player.Tag as Human), shipType, new Vector2(500, 600));
+                        ship = setUpShip((player.Tag as Human), shipType, blueSpaceStationPos);
                         addToGame(blueTeam, ship);
                     }
 
                     if (player.IsLocal)
                         cameraTarget = ship;
                 }
-                addToGame(spaceStations, new SpaceStation(new Vector2(200, 200)));
+                addToGame(spaceStations, new SpaceStation(redSpaceStationPos, Color.Red));
 
 
 
-                addToGame(spaceStations, new SpaceStation(new Vector2(1000, 1000)));
+                addToGame(spaceStations, new SpaceStation(blueSpaceStationPos, Color.Aqua));
 
 	   }
 
@@ -324,8 +335,8 @@ namespace SpacePirates
 
                 Rectangle levelBounds = level.GetLevelBounds();
 
-                bool sideOrTop = new Random().Next() % 2 == 0 ? true : false;
-                bool leftOrRight = new Random().Next() % 2 == 0 ? true : false;
+                bool sideOrTop = random.Next(1, 3) % 2 == 0 ? true : false;
+                bool leftOrRight = random.Next(1, 3) % 2 == 0 ? true : false;
 
                 if (sideOrTop)
                 {
@@ -370,7 +381,7 @@ namespace SpacePirates
                     astroidVelocity.X = random.Next(astroidMinSpeed / 5, astroidMaxSpeed / 5);
                 }
 
-                IObstacle asteroid = obstacleFactoryCollection[obstacleType].CreateObstacle(astroidStart, astroidVelocity);
+                IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle("asteroid", astroidStart, astroidVelocity);
                 addToGame(obstacles, asteroid);
 
                 Console.WriteLine("Created astroid with position " + astroidStart.X + "," + astroidStart.Y + " and velocity " + astroidVelocity.X + "," + astroidVelocity.Y);
@@ -395,9 +406,12 @@ namespace SpacePirates
             {
                 //Show victory red team.
                 //Should perhaps show score screen of some manner before setting gameobject as false and going back to the menu?
+                victoryText = "Red Team Victorious!";
+
             } else if (blueScore >= goalLimit)
             {
                 //Show victory blue team.
+                victoryText = "Blue Team Victorious!";
             }
 
             if (NetworkObject.Instance().getNetworked())
@@ -512,9 +526,7 @@ namespace SpacePirates
                 
                 if (player.IsLocal)
                 {
-                    //(cameraTarget as Unit).Draw(spriteBatch);
-                    //IPlayer human = player.Tag as Human;
-                    Human human = NetworkObject.Instance().getPlayer();
+                    Human human = player.Tag as Human;
 
                     
 
@@ -531,7 +543,7 @@ namespace SpacePirates
 
                     Unit unit = (ship as Unit);
 
-                    if (unit.getHealth() > 0)
+                    if (unit.getHealth() > 0 && !(player.Tag as Human).GetDestroyed())
                     {
                         human.getHud().executeDraw(spriteBatch, screenArea);
                         unit.Draw(spriteBatch);
@@ -557,7 +569,8 @@ namespace SpacePirates
                         }
 
                         Unit unit = (ship as Unit);
-                        if (unit.getHealth() > 0)
+                        //if (unit.getHealth() > 0)
+                        if(!human.GetDestroyed())
                         {
                             unit.Draw(spriteBatch);
                             Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
@@ -580,10 +593,7 @@ namespace SpacePirates
             foreach (SpaceStation station in spaceStations)
             {
                 station.Draw(spriteBatch);
-            }
-            
-            
-           
+            }          
 
         }
 
@@ -620,9 +630,12 @@ namespace SpacePirates
 
                         Vector2 pos;
                         double rot;
+                        Vector2 vel;
+                        double hp;
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
+                        bool destroyed;
 
                         try
                         {
@@ -631,20 +644,36 @@ namespace SpacePirates
                             
                             pos = packetReader.ReadVector2();
                             rot = packetReader.ReadDouble();
+                            vel = packetReader.ReadVector2();
+                            hp = packetReader.ReadDouble();
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
                             
 
                             firing = packetReader.ReadBoolean();
+                            destroyed = packetReader.ReadBoolean();
 
-                            (ship as Unit).setPosition(pos);
+                            double totPos1 = Math.Sqrt(Math.Pow(pos.X, 2) + Math.Pow(pos.Y, 2));
+                            double totPos2 = Math.Sqrt(Math.Pow((ship as Unit).getVelocity().X, 2) 
+                                + Math.Pow((ship as Unit).getVelocity().Y, 2));
+                            //If the difference between the local ship's position and the position of the sending ship
+                            //is larger than 10, update the position
+                            if (totPos1 - totPos2 > 5 || totPos1 - totPos2 < -5)
+                            {
+                                (ship as Unit).setPosition(pos);
+                            }
                             (ship as Unit).SetRotation(rot);
+                            (ship as Unit).setVelocity(vel);
+                            (ship as Unit).SetHealth(hp);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
+
                             if (firing)
                                 ship.Fire(gameTime);
+
+                            senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
 
                         }
                         catch (EndOfStreamException)
@@ -668,20 +697,28 @@ namespace SpacePirates
                 //This should be the same as is read in the read function.
                 packetWriter.Write(unit.GetPosition());
                 packetWriter.Write(unit.GetRotation());
+                packetWriter.Write(unit.getVelocity());
+                packetWriter.Write(unit.getHealth());
 
                 Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));
                 packetWriter.Write(new Vector2(anim.Width, anim.Height));
 
                 packetWriter.Write(me.GetFiring());
+                //Regardless of whether we fired or not, set the bool to false.
                 me.ShipFired();
-                
+
+                packetWriter.Write(me.GetDestroyed());
+
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }
 	}
-        public ObstacleFactory getOFactory(String name)
+
+        [Obsolete("This method is obsolete, use methods in ConcreteObstacleFactory instead")]
+        public IObstacleFactory getOFactory(String name)
         {
-            return obstacleFactoryCollection[name];
+            Dictionary<String, IObstacleFactory> f = ConcreteObstacleFactory.GetFactories();
+            return f[name];
         }
     }
 }
