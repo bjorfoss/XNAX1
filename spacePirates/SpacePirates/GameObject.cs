@@ -508,10 +508,6 @@ namespace SpacePirates
 
             for (int i = 0; i < objectsInGame.Count; i++)
             {
-
-               
-
-
                 for (int j = i + 1; j < objectsInGame.Count; j++)
                 {
                     if (objectsInGame.ElementAt(i).getUnitRectangle().Intersects(objectsInGame.ElementAt(j).getUnitRectangle()))
@@ -527,7 +523,7 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
-            /*
+            
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
                 
@@ -584,7 +580,7 @@ namespace SpacePirates
                     }
                 }
             }
-            */
+            
             foreach (Explosion explosion in explosions)
             {
                 explosion.Draw(spriteBatch);
@@ -592,7 +588,13 @@ namespace SpacePirates
 
             foreach (Unit unit in objectsInGame)
             {
-                unit.Draw(spriteBatch);
+                if (unit is ISpaceShip)
+                {
+                    if (!((unit as ISpaceShip).GetOwner() is Human))
+                    {
+                        unit.Draw(spriteBatch);
+                    }
+                }
             }
             foreach (SpaceStation station in spaceStations)
             {
