@@ -47,7 +47,7 @@ namespace SpacePirates
         public void addEvent(String happening)
         {
             eventLog.Add(happening);
-            System.Diagnostics.Debug.WriteLine(happening);
+            //System.Diagnostics.Debug.WriteLine(happening);
         }
 
     }
