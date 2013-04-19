@@ -456,6 +456,7 @@ namespace SpacePirates
                 }
             }
             
+            //Update all explosions
             List<Explosion> exClone = Extensions.CloneExplosions(explosions);
             foreach (Explosion ex in exClone)
             {
@@ -463,6 +464,7 @@ namespace SpacePirates
                 {
                     if (ex.update(gameTime))
                     {
+                        ex.playSound();
                         if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
                         {
                             unit.damage(ex.getDamage());

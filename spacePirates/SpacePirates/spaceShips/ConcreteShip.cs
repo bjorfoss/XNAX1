@@ -18,7 +18,7 @@ namespace SpacePirates.spaceShips
         /// </summary>
         /// 
         public ConcreteShip_Fighter(Ownership registration, Vector2 position, double rotation) 
-            : base(20000, 10000, 50, 30, 40, registration, position, rotation, GraphicBank.getInstance().getGraphic("fighter"))
+            : base(20000, 10000, 50, 64, 100, registration, position, rotation, GraphicBank.getInstance().getGraphic("fighter"))
         {
             animationFrame = new Rectangle(0, 0, 128, 128);
         }

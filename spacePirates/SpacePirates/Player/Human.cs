@@ -253,7 +253,7 @@ namespace SpacePirates.Player
             }
 
             // Fire weapon
-            if (newState.IsKeyDown(Keys.F))
+            if (newState.IsKeyDown(Keys.F) || newState.IsKeyDown(Keys.Space))
             {
                 shipFires = true;
                 ship.Fire(gameTime);
