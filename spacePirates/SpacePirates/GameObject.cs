@@ -533,12 +533,11 @@ namespace SpacePirates
 
                     ISpaceShip ship = human.GetShip();
 
-                    Vector2 pos = new Vector2(300, 600);
+                    Vector2 pos = new Vector2((ship as Unit).GetPosition().X, (ship as Unit).GetPosition().Y - (float)((ship as Unit).getUnitRectangle().Height/(1.5)));
                     Color col = Color.OrangeRed;
 
                     if (blueTeam.Contains(ship))
                     {
-                        pos = new Vector2(500, 600);
                         col = Color.LightBlue;
                     }
 
@@ -549,7 +548,7 @@ namespace SpacePirates
                         unit.Draw(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
                         screenPos -= new Vector2(50,150);
-                        spriteBatch.DrawString(spritefont, player.Gamertag, pos, col);
+                        spriteBatch.DrawString(spritefont, player.Gamertag, Unit.WorldPosToScreenPos(pos), col);
                     }
                 }
                 else
@@ -559,12 +558,14 @@ namespace SpacePirates
                     {
                         ISpaceShip ship = human.GetShip();
 
-                        Vector2 pos = new Vector2(300, 600);
+                        Vector2 pos = new Vector2((ship as Unit).GetPosition().X, (ship as Unit).GetPosition().Y - (float)((ship as Unit).getUnitRectangle().Height / (1.5)));
+
+                        
                         Color col = Color.OrangeRed;
 
                         if (blueTeam.Contains(ship))
                         {
-                            pos = new Vector2(500, 600);
+                            
                             col = Color.LightBlue;
                         }
 
