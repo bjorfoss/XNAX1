@@ -146,7 +146,7 @@ namespace SpacePirates
         /// <param name="Content"></param>
         /// <param name="defaultGoalLimit"></param>
         /// <returns></returns>
-        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=25)
+        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=3)
         {
             lock (padlock) {
                 if (instance == null) {

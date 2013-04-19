@@ -413,30 +413,19 @@ namespace SpacePirates
                     if (!dead.GetDestroyed())
                     {
                         dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
+                        if (awardPoint)
+                        {
+                            int teamloss = (died as Human).GetTeam();
+
+                            if (teamloss == 1)
+                                GameObject.Instance().blueScored();
+                            else
+                                GameObject.Instance().redScored();
+                        }
                     }
             }
             else
                 GameObject.Instance().removeFromGame(this);
-
-            if (awardPoint)
-            {
-                if(this is SpaceShip)
-                {
-                    if ((this as SpaceShip).GetOwner() != null)
-                    {
-                        IPlayer died = (this as SpaceShip).GetOwner();
-
-                        int teamloss = (died as Human).GetTeam();
-
-                        if (teamloss == 1)
-                            GameObject.Instance().blueScored();
-                        else
-                            GameObject.Instance().redScored();
-                    }
-                }
-            }
-
-
         }
 
 
@@ -466,6 +455,7 @@ namespace SpacePirates
         public double getArmorEffectiveness()
         {
             return armorEffectiveness;
+        }
 
         public void RestoreHealth(double heal)
         {
@@ -543,8 +533,7 @@ namespace SpacePirates
                 String text = "X: " + Math.Round(position.X) + " -- Y: " +
                         Math.Round(position.Y);
                 batch.DrawString(font, text, screenPos + new Vector2(0, 200), Color.Wheat);
-                batch.DrawString(font, "HP: " + ((int)health).ToString() + "/" + ((int)maxHealth).ToString() + " (" + ((int)((health * 100)/maxHealth)).ToString() + "%)", screenPos + new Vector2(0, 180), Color.White);
-                batch.DrawString(font, GameObject.Instance().getVictoryText(), screenPos + new Vector2(-300, 0), Color.Gold);
+                batch.DrawString(font, GameObject.Instance().getVictoryText(), screenPos + new Vector2(0, 180), Color.Gold);
 
                 if (outOfBounds)
                 {

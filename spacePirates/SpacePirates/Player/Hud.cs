@@ -45,7 +45,7 @@ namespace SpacePirates.Player
             currentHealth = new Rectangle(100, 5, _currentHealth, 20);
             maxHealth = new Rectangle(100, 5, 200, 20);
 
-            int _currentAmor = Convert.ToInt32(UnitObject.getArmorEffectiveness() * 2);
+            int _currentAmor = Convert.ToInt32(UnitObject.getArmorEffectiveness()*2);
 
             currentArmor = new Rectangle(100, 30, _currentAmor, 20);
             maxArmor = new Rectangle(100, 30, 200, 20);
@@ -63,9 +63,9 @@ namespace SpacePirates.Player
             batch.Draw(GraphicBank.getInstance().getGraphic("box"), maxArmor, Color.DarkBlue);
             batch.Draw(GraphicBank.getInstance().getGraphic("box"), currentArmor, Color.Blue);
 
-            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Armor:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-        
-            batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", new Vector2(0.0f,30.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+
+            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Armor:", new Vector2(0.0f, 30.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
         }
 
         

@@ -113,12 +113,12 @@
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
     <Compile Include="Graphics\SpriteFonts\Health.spritefont">
-      <Name>Health</Name>
+      <Name>Armor</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
     <Compile Include="Graphics\SpriteFonts\Armor.spritefont">
-      <Name>Armor</Name>
+      <Name>Health</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
