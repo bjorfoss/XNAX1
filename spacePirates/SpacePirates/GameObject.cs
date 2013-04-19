@@ -595,6 +595,10 @@ namespace SpacePirates
                         unit.Draw(spriteBatch);
                     }
                 }
+                else
+                {
+                    unit.Draw(spriteBatch);
+                }
             }
             foreach (SpaceStation station in spaceStations)
             {
