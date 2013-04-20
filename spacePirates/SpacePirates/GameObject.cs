@@ -214,6 +214,12 @@ namespace SpacePirates
             addToGame((Unit)iObstacle);
         }
 
+        public void addToGame(IObstacle obstacle)
+        {
+            obstacles.Add(obstacle);
+            addToGame((Unit)obstacle);
+        }
+
         // Adds spaceships to the game
         private void addToGame(List<ISpaceShip> list, ISpaceShip spaceShip)
         {

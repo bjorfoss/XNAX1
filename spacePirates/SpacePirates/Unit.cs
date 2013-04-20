@@ -575,6 +575,7 @@ namespace SpacePirates
                 if ((this as IObstacle).GetLifetimeExpired(gameTime.ElapsedGameTime.Milliseconds))
                 {
                     this.SetHealth(0);
+                    this.OnDestroy(gameTime, false);
                 }
             }
         }
@@ -638,7 +639,7 @@ namespace SpacePirates
                 {
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
-                    batch.DrawString(font, warning, screenPos + new Vector2(0, -200), Color.Red);
+                    batch.DrawString(font, warning, screenPos + new Vector2(-200, -200), Color.Red);
                 }
                 if (docked)
                 {
