@@ -182,12 +182,12 @@ namespace SpacePirates.spaceShips
             batch.Draw(graphics, screenPos, graphics.Bounds, spacestationColor, (float)rotation,
                   new Vector2(graphics.Bounds.Width / 2, graphics.Bounds.Height / 2),
                   1.0f, SpriteEffects.None, 0f);
-            
+            /*/
             if (dockedShips.Count > 0)
             {
                 Vector2 menuPos = BottomLeftScreenPos(dockMenu.Bounds);
                 batch.Draw(dockMenu, menuPos, dockMenu.Bounds, Color.White, 0f, new Vector2(dockMenu.Bounds.Width / 2, dockMenu.Bounds.Height / 2), 1.0f, SpriteEffects.None, 0f);
-            }
+            }/*/
 
 
             

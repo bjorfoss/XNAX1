@@ -164,6 +164,8 @@ namespace SpacePirates.spaceShips
             }
         }
 
+       
+
         public IPlayer GetOwner()
         {
             return registration.GetOwner();

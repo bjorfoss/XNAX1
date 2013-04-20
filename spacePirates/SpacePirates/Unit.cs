@@ -35,6 +35,9 @@ namespace SpacePirates
         protected double blastRadius;
         protected double blastDamage;
 
+        protected bool docked; //tells if ship(as unit) is docked
+        protected double docktime; // tells when the ship docked last
+
         private bool outOfBounds;
 
         List<CollisionCd> cooldowns;
@@ -61,6 +64,7 @@ namespace SpacePirates
             this.blastRadius = blastRadius;
 
             this.graphics = graphics;
+            docked = false; 
 
             cooldowns = new List<CollisionCd>();
         }
@@ -489,6 +493,7 @@ namespace SpacePirates
         {
             unitColor = col;
         }
+       
 
 
         public virtual void Update(GameTime gameTime)
@@ -502,8 +507,19 @@ namespace SpacePirates
             UpdatePosition(gameTime);
             UpdateFacing(gameTime);
             checkIfOutsideLevel(gameTime);
+            if (docked)
+            {
+                if (gameTime.ElapsedGameTime.TotalMilliseconds - docktime <= 100)
+                {
+                    docked = false;
+                }
+            }
         }
-
+        public void docking(GameTime gameTime)
+        {
+            docked = true;
+            docktime = gameTime.ElapsedGameTime.TotalMilliseconds;
+        }
         public static Vector2 WorldPosToScreenPos(Vector2 position)
         {
             Rectangle screen = GameObject.GetScreenArea();
@@ -543,6 +559,15 @@ namespace SpacePirates
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
                     batch.DrawString(font, warning, screenPos + new Vector2(0, -200), Color.Red);
+                }
+                if (docked)
+                {
+                    String shopString = "Docked";
+                    Rectangle screen = GameObject.GetScreenArea();
+                    Vector2 pos = new Vector2(0, (float)(screen.Bottom - (font.MeasureString(shopString).Y)));
+
+                    
+                    batch.DrawString(font, shopString, pos, Color.Blue);
                 }
             }
 

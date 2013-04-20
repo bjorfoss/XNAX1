@@ -485,19 +485,20 @@ namespace SpacePirates
             {
                 station.Update(gameTime);
             }
-            foreach (ISpaceShip ship in redTeam){
+            foreach (SpaceShip ship in redTeam){
 
                 if((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(0).getRectangle()))
                 {
-                    spaceStations.ElementAt(0).dockShip(ship);
+                   
+                    ship.docking(gameTime);
                 }
             }
-            foreach (ISpaceShip ship in blueTeam)
+            foreach (SpaceShip ship in blueTeam)
             {
 
                 if ((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(1).getRectangle()))
                 {
-                    spaceStations.ElementAt(1).dockShip(ship);
+                    ship.docking(gameTime);
                 }
             }
 
