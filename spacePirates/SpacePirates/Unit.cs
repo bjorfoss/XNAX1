@@ -261,7 +261,7 @@ namespace SpacePirates
             if (damage < currentThreshold)
             {
                 //just reduce armor effectiveness a bit
-                armorEffectiveness -= 0.1f;
+                armorEffectiveness -= 1f;
                 Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
             }
             //some damage is blocked still
@@ -269,7 +269,7 @@ namespace SpacePirates
             {
                 health -= damage - currentThreshold;
                 //erode armor faster when it's penetrated
-                armorEffectiveness -= 0.10f;
+                armorEffectiveness -= 10f;
                 if (armorEffectiveness < 0)
                 {
                     armorEffectiveness = 0;
