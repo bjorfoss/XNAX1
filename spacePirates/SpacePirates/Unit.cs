@@ -247,11 +247,42 @@ namespace SpacePirates
 
         }
 
+        /// <summary>
+        /// Calculate armor and health damage
+        /// </summary>
+        /// <param name="damage"></param>
         public void damage(double damage)
         {
-            damage -= ((armorEffectiveness / 100) * armorThreshold);
-            if(damage < 0){ damage = 0; }
-            health -= damage;
+            double currentThreshold = ((armorEffectiveness / 100) * armorThreshold);
+            double blockedDamage = damage - currentThreshold;
+            Console.WriteLine("Unit.damage: Damage: " + damage + " -- Effectiveness: " + armorEffectiveness + " -- CurrentThreshold: " + currentThreshold);
+
+            //cannot penetrate armor
+            if (damage < currentThreshold)
+            {
+                //just reduce armor effectiveness a bit
+                armorEffectiveness -= 0.1f;
+                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+            }
+            //some damage is blocked still
+            else if (currentThreshold != 0)
+            {
+                health -= damage - currentThreshold;
+                //erode armor faster when it's penetrated
+                armorEffectiveness -= 0.10f;
+                if (armorEffectiveness < 0)
+                {
+                    armorEffectiveness = 0;
+                }
+                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+            }
+            //no armor left to block damage
+            else
+            {
+                //damage bonus from no armor
+                damage *= 1.02f;
+                health -= damage;
+            }
         }
 
         /// <summary>
