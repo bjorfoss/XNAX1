@@ -352,19 +352,205 @@ namespace SpacePirates.Player
             {
                 if ((ship as SpaceShip).GetDocked())
                 {
-                    if (newState.IsKeyDown(Keys.Z))
-                    {
-                        (ship as SpaceShip).Repair(gameTime);
-                    }
-                    if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X))
-                    {
-                        (ship as SpaceShip).BuyArmor();
-                    }
+                    HandleShopInput(newState, gameTime, (ship as SpaceShip));
+                    
                 }
 
             }
 
             
+
+        }
+        public void HandleShopInput(KeyboardState newState, GameTime gameTime, SpaceShip ship)
+        {
+
+            switch (ship.GetShopWindow())
+            {
+                case "main":
+
+                    if (newState.IsKeyDown(Keys.Z)) // Repair
+                    {
+                        ship.Repair(gameTime);
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Engine window
+                    {
+                        ship.SetShopWindow("engine");
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Abilities window
+                    {
+                        ship.SetShopWindow("abilities1");
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // Weapons window
+                    {
+                        ship.SetShopWindow("weapons1");
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // Armor window
+                    {
+                        ship.SetShopWindow("armor");
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // 
+                    {
+                                
+                    }
+                    break;
+                case "abilities1":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // Next abilities page
+                    {
+                        ship.SetShopWindow("abilities2");
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+                case "abilities2":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // Next abilities window
+                    {
+                        ship.SetShopWindow("abilities1");
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+                case "weapons1":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // Next weapons window
+                    {
+                        ship.SetShopWindow("weapons2");
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+                case "weapons2":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // Next weapons window
+                    {
+                        ship.SetShopWindow("weapons1");
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+                case "armor":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Buy Armor
+                    {
+                        ship.BuyArmor();
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+                case "engine":
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.B) && !oldState.IsKeyDown(Keys.B)) // 
+                    {
+
+                    }
+                    else if (newState.IsKeyDown(Keys.N) && !oldState.IsKeyDown(Keys.N)) // Exit
+                    {
+                        ship.SetShopWindow("main");
+                    }
+                    break;
+  
+            }
 
         }
 
