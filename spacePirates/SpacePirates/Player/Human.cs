@@ -187,8 +187,10 @@ namespace SpacePirates.Player
             else
                 spawn = GameObject.Instance().getBlueSpawn();
 
+            (ship as Unit).addCd(new Utilities.CollisionCd((ship as Unit)));
             (ship as SpaceShip).setPosition(spawn);
-            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());
+            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());            
+
             GameObject.Instance().addToGame(ship as Unit);
         }
 
@@ -206,6 +208,11 @@ namespace SpacePirates.Player
         public IObstacle GetGeneratedAsteroid()
         {
             return asteroid;         
+        }
+
+        public void SetHasGeneratedAsteroid()
+        {
+            generatedAsteroid = false;
         }
 
         public void SetAwardOpposition(bool award)

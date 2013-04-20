@@ -408,21 +408,21 @@ namespace SpacePirates
                 if (damage < 1) { damage = 1; }
                 health -= damage; 
                 outOfBounds = true;
-            } else {
-               outOfBounds = false;
-            }
 
-            if (health <= 0)
-            {
-                if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+                if (health <= 0)
                 {
-                    IPlayer player = (this as SpaceShip).GetOwner();
+                    if ((this is SpaceShip) && (this as SpaceShip).GetOwner() != null)
+                    {
+                        IPlayer player = (this as SpaceShip).GetOwner();
 
-                    if(!(player as Human).GetDestroyed())
+                        if (!(player as Human).GetDestroyed())
+                            OnDestroy(gameTime, false);
+                    }
+                    else
                         OnDestroy(gameTime, false);
                 }
-                else
-                    OnDestroy(gameTime, false);
+            } else {
+               outOfBounds = false;
             }
         }
         /// <summary>

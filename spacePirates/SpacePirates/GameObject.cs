@@ -233,7 +233,6 @@ namespace SpacePirates
         public void addToGame(Unit unit)
         {
             objectsInGame.Add(unit);
-            
         }
 
         public void addToGame(Explosion explosion)
@@ -822,6 +821,8 @@ namespace SpacePirates
                         packetWriter.Write("asteroid");
                         packetWriter.Write((asteroid as Unit).GetPosition());
                         packetWriter.Write((asteroid as Unit).getVelocity());
+
+                        me.SetHasGeneratedAsteroid();
                     }
 
 
