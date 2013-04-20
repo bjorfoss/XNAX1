@@ -418,12 +418,7 @@ namespace SpacePirates
                         dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
                         if (awardPoint)
                         {
-                            int teamloss = (died as Human).GetTeam();
-
-                            if (teamloss == 1)
-                                GameObject.Instance().blueScored();
-                            else
-                                GameObject.Instance().redScored();
+                            (died as Human).SetAwardOpposition(true);
                         }
                     }
             }
@@ -552,8 +547,6 @@ namespace SpacePirates
                         new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
                         1.0f, SpriteEffects.None, 0f);
             }
-          
-            
         }
 
     }

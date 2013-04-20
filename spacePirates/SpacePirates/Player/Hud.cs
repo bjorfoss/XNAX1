@@ -66,6 +66,10 @@ namespace SpacePirates.Player
             batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
             batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Armor:", new Vector2(0.0f, 30.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+
+            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Weapon:  " + (playerObject.GetShip() as SpaceShip).GetWeaponName(), new Vector2(0.0f, 60.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+
+            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Ability: " + (playerObject.GetShip() as SpaceShip).GetAbilityName(), new Vector2(0.0f, 90.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
         }
 
         

@@ -13,6 +13,8 @@ namespace SpacePirates.spaceShips
         double maxHealth; //The shield's health at activation.
         double health; //The shield's health until it breaks.
 
+        string name; //Name of the ability.
+
         bool active; //Holds whether the shield is currently active.
         double time; //Holds when the shield last either activated or expired.
         Stopwatch clock; //Handles the passage of time.
@@ -30,6 +32,8 @@ namespace SpacePirates.spaceShips
             maxHealth = health;
             this.health = 0;
 
+            name = "Shield";
+
             active = false;
             time = -cooldown; //Set the time to negative cooldown, so the shield can be activated immediately
         }
@@ -40,6 +44,9 @@ namespace SpacePirates.spaceShips
         /// </summary>
         public void Activate()
         {
+            if (clock == null)
+                clock = new Stopwatch();
+
             double temp = clock.ElapsedMilliseconds;
             if (temp - time >= cooldown)
             {
@@ -84,6 +91,9 @@ namespace SpacePirates.spaceShips
             return active;
         }
 
-
+        public string GetName()
+        {
+            return name;
+        }
     }
 }

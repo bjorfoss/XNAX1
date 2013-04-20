@@ -317,7 +317,7 @@ namespace SpacePirates
            
         }
 
-        private void generateAstroids(GameTime gameTime)
+        private void generateAstroids(GameTime gameTime, Human host)
         {
 
             String obstacleType = "asteroid";
@@ -389,6 +389,8 @@ namespace SpacePirates
                 IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle(obstacleType, astroidStart, astroidVelocity);
                 addToGame(obstacles, asteroid);
 
+                host.HostAsteroidGeneration(asteroid);
+
                 Console.WriteLine("Created astroid with position " + astroidStart.X + "," + astroidStart.Y + " and velocity " + astroidVelocity.X + "," + astroidVelocity.Y);
             }
 
@@ -426,8 +428,10 @@ namespace SpacePirates
                     if (player.IsLocal)
                     {
                         Human test = (player.Tag as Human);
-                        //Human test = NetworkObject.Instance().getPlayer();
                         test.HandleInput(Keyboard.GetState(), (gameTime));
+
+                        if(player.IsHost)
+                            generateAstroids(gameTime, test);
                     }           
                 }
             }
@@ -470,8 +474,6 @@ namespace SpacePirates
                         }
                     }
             }
-
-            generateAstroids(gameTime);
 
             //Updates all the units in the game
             for (int i = 0; i < objectsInGame.Count; i++)
@@ -647,12 +649,19 @@ namespace SpacePirates
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
+
                         bool destroyed;
+                        bool rewardOpposition;
 
                         bool shipNextWep;
                         bool shipPreviousWep;
                         bool shipNextAbility;
                         bool shipPrevAbility;
+
+                        bool generatedAsteroid;
+                        string asteroidName;
+                        Vector2 startAsteroidPos;
+                        Vector2 asteroidVelocity;
 
                         try
                         {
@@ -669,8 +678,10 @@ namespace SpacePirates
                             
 
                             firing = packetReader.ReadBoolean();
+
                             destroyed = packetReader.ReadBoolean();
- 
+                            rewardOpposition = packetReader.ReadBoolean();
+
                             shipNextWep = packetReader.ReadBoolean();
                             shipPreviousWep = packetReader.ReadBoolean();
                             shipNextAbility = packetReader.ReadBoolean();
@@ -696,6 +707,16 @@ namespace SpacePirates
                                 ship.Fire(gameTime);
 
                             senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
+                            if (rewardOpposition)
+                            {
+                                int team = senderHuman.GetTeam();
+
+                                if (team == 1)
+                                    blueScored();
+                                else
+                                    redScored();
+                            }
+
 
                             if (shipNextWep)
                                 ship.NextWeapon();
@@ -705,6 +726,22 @@ namespace SpacePirates
                                 ship.NextAbility();
                             if (shipPreviousWep)
                                 ship.PreviousAbility();
+
+                            if (sender.IsHost)
+                            {
+                                //Has an asteroid been generated?
+                                generatedAsteroid = packetReader.ReadBoolean();
+
+                                if (generatedAsteroid)
+                                {
+                                    asteroidName = packetReader.ReadString();
+                                    startAsteroidPos = packetReader.ReadVector2();
+                                    asteroidVelocity = packetReader.ReadVector2();
+
+                                    IObstacle asteroid = ConcreteObstacleFactory.CreateObstacle(asteroidName, startAsteroidPos, asteroidVelocity);
+                                    addToGame(obstacles, asteroid);
+                                }
+                            }
 
                         }
                         catch (EndOfStreamException)
@@ -741,10 +778,41 @@ namespace SpacePirates
 
                 packetWriter.Write(me.GetDestroyed());
 
+                bool rewardOpposition = me.GetAwardOppposition();
+
+                packetWriter.Write(rewardOpposition);
+
+                if (rewardOpposition)
+                {
+                    int team = me.GetTeam();
+
+                    if (team == 1)
+                        blueScored();
+                    else
+                        redScored();
+                }
+
                 packetWriter.Write(me.GetNextWeaponChange());
                 packetWriter.Write(me.GetPrevWeaponChange());
                 packetWriter.Write(me.GetNextAbilityChange());
                 packetWriter.Write(me.GetPrevAbilityChange());
+
+                if (gamer.IsHost)
+                {
+                    //Has an asteroid been generated?
+                    bool generatedAsteroid = me.HasHostGeneratedAsteroid();
+                    packetWriter.Write(generatedAsteroid);
+
+                    if (generatedAsteroid)
+                    {
+                        IObstacle asteroid = me.GetGeneratedAsteroid();
+                        packetWriter.Write("asteroid");
+                        packetWriter.Write((asteroid as Unit).GetPosition());
+                        packetWriter.Write((asteroid as Unit).getVelocity());
+                    }
+
+
+                }
 
                 gamer.SendData(packetWriter, SendDataOptions.None);
             }

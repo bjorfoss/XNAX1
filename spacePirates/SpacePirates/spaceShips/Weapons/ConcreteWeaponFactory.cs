@@ -16,6 +16,7 @@ namespace SpacePirates.spaceShips.Weapons
             factories = new Dictionary<string, WeaponFactory>();
             factories.Add("gun", new Factory_Gun());
             factories.Add("rapidgun", new Factory_RapidGun());
+            factories.Add("laser", new Factory_Laser());
         }
 
         /// <summary>
@@ -55,6 +56,16 @@ namespace SpacePirates.spaceShips.Weapons
             IWeapon WeaponFactory.CreateWeapon()
             {
                 return new RapidGun();
+            }
+        }
+
+        class Factory_Laser : WeaponFactory
+        {
+            public Factory_Laser() { }
+
+            IWeapon WeaponFactory.CreateWeapon()
+            {
+                return new Laser();
             }
         }
     }
