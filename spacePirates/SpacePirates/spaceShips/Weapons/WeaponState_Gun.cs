@@ -11,11 +11,18 @@ namespace SpacePirates.spaceShips
     {
         double fireRate; //The time, in milliseconds, from a shot is fired until another shot can be fired.
         double time; //The time, in milliseconds, when the previous shot was fired.
+        string name; //The name of the weapon.
 
         public WeaponState_Gun()
         {
             fireRate = 500;
             time = 0;
+            name = "Standard Gun";
+        }
+
+        public string GetName()
+        {
+            return name;
         }
 
 

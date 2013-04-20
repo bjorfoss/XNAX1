@@ -17,6 +17,7 @@ namespace SpacePirates.Obstacles
             factories = new Dictionary<string, IObstacleFactory>();
             factories.Add("asteroid", new Factory_Asteroid());
             factories.Add("bullet", new Factory_Bullet());
+            factories.Add("laser", new Factory_Laser());
         }
 
         /// <summary>
@@ -42,8 +43,8 @@ namespace SpacePirates.Obstacles
         /// <param name="position">Where to spawn</param>
         /// <param name="velocity">How it moves</param>
         /// <returns></returns>
-        public static IObstacle CreateObstacle(String type, Vector2 position, Vector2 velocity) {
-            return Instance().factories[type].CreateObstacle(position, velocity);
+        public static IObstacle CreateObstacle(String type, Vector2 position, Vector2 velocity, float obstRotation=0.0f) {
+            return Instance().factories[type].CreateObstacle(position, velocity, obstRotation);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace SpacePirates.Obstacles
         class Factory_Bullet : IObstacleFactory
         {
 
-            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity)
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity, float obstRotation)
             {
                 return new ConcreteObstacle_Bullet(velocity, position);
             }
@@ -77,9 +78,18 @@ namespace SpacePirates.Obstacles
         class Factory_Asteroid : IObstacleFactory
         {
 
-            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity)
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity, float obstRotation)
             {
                 return new ConcreteObstacle_Asteroid(velocity, position);
+            }
+        }
+
+        class Factory_Laser : IObstacleFactory
+        {
+
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity, float rotation=0.0f)
+            {
+                return new ConcreteObstacle_Laser(velocity, position, rotation);
             }
         }
     }

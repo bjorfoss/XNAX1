@@ -251,11 +251,42 @@ namespace SpacePirates
 
         }
 
+        /// <summary>
+        /// Calculate armor and health damage
+        /// </summary>
+        /// <param name="damage"></param>
         public void damage(double damage)
         {
-            damage -= ((armorEffectiveness / 100) * armorThreshold);
-            if(damage < 0){ damage = 0; }
-            health -= damage;
+            double currentThreshold = ((armorEffectiveness / 100) * armorThreshold);
+            double blockedDamage = damage - currentThreshold;
+            Console.WriteLine("Unit.damage: Damage: " + damage + " -- Effectiveness: " + armorEffectiveness + " -- CurrentThreshold: " + currentThreshold);
+
+            //cannot penetrate armor
+            if (damage < currentThreshold)
+            {
+                //just reduce armor effectiveness a bit
+                armorEffectiveness -= 1f;
+                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+            }
+            //some damage is blocked still
+            else if (currentThreshold != 0)
+            {
+                health -= damage - currentThreshold;
+                //erode armor faster when it's penetrated
+                armorEffectiveness -= 10f;
+                if (armorEffectiveness < 0)
+                {
+                    armorEffectiveness = 0;
+                }
+                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+            }
+            //no armor left to block damage
+            else
+            {
+                //damage bonus from no armor
+                damage *= 1.02f;
+                health -= damage;
+            }
         }
 
         /// <summary>
@@ -422,12 +453,7 @@ namespace SpacePirates
                         dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
                         if (awardPoint)
                         {
-                            int teamloss = (died as Human).GetTeam();
-
-                            if (teamloss == 1)
-                                GameObject.Instance().blueScored();
-                            else
-                                GameObject.Instance().redScored();
+                            (died as Human).SetAwardOpposition(true);
                         }
                     }
             }
@@ -577,8 +603,6 @@ namespace SpacePirates
                         new Vector2(animationFrame.Width / 2, animationFrame.Height / 2),
                         1.0f, SpriteEffects.None, 0f);
             }
-          
-            
         }
 
     }

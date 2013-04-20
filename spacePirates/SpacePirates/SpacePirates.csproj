@@ -143,6 +143,7 @@
     <Compile Include="spaceShips\IShipFactory.cs" />
     <Compile Include="spaceShips\SpaceShip.cs" />
     <Compile Include="spaceShips\SpaceStation.cs" />
+    <Compile Include="spaceShips\Weapons\Laser.cs" />
     <Compile Include="spaceShips\Weapons\RapidGun.cs" />
     <Compile Include="spaceShips\Weapons\ConcreteWeaponFactory.cs" />
     <Compile Include="spaceShips\Weapons\IWeapon.cs" />

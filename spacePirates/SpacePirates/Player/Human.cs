@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SpacePirates.spaceShips;
+using SpacePirates.Obstacles;
 
 namespace SpacePirates.Player
 {
@@ -29,6 +30,11 @@ namespace SpacePirates.Player
         private bool shipPrevAbility = false;
         private bool shipNextWep = false;
         private bool shipPreviousWep = false;
+
+        private bool generatedAsteroid = false;
+        IObstacle asteroid;
+
+        private bool awardPointToOpposition = false;
 
         public Human(string name)
         {
@@ -184,6 +190,32 @@ namespace SpacePirates.Player
             (ship as SpaceShip).setPosition(spawn);
             (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());
             GameObject.Instance().addToGame(ship as Unit);
+        }
+
+        public void HostAsteroidGeneration(IObstacle astro)
+        {
+            generatedAsteroid = true;
+            asteroid = astro;
+        }
+
+        public bool HasHostGeneratedAsteroid()
+        {
+            return generatedAsteroid;
+        }
+
+        public IObstacle GetGeneratedAsteroid()
+        {
+            return asteroid;         
+        }
+
+        public void SetAwardOpposition(bool award)
+        {
+            awardPointToOpposition = award;
+        }
+
+        public bool GetAwardOppposition()
+        {
+            return awardPointToOpposition;
         }
 
         /// <summary>

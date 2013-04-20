@@ -9,5 +9,7 @@ namespace SpacePirates.spaceShips
     public interface IWeapon
     {
         void Fire(GameTime gameTime, Unit ship);
+
+        string GetName();
     }
 }

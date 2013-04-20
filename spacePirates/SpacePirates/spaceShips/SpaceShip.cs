@@ -49,9 +49,10 @@ namespace SpacePirates.spaceShips
             currentThrust = 0;
 
             this.registration = registration;
-            weapons = new IWeapon[2];
+            weapons = new IWeapon[3];
             weapons[0] = ConcreteWeaponFactory.CreateWeapon("gun");
             weapons[1] = ConcreteWeaponFactory.CreateWeapon("rapidgun");
+            weapons[2] = ConcreteWeaponFactory.CreateWeapon("laser");
             currentWeapon = weapons[0];
 
             abilities = new IAbility[1];
@@ -164,7 +165,16 @@ namespace SpacePirates.spaceShips
             }
         }
 
-       
+
+        public string GetWeaponName()
+        {
+            return currentWeapon.GetName();
+        }
+
+        public string GetAbilityName()
+        {
+            return currentAbility.GetName();
+        }
 
         public IPlayer GetOwner()
         {

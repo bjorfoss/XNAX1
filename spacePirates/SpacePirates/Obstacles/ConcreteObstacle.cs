@@ -42,4 +42,31 @@ namespace SpacePirates.Obstacles
         }
     }
 
+    class ConcreteObstacle_Laser : Unit, IObstacle
+    {
+        double safeTime;
+
+        public ConcreteObstacle_Laser(Vector2 velocity, Vector2 position, float laserRot)
+            : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 18, 900, GraphicBank.getInstance().getGraphic("laser"))
+        {
+            animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
+            rotation = laserRot;
+            safeTime = 0;
+        }
+
+        public override bool readyToCollide(GameTime gameTime)
+        {
+            double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (safeTime + temp > 100)
+            {
+                return true;
+            }
+            else
+            {
+                safeTime += temp;
+                return false;
+            }
+        }
+    }
+
 }

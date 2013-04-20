@@ -8,6 +8,6 @@ namespace SpacePirates.Obstacles
 {
     public interface IObstacleFactory
     {
-        IObstacle CreateObstacle(Vector2 velocity, Vector2 position);
+        IObstacle CreateObstacle(Vector2 velocity, Vector2 position, float rotation=0.0f);
     }
 }
