@@ -18,8 +18,9 @@ namespace SpacePirates
         double timeToLive;
         double animationTime;
         Rectangle animationFrame;
+        Color explosionColor;
 
-        public Explosion(Vector2 position, Vector2 size, double damage)
+        public Explosion(Vector2 position, Vector2 size, double damage, Color explColor)
         {
             graphic = GraphicBank.getInstance().GetGraphic("explosion");
             this.position = position;
@@ -28,6 +29,12 @@ namespace SpacePirates
             timeToLive = 1000;
             animationFrame = new Rectangle(0, 0, 32, 32);
             animationTime = 0;
+            explosionColor = explColor;
+        }
+
+        public void SetAlternateExplosion(string explosionPNG)
+        {
+
         }
 
         public Rectangle getExplosionRectangle()
@@ -79,7 +86,7 @@ namespace SpacePirates
         public void Draw(SpriteBatch batch)
         {
             
-            batch.Draw(graphic, Unit.WorldPosToScreenPos(position), animationFrame, Color.White, 0,
+            batch.Draw(graphic, Unit.WorldPosToScreenPos(position), animationFrame, explosionColor, 0,
                     new Vector2(animationFrame.Width / 2, animationFrame.Height / 2), 
                     size.X/animationFrame.Width, SpriteEffects.None, 0f);
         }

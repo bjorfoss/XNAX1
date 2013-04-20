@@ -488,10 +488,17 @@ namespace SpacePirates
             }
             foreach (SpaceShip ship in redTeam){
 
+                
+
                 if((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(0).getRectangle()))
                 {
-                   
                     ship.docking(gameTime);
+                }
+                if ((ship as Unit).getUnitRectangle().Intersects(new Rectangle(spaceStations.ElementAt(1).getRectangle().X - 300, spaceStations.ElementAt(1).getRectangle().Y - 300, spaceStations.ElementAt(1).getRectangle().Width + 600, spaceStations.ElementAt(1).getRectangle().Height + 600)) && (int)gameTime.TotalGameTime.TotalMilliseconds % 1000 == 0)
+                {
+                    //Enemy ship! Get it!
+                    (ship as Unit).damage(1500);
+                    addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Blue));
                 }
             }
             foreach (SpaceShip ship in blueTeam)
@@ -500,6 +507,12 @@ namespace SpacePirates
                 if ((ship as Unit).getUnitRectangle().Intersects(spaceStations.ElementAt(1).getRectangle()))
                 {
                     ship.docking(gameTime);
+                }
+                if ((ship as Unit).getUnitRectangle().Intersects(new Rectangle(spaceStations.ElementAt(0).getRectangle().X - 300, spaceStations.ElementAt(0).getRectangle().Y - 300, spaceStations.ElementAt(0).getRectangle().Width + 600, spaceStations.ElementAt(0).getRectangle().Height + 600)) && (int)gameTime.TotalGameTime.TotalMilliseconds % 1000 == 0)
+                {
+                    //Enemy ship! Get it!
+                    (ship as Unit).damage(1500);
+                    addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Red));
                 }
             }
 
@@ -525,15 +538,13 @@ namespace SpacePirates
         public void executeDraw(SpriteBatch spriteBatch)
         {
             level.executeDraw(spriteBatch);
-            
+
             foreach (NetworkGamer player in NetworkObject.Instance().getNetworksession().AllGamers)
             {
                 
                 if (player.IsLocal)
                 {
                     Human human = player.Tag as Human;
-
-                    
 
                     ISpaceShip ship = human.GetShip();
 

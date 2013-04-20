@@ -70,7 +70,7 @@ namespace SpacePirates.spaceShips
         /// </summary>
         /// 
         public ConcreteShip_Eightwing(Ownership registration, Vector2 position, double rotation)
-            : base(20000, 10000, 50, 30, 40, registration, position, rotation, GraphicBank.getInstance().GetGraphic("eightwing"))
+            : base(20000, 10000, 500, 30, 40, registration, position, rotation, GraphicBank.getInstance().GetGraphic("eightwing"))
         {
             animationFrame = new Rectangle(0, 0, 128, 128);
             unitColor = Color.DimGray;

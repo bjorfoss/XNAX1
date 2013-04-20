@@ -437,7 +437,7 @@ namespace SpacePirates
         {
             if (blastDamage > 0)
             {
-                GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage));
+                GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage, Color.White));
                 //something.CreateBlast(position, blastradius, blastdamage);
             }
 
