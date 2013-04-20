@@ -22,7 +22,7 @@ namespace SpacePirates
             Level self = this;
 
             self.background = Content.Load<Texture2D>("Graphics/background");
-            bounds = new Rectangle(0, 0, 30000, 30000);
+            bounds = new Rectangle(0, 0, 10000, 10000);
             position = new Vector2(0, 0);
         }
 
