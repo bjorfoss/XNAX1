@@ -93,7 +93,7 @@ namespace SpacePirates
             Vector2 newVelocity = new Vector2(
                 velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
                 velocity.Y + (acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds));
-            if (this is ConcreteObstacle_Bullet)
+            if (this is IObstacle)
             {
                 if (Math.Pow(newVelocity.X, 2) + Math.Pow(newVelocity.Y, 2) > Math.Pow(2*max, 2))
                 {
