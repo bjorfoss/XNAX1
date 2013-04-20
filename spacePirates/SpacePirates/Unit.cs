@@ -400,6 +400,10 @@ namespace SpacePirates
             return edge;
         }
 
+        /// <summary>
+        /// Check if the unit is outside the level, and start damaging it
+        /// </summary>
+        /// <param name="gameTime"></param>
         private void checkIfOutsideLevel(GameTime gameTime)
         {
             if (GameObject.GetLevel().IsOutsideLevel(this))
@@ -490,6 +494,10 @@ namespace SpacePirates
             return armorEffectiveness;
         }
 
+        /// <summary>
+        /// Repair health first, then armor
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Repair(GameTime gameTime)
         {
             if (health != maxHealth)
@@ -561,6 +569,14 @@ namespace SpacePirates
 
         public virtual void Update(GameTime gameTime)
         {
+            if (this is IObstacle)
+            {
+                //destroy old obstacles
+                if ((this as IObstacle).GetLifetimeExpired(gameTime.ElapsedGameTime.Milliseconds))
+                {
+                    this.SetHealth(0);
+                }
+            }
         }
 
         public void UpdateUnit(GameTime gameTime)

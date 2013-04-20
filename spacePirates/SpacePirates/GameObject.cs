@@ -789,7 +789,7 @@ namespace SpacePirates
 
                 packetWriter.Write(me.GetDestroyed());
 
-                bool rewardOpposition = me.GetAwardOppposition();
+                bool rewardOpposition = me.GetAwardOpposition();
 
                 packetWriter.Write(rewardOpposition);
 

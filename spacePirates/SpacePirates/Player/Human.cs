@@ -213,7 +213,7 @@ namespace SpacePirates.Player
             awardPointToOpposition = award;
         }
 
-        public bool GetAwardOppposition()
+        public bool GetAwardOpposition()
         {
             return awardPointToOpposition;
         }
