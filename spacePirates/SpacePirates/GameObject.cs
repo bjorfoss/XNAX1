@@ -71,8 +71,8 @@ namespace SpacePirates
         private int blueScore;
         private string victoryText = "";
         private double respawnCooldown = 15.0;
-        private Vector2 redSpaceStationPos = new Vector2(200, 200);
-        private Vector2 blueSpaceStationPos = new Vector2(1000, 1000);       
+        private Vector2 redSpaceStationPos = new Vector2(2500, 2500);
+        private Vector2 blueSpaceStationPos = new Vector2(7500, 7500);       
 
         SpriteFont spritefont;
 
