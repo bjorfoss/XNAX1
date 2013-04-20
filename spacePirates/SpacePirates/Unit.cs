@@ -38,6 +38,9 @@ namespace SpacePirates
         protected bool docked; //tells if ship(as unit) is docked
         protected double docktime; // tells when the ship docked last
 
+        protected Dictionary<String, String> shopString;
+        protected String shopWindow;
+
         private bool outOfBounds;
 
         List<CollisionCd> cooldowns;
@@ -64,7 +67,18 @@ namespace SpacePirates
             this.blastRadius = blastRadius;
 
             this.graphics = graphics;
-            docked = false; 
+            docked = false;
+
+            shopString = new Dictionary<String, String>();
+
+            shopString.Add("main", "Spaceshop\nZ - Repair\nX - Engine\nC - Abilities\nV - Weapons\nB - Armor\n");
+            shopString.Add("abilities1", "Abilities 1\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("abilities2", "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("weapons1", "Weapons 1\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("weapons2", "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("armor", "Armor\nZ - Buy Armor\nX - \nC - \nV - \nB - \nN - Exit");
+            shopString.Add("engine", "Engine\nZ - More Thrust\nX - Max Speed\nC - Turn Speed\nV - \nB - \nN - Exit");
+            shopWindow = "main";
 
             cooldowns = new List<CollisionCd>();
         }
@@ -494,6 +508,18 @@ namespace SpacePirates
             return armorEffectiveness;
         }
 
+
+        public String GetShopWindow()
+        {
+            return shopWindow;
+        }
+        public void SetShopWindow(String nextWindow)
+        {
+
+            shopWindow = nextWindow;
+        }
+
+
         /// <summary>
         /// Repair health first, then armor
         /// </summary>
@@ -575,6 +601,7 @@ namespace SpacePirates
                 if ((this as IObstacle).GetLifetimeExpired(gameTime.ElapsedGameTime.Milliseconds))
                 {
                     this.SetHealth(0);
+                    this.OnDestroy(gameTime, false);
                 }
             }
         }
@@ -592,6 +619,7 @@ namespace SpacePirates
                 if (docktime >= 20)
                 {
                     docked = false;
+                    SetShopWindow("main");
                 }
             }
         }
@@ -638,16 +666,16 @@ namespace SpacePirates
                 {
                     String warning = "Deserters will die, return to the combat area! -- Health: " +
                         Math.Round(this.getHealth());
-                    batch.DrawString(font, warning, screenPos + new Vector2(0, -200), Color.Red);
+                    batch.DrawString(font, warning, screenPos + new Vector2(-200, -200), Color.Red);
                 }
                 if (docked)
                 {
-                    String shopString = "Docked\nZ - repair\nX - Inc Armor\nC - Inc Thrust";
+                    
                     Rectangle screen = GameObject.GetScreenArea();
-                    Vector2 pos = new Vector2(0, (float)(screen.Bottom - (font.MeasureString(shopString).Y)));
+                    Vector2 pos = new Vector2(0, (float)(screen.Bottom - (font.MeasureString(shopString[shopWindow]).Y)));
 
                     
-                    batch.DrawString(font, shopString, pos, Color.Green);
+                    batch.DrawString(font, shopString[shopWindow], pos, Color.Green);
                 }
             }
 

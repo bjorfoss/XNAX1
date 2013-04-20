@@ -12,6 +12,7 @@ namespace SpacePirates.Obstacles
     {
         double safeTime;
         double timeToLive = 15000;
+        double check = 0;
 
         public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 32, 500, GraphicBank.getInstance().GetGraphic("bullet"))
         {
@@ -35,8 +36,9 @@ namespace SpacePirates.Obstacles
 
         public bool GetLifetimeExpired(double millis)
         {
+            check += millis;
             timeToLive -= millis;
-            if (millis < 0)
+            if (timeToLive <= 0)
             {
                 return true;
             }
@@ -66,7 +68,7 @@ namespace SpacePirates.Obstacles
     class ConcreteObstacle_Laser : Unit, IObstacle
     {
         double safeTime;
-        double timeToLive = 15000;
+        double timeToLive = 8000;
 
         public ConcreteObstacle_Laser(Vector2 velocity, Vector2 position, float laserRot)
             : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 18, 200, GraphicBank.getInstance().GetGraphic("laser"))
@@ -93,7 +95,7 @@ namespace SpacePirates.Obstacles
         public bool GetLifetimeExpired(double millis)
         {
             timeToLive -= millis;
-            if (millis < 0)
+            if (timeToLive < 0)
             {
                 return true;
             }
