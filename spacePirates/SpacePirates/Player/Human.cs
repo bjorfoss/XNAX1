@@ -348,6 +348,24 @@ namespace SpacePirates.Player
                 ship.Fire(gameTime);
             }
 
+            if (ship is SpaceShip)
+            {
+                if ((ship as SpaceShip).GetDocked())
+                {
+                    if (newState.IsKeyDown(Keys.Z))
+                    {
+                        (ship as SpaceShip).Repair(gameTime);
+                    }
+                    if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X))
+                    {
+                        (ship as SpaceShip).BuyArmor();
+                    }
+                }
+
+            }
+
+            
+
         }
 
         void HandleGamepadInput()

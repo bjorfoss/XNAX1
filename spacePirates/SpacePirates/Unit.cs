@@ -265,7 +265,7 @@ namespace SpacePirates
             if (damage < currentThreshold)
             {
                 //just reduce armor effectiveness a bit
-                armorEffectiveness -= 1f;
+                armorEffectiveness -= 1;
                 Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
             }
             //some damage is blocked still
@@ -273,7 +273,7 @@ namespace SpacePirates
             {
                 health -= damage - currentThreshold;
                 //erode armor faster when it's penetrated
-                armorEffectiveness -= 10f;
+                armorEffectiveness -= 10;
                 if (armorEffectiveness < 0)
                 {
                     armorEffectiveness = 0;
@@ -284,7 +284,7 @@ namespace SpacePirates
             else
             {
                 //damage bonus from no armor
-                damage *= 1.02f;
+                damage *= 1.02;
                 health -= damage;
             }
         }
@@ -490,12 +490,49 @@ namespace SpacePirates
             return armorEffectiveness;
         }
 
+        public void Repair(GameTime gameTime)
+        {
+            if (health != maxHealth)
+            {
+
+                if (20 + health > maxHealth)
+                {
+                    health = maxHealth;
+                    return;
+                }
+
+                health += 20;
+                return;
+            }
+
+            if (armorEffectiveness < 100)
+            {
+                double inc = 10 * gameTime.ElapsedGameTime.TotalSeconds;
+
+                if(armorEffectiveness + inc > 100){
+                    armorEffectiveness = 100;
+                    return;
+                }
+                armorEffectiveness += inc;
+                
+            }
+        }
+
+        public void BuyArmor()
+        {
+            armorThreshold *= 1.1;
+            
+        }
+
         public void RestoreHealth(double heal)
         {
-            if (heal > maxHealth)
-                heal = maxHealth;
+            if (heal + health > maxHealth)
+            {
+                health = maxHealth;
+                return;
+            }
 
-            health = heal;
+            health += heal;
 
         }
         public Rectangle getUnitRectangle()
@@ -535,7 +572,8 @@ namespace SpacePirates
             checkIfOutsideLevel(gameTime);
             if (docked)
             {
-                if (gameTime.ElapsedGameTime.TotalMilliseconds - docktime <= 100)
+                docktime += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (docktime >= 20)
                 {
                     docked = false;
                 }
@@ -544,7 +582,7 @@ namespace SpacePirates
         public void docking(GameTime gameTime)
         {
             docked = true;
-            docktime = gameTime.ElapsedGameTime.TotalMilliseconds;
+            docktime = 0;
         }
         public static Vector2 WorldPosToScreenPos(Vector2 position)
         {
@@ -588,12 +626,12 @@ namespace SpacePirates
                 }
                 if (docked)
                 {
-                    String shopString = "Docked";
+                    String shopString = "Docked\nZ - repair\nX - Inc Armor\nC - Inc Thrust";
                     Rectangle screen = GameObject.GetScreenArea();
                     Vector2 pos = new Vector2(0, (float)(screen.Bottom - (font.MeasureString(shopString).Y)));
 
                     
-                    batch.DrawString(font, shopString, pos, Color.Blue);
+                    batch.DrawString(font, shopString, pos, Color.Green);
                 }
             }
 

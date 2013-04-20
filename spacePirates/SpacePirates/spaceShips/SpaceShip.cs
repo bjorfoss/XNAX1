@@ -216,5 +216,10 @@ namespace SpacePirates.spaceShips
         {
             animationFrame = anim;
         }
+
+        public bool GetDocked()
+        {
+            return docked;
+        }
     }
 }
