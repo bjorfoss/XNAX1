@@ -57,11 +57,11 @@ namespace SpacePirates.Player
             GraphicBank.getInstance().GetFont("Armor");
             GraphicBank.getInstance().GetFont("KillCount");
 
-            batch.Draw(GraphicBank.getInstance().getGraphic("box"), maxHealth, Color.DarkRed);
-            batch.Draw(GraphicBank.getInstance().getGraphic("box"), currentHealth, Color.Red);
+            batch.Draw(GraphicBank.getInstance().GetGraphic("box"), maxHealth, Color.DarkRed);
+            batch.Draw(GraphicBank.getInstance().GetGraphic("box"), currentHealth, Color.Red);
 
-            batch.Draw(GraphicBank.getInstance().getGraphic("box"), maxArmor, Color.DarkBlue);
-            batch.Draw(GraphicBank.getInstance().getGraphic("box"), currentArmor, Color.Blue);
+            batch.Draw(GraphicBank.getInstance().GetGraphic("box"), maxArmor, Color.DarkBlue);
+            batch.Draw(GraphicBank.getInstance().GetGraphic("box"), currentArmor, Color.Blue);
 
             batch.DrawString(GraphicBank.getInstance().GetFont("Health"), "Health:", Vector2.Zero, Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 

@@ -21,7 +21,7 @@ namespace SpacePirates
 
         public Explosion(Vector2 position, Vector2 size, double damage)
         {
-            graphic = GraphicBank.getInstance().getGraphic("explosion");
+            graphic = GraphicBank.getInstance().GetGraphic("explosion");
             this.position = position;
             this.size = size;
             this.damage = damage;
@@ -91,7 +91,7 @@ namespace SpacePirates
             if (pos.X > -screen.Width / 2 && pos.X < screen.Width + screen.Width / 2
                 && pos.Y > -screen.Height / 2 && pos.Y < screen.Height + screen.Height / 2)
             {
-                GraphicBank.getInstance().getSound("boom"+((new Random()).Next(4)+1)).Play();
+                GraphicBank.getInstance().GetSound("boom"+((new Random()).Next(4)+1)).Play();
             }
         }
     }

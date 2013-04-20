@@ -12,7 +12,7 @@ namespace SpacePirates.Obstacles
     {
         double safeTime;
 
-        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 32, 500, GraphicBank.getInstance().getGraphic("bullet"))
+        public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 32, 500, GraphicBank.getInstance().GetGraphic("bullet"))
         {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
             safeTime = 0;
@@ -35,7 +35,7 @@ namespace SpacePirates.Obstacles
 
     class ConcreteObstacle_Asteroid : Unit, IObstacle
     {
-        public ConcreteObstacle_Asteroid(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 200, 0, 10000, 10000, 10, 10, 0, 0, GraphicBank.getInstance().getGraphic("astroid"))
+        public ConcreteObstacle_Asteroid(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 200, 0, 10000, 10000, 10, 10, 0, 0, GraphicBank.getInstance().GetGraphic("astroid"))
         {
           
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
@@ -47,7 +47,7 @@ namespace SpacePirates.Obstacles
         double safeTime;
 
         public ConcreteObstacle_Laser(Vector2 velocity, Vector2 position, float laserRot)
-            : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 18, 900, GraphicBank.getInstance().getGraphic("laser"))
+            : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 18, 900, GraphicBank.getInstance().GetGraphic("laser"))
         {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
             rotation = laserRot;
