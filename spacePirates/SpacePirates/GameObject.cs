@@ -622,10 +622,20 @@ namespace SpacePirates
             redScore++;
         }
 
+        public int getRedScore()
+        {
+            return redScore;
+        }
+
         //Get the GameObject instance and call this when blue team destroys an enemy ship.
         public void blueScored()
         {
             blueScore++;
+        }
+
+        public int getBlueScore()
+        {
+            return blueScore;
         }
 
         private void ReceiveNetworkData(GameTime gameTime)
@@ -785,6 +795,8 @@ namespace SpacePirates
                 if (rewardOpposition)
                 {
                     int team = me.GetTeam();
+
+                    me.SetAwardOpposition(false);
 
                     if (team == 1)
                         blueScored();

@@ -40,8 +40,8 @@ namespace SpacePirates.spaceShips.Weapons
                 float var = (float)Math.Sqrt(Math.Pow(((ship.getUnitRectangle().Height / 2) + offset), 2) /
                     (Math.Pow(vel.X, 2) + Math.Pow(vel.Y, 2)));
                 Vector2 pos = new Vector2(ship.GetPosition().X + var * vel.X, ship.GetPosition().Y + var * vel.Y);
-                vel.X += ship.getVelocity().X;
-                vel.Y += ship.getVelocity().Y;
+                //vel.X += ship.getVelocity().X;
+                //vel.Y += ship.getVelocity().Y;
 
                 ConcreteObstacle_Laser laser = (ConcreteObstacleFactory.CreateObstacle("laser", pos, vel, (float)ship.rotation)) as ConcreteObstacle_Laser;
 
