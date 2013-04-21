@@ -149,5 +149,24 @@ namespace SpacePirates.spaceShips
         {
             return name;
         }
+
+        public double getHealth()
+        {
+            return health;
+        }
+
+        public void setHealth(double health)
+        {
+            if (health > 0)
+            {
+                this.health = health;
+            }
+            else if (health == 0 && active)
+            {
+                this.health = health;
+                active = false;
+                time = cooldown;
+            }
+        }
     }
 }

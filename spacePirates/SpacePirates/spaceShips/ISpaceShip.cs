@@ -103,5 +103,7 @@ namespace SpacePirates.spaceShips
         /// </summary>
         /// <returns></returns>
         int GetNumAbilitySlots();
+
+        IAbility GetCurrentAbility();
     }
 }

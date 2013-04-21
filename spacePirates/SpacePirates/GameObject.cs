@@ -683,6 +683,8 @@ namespace SpacePirates
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
+                        bool abilityActivated;
+                        double shieldHealth;
 
                         bool destroyed;
                         bool rewardOpposition;
@@ -709,9 +711,10 @@ namespace SpacePirates
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
-                            
 
                             firing = packetReader.ReadBoolean();
+                            abilityActivated = packetReader.ReadBoolean();
+                            shieldHealth = packetReader.ReadDouble();
 
                             destroyed = packetReader.ReadBoolean();
                             rewardOpposition = packetReader.ReadBoolean();
@@ -739,6 +742,14 @@ namespace SpacePirates
 
                             if (firing)
                                 ship.Fire(gameTime);
+
+                            if (abilityActivated)
+                                ship.UseAbility(gameTime);
+
+                            if (ship.GetCurrentAbility() is AbilityState_Shield)
+                            {
+                                (ship.GetCurrentAbility() as AbilityState_Shield).setHealth(shieldHealth);
+                            }
 
                             senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
                             if (rewardOpposition)
@@ -809,6 +820,18 @@ namespace SpacePirates
                 packetWriter.Write(me.GetFiring());
                 //Regardless of whether we fired or not, set the bool to false.
                 me.ShipFired();
+
+                packetWriter.Write(me.GetAbilityActivated());
+                //Regardless of whether we activated or not, set the bool to false.
+                me.setAbilityActivated();
+                if (me.GetShip().GetCurrentAbility() is AbilityState_Shield)
+                {
+                    packetWriter.Write((me.GetShip().GetCurrentAbility() as AbilityState_Shield).getHealth());
+                }
+                else
+                {
+                    packetWriter.Write(-1);
+                }
 
                 packetWriter.Write(me.GetDestroyed());
 

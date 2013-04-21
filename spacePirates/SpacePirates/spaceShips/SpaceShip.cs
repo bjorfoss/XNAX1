@@ -242,6 +242,23 @@ namespace SpacePirates.spaceShips
             return registration.GetOwner();
         }
 
+        public IAbility GetCurrentAbility()
+        {
+            return currentAbility;
+        }
+
+        public double GetShieldHealth()
+        {
+            if (currentAbility is AbilityState_Shield)
+            {
+                return (currentAbility as AbilityState_Shield).getHealth();
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
         [Obsolete("Use GetPosition in Unit instead")]
         public Vector2 GetShipPosition()
         {

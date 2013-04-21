@@ -19,6 +19,7 @@ namespace SpacePirates.Player
         bool pickedTeam = false;
         private string shipSelection = "fighter";
         bool shipFires = false;
+        bool activateAbility = false;
         Hud hud;
         
 
@@ -106,6 +107,16 @@ namespace SpacePirates.Player
         public void ShipFired()
         {
             shipFires = false;
+        }
+
+        public bool GetAbilityActivated()
+        {
+            return activateAbility;
+        }
+
+        public void setAbilityActivated()
+        {
+            activateAbility = false;
         }
 
         //Getter for network. Just set the bool to false at the end anyway.
@@ -319,12 +330,12 @@ namespace SpacePirates.Player
             }
 
             // Browse features
-            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I))
+            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I) && !ship.GetCurrentAbility().getActive())
             {
                 shipNextAbility = true;
                 ship.NextAbility();
             }
-            else if (newState.IsKeyDown(Keys.J) && oldState.IsKeyUp(Keys.J))
+            else if (newState.IsKeyDown(Keys.J) && oldState.IsKeyUp(Keys.J) && !ship.GetCurrentAbility().getActive())
             {
                 shipPrevAbility = true;
                 ship.PreviousAbility();
@@ -345,6 +356,7 @@ namespace SpacePirates.Player
             // Execute feature
             if (newState.IsKeyDown(Keys.E))
             {
+                activateAbility = true;
                 ship.UseAbility(gameTime);
             }
 
