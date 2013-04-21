@@ -345,7 +345,7 @@ namespace SpacePirates.Player
             // Execute feature
             if (newState.IsKeyDown(Keys.E))
             {
-                ship.UseAbility();
+                ship.UseAbility(gameTime);
             }
 
             // Fire weapon

@@ -486,6 +486,10 @@ namespace SpacePirates
                 Unit unit = objectsInGame.ElementAt(i);
                 unit.Update(gameTime);
                 unit.UpdateUnit(gameTime);
+                if (unit is ISpaceShip)
+                {
+                    (unit as ISpaceShip).updateAbilities(gameTime);
+                }
                 
             }
             foreach (SpaceStation station in spaceStations)
@@ -568,6 +572,7 @@ namespace SpacePirates
                     {
                         human.getHud().executeDraw(spriteBatch, screenArea);
                         unit.Draw(spriteBatch);
+                        ship.drawAbilities(spriteBatch);
                         Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
                         spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag) / 2, 1f, SpriteEffects.None, 0f);
                     }
@@ -595,6 +600,7 @@ namespace SpacePirates
                         if(!human.GetDestroyed())
                         {
                             unit.Draw(spriteBatch);
+                            ship.drawAbilities(spriteBatch);
                             Vector2 screenPos = Unit.WorldPosToScreenPos(pos);
                             spriteBatch.DrawString(spritefont, player.Gamertag, screenPos, col, 0, spritefont.MeasureString(player.Gamertag)/2, 1f, SpriteEffects.None, 0f);
                         }
@@ -614,6 +620,7 @@ namespace SpacePirates
                     if (!((unit as ISpaceShip).GetOwner() is Human))
                     {
                         unit.Draw(spriteBatch);
+                        (unit as ISpaceShip).drawAbilities(spriteBatch);
                     }
                 }
                 else

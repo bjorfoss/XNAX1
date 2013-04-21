@@ -265,12 +265,19 @@ namespace SpacePirates
 
         }
 
+        protected virtual double getDamage(double damage)
+        {
+            return damage;
+        }
+
         /// <summary>
         /// Calculate armor and health damage
         /// </summary>
         /// <param name="damage"></param>
         public void damage(double damage)
         {
+            damage = getDamage(damage);
+            if (damage <= 0) { return; }
             double currentThreshold = ((armorEffectiveness / 100) * armorThreshold);
             double blockedDamage = damage - currentThreshold;
             Console.WriteLine("Unit.damage: Damage: " + damage + " -- Effectiveness: " + armorEffectiveness + " -- CurrentThreshold: " + currentThreshold);

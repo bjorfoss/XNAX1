@@ -47,7 +47,15 @@ namespace SpacePirates.spaceShips
         /// <summary>
         /// Use the ship's currently selected ability
         /// </summary>
-        void UseAbility();
+        void UseAbility(GameTime gameTime);
+
+        /// <summary>
+        /// Updates cooldowns and durations of abilities
+        /// </summary>
+        /// <param name="gameTime"></param>
+        void updateAbilities(GameTime gameTime);
+
+        void drawAbilities(SpriteBatch batch);
 
         /// <summary>
         /// Change the currently selected ability to the next one
