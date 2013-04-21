@@ -132,9 +132,43 @@ namespace SpacePirates.spaceShips
             }
         }
 
-        public virtual void UseAbility()
+        public virtual void UseAbility(GameTime gameTime)
         {
-            currentAbility.Activate();
+            if (currentAbility != null)
+            {
+                currentAbility.Activate(gameTime);
+            }
+        }
+
+        protected override double getDamage(double damage)
+        {
+            if (currentAbility is AbilityState_Shield)
+            {
+                return (currentAbility as AbilityState_Shield).Damage(damage);
+            }
+            else
+            {
+                return damage;
+            }
+        }
+
+        public virtual void updateAbilities(GameTime gameTime)
+        {
+            if (abilities.Length > 0)
+            {
+                foreach (IAbility ability in abilities)
+                {
+                    ability.Update(gameTime);
+                }
+            }
+        }
+
+        public virtual void drawAbilities(SpriteBatch batch)
+        {
+            if (currentAbility != null)
+            {
+                currentAbility.Draw(batch, this);
+            }
         }
 
         public virtual void NextAbility()
@@ -166,14 +200,24 @@ namespace SpacePirates.spaceShips
         }
 
 
-        public string GetWeaponName()
+        public string GetSelWeaponName()
         {
             return currentWeapon.GetName();
         }
 
-        public string GetAbilityName()
+        public string GetSelAbilityName()
         {
             return currentAbility.GetName();
+        }
+
+        public bool getAbilityActive()
+        {
+            return currentAbility.getActive();
+        }
+
+        public double getAbilityTimer()
+        {
+            return currentAbility.getTimer();
         }
 
         public IPlayer GetOwner()
@@ -217,9 +261,22 @@ namespace SpacePirates.spaceShips
             animationFrame = anim;
         }
 
-        public bool GetDocked()
+        /// <summary>
+        /// If the ship is docked at a space station
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsDocked()
         {
             return docked;
+        }
+
+        public virtual int GetNumWeaponSlots() {
+            return 4;
+        }
+
+        public virtual int GetNumAbilitySlots()
+        {
+            return 2;
         }
     }
 }

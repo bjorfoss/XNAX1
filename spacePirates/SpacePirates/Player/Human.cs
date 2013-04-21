@@ -345,7 +345,7 @@ namespace SpacePirates.Player
             // Execute feature
             if (newState.IsKeyDown(Keys.E))
             {
-                ship.UseAbility();
+                ship.UseAbility(gameTime);
             }
 
             // Fire weapon
@@ -357,7 +357,7 @@ namespace SpacePirates.Player
 
             if (ship is SpaceShip)
             {
-                if ((ship as SpaceShip).GetDocked())
+                if ((ship as SpaceShip).GetIsDocked())
                 {
                     HandleShopInput(newState, gameTime, (ship as SpaceShip));
                     

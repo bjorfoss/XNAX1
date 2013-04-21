@@ -16,6 +16,16 @@ namespace SpacePirates.Utilities
             }
             return ts;
         }
+
+        public static double round(double value, int places)
+        {
+            if (places < 0) throw new ArgumentOutOfRangeException();
+
+            long factor = (long)Math.Pow(10, places);
+            value = value * factor;
+            long tmp = (long)Math.Round(value);
+            return (double)tmp / factor;
+        }
     }
 
 }
