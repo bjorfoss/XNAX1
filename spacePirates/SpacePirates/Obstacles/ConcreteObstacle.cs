@@ -23,7 +23,7 @@ namespace SpacePirates.Obstacles
         public override bool readyToCollide(GameTime gameTime)
         {
             double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (safeTime + temp > 100)
+            if (safeTime + temp > 400)
             {
                 return true;
             }
@@ -81,7 +81,7 @@ namespace SpacePirates.Obstacles
         public override bool readyToCollide(GameTime gameTime)
         {
             double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (safeTime + temp > 100)
+            if (safeTime + temp > 400)
             {
                 return true;
             }

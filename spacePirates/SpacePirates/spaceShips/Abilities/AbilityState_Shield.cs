@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips
 {
@@ -14,10 +17,10 @@ namespace SpacePirates.spaceShips
         double health; //The shield's health until it breaks.
 
         string name; //Name of the ability.
+        Texture2D graphic;
 
         bool active; //Holds whether the shield is currently active.
         double time; //Holds when the shield last either activated or expired.
-        Stopwatch clock; //Handles the passage of time.
 
         /// <summary>
         /// Creates a new shield
@@ -33,9 +36,10 @@ namespace SpacePirates.spaceShips
             this.health = 0;
 
             name = "Shield";
+            graphic = GraphicBank.getInstance().GetGraphic("barrier");
 
             active = false;
-            time = -cooldown; //Set the time to negative cooldown, so the shield can be activated immediately
+            time = 0; //Set the time to negative cooldown, so the shield can be activated immediately
         }
 
         public string GetType()
@@ -47,32 +51,35 @@ namespace SpacePirates.spaceShips
         /// Activates the shield, given that the cooldown has expired.
         /// This gives the shield health, and sets active to true.
         /// </summary>
-        public void Activate()
+        public void Activate(GameTime gameTime)
         {
-            if (clock == null)
-                clock = new Stopwatch();
-
-            double temp = clock.ElapsedMilliseconds;
-            if (temp - time >= cooldown)
+            if (time <= 0)
             {
                 health = maxHealth;
                 active = true;
+                time = duration;
             }
-            time = temp;
         }
 
         /// <summary>
         /// Checks whether the shield should expire.
         /// </summary>
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            if (active)
+            if (time > 0)
             {
-                double temp = clock.ElapsedMilliseconds;
-                if (temp - time > duration || health <= 0)
+                time -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+            else
+            {
+                if (time < 0)
+                {
+                    time = 0;
+                }
+                if (active)
                 {
                     active = false;
-                    time = temp;
+                    time = cooldown;
                 }
             }
         }
@@ -81,19 +88,61 @@ namespace SpacePirates.spaceShips
         /// Deals damage to the shield
         /// </summary>
         /// <param name="damage"></param>
-        public void Damage(double damage)
+        public double Damage(double damage)
         {
-            health -= damage;
-            Update();
+            if (active)
+            {
+                double remainder = damage - health;
+                if (remainder < 0)
+                {
+                    remainder = 0;
+                    health -= damage;
+                }
+                else
+                {
+                    health = 0;
+                }
+
+                if (health <= 0 && active)
+                {
+                    active = false;
+                    time = cooldown;
+                }
+
+                return remainder;
+            }
+            else
+            {
+                return damage;
+            }
+        }
+
+
+        public void Draw(SpriteBatch batch, SpaceShip ship)
+        {
+            if (active)
+            {
+                Rectangle rectangle = ship.getUnitRectangle();
+                Vector2 location = Unit.WorldPosToScreenPos(ship.GetPosition());
+                Rectangle animationFrame = new Rectangle(0, 0, graphic.Width, graphic.Height);
+                batch.Draw(graphic, location, animationFrame, Color.White, 0f, 
+                    new Vector2(animationFrame.Width/2, animationFrame.Height/2), 
+                    (float)rectangle.Width/animationFrame.Width, SpriteEffects.None, 1f);
+            }
         }
 
         /// <summary>
         /// Checks whether the shield is currently active
         /// </summary>
         /// <returns></returns>
-        public bool Active()
+        public bool getActive()
         {
             return active;
+        }
+
+        public double getTimer()
+        {
+            return time;
         }
 
         public string GetName()

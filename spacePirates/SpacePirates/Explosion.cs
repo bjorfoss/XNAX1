@@ -34,7 +34,9 @@ namespace SpacePirates
 
         public void SetAlternateExplosion(string explosionPNG)
         {
-
+            graphic = GraphicBank.getInstance().GetGraphic(explosionPNG);
+            if(graphic == null)
+                graphic = GraphicBank.getInstance().GetGraphic("explosion");
         }
 
         public Rectangle getExplosionRectangle()
