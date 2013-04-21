@@ -690,6 +690,8 @@ namespace SpacePirates
                         bool destroyed;
                         bool rewardOpposition;
 
+                        bool shipUpgraded;
+
                         bool shipNextWep;
                         bool shipPreviousWep;
                         bool shipNextAbility;
@@ -720,6 +722,15 @@ namespace SpacePirates
 
                             destroyed = packetReader.ReadBoolean();
                             rewardOpposition = packetReader.ReadBoolean();
+
+                            //ship upgrades
+                            shipUpgraded = packetReader.ReadBoolean();
+                            if (shipUpgraded)
+                            {
+                                ship.SetArmorThreshold(packetReader.ReadDouble());
+                                ship.SetMaxThrust(packetReader.ReadDouble());
+                                ship.SetWeapons(packetReader.ReadString());
+                            }
 
                             shipNextWep = packetReader.ReadBoolean();
                             shipPreviousWep = packetReader.ReadBoolean();
@@ -853,6 +864,17 @@ namespace SpacePirates
                         blueScored();
                     else
                         redScored();
+                }
+
+                //deal with ship upgrades
+                bool sendShipUpdates = me.WasShipUpgraded();
+                packetWriter.Write(sendShipUpdates);
+                if (sendShipUpdates)
+                {
+                    ISpaceShip ship = me.GetShip();
+                    packetWriter.Write(ship.GetArmorThreshold());
+                    packetWriter.Write(ship.GetMaxThrust());
+                    packetWriter.Write(ship.GetWeapons());
                 }
 
                 packetWriter.Write(me.GetNextWeaponChange());

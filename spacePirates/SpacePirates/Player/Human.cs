@@ -585,5 +585,10 @@ namespace SpacePirates.Player
             return new Human("nobody");
             //throw new NotImplementedException();
         }
+
+        internal bool WasShipUpgraded()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

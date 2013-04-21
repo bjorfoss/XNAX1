@@ -426,5 +426,42 @@ namespace SpacePirates.spaceShips
         {
             return 2;
         }
+
+        public virtual double GetArmorThreshold()
+        {
+            return armorThreshold;
+        }
+
+        public virtual void SetArmorThreshold(double threshold)
+        {
+            armorThreshold = threshold;
+        }
+
+        public virtual double GetMaxThrust()
+        {
+            return maxThrust;
+        }
+
+        public virtual void SetMaxThrust(double thrust)
+        {
+            maxThrust = thrust;
+        }
+
+        public virtual string GetWeapons()
+        {
+            string weapons = "";
+            foreach (IWeapon weapon in this.weapons)
+            {
+                
+                weapons += "|" + weapon.GetType();
+            }
+            return weapons;
+        }
+
+        public virtual void SetWeapons(string weaponTypes)
+        {
+            string[] weaponTypeArr = weaponTypes.Split('|');
+            //Clear weapons and add again
+        }
     }
 }
