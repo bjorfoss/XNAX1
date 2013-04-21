@@ -27,6 +27,7 @@ namespace SpacePirates.Player
         private double timeDied = 0;
 
         //Changes for weapons and abilities.
+        private bool shipUpgraded = false;
         private bool shipNextAbility = false;
         private bool shipPrevAbility = false;
         private bool shipNextWep = false;
@@ -586,9 +587,27 @@ namespace SpacePirates.Player
             //throw new NotImplementedException();
         }
 
-        internal bool WasShipUpgraded()
+        /// <summary>
+        /// Check if the ship has received an upgrade.
+        /// If yes, it's automatically reset to false after this check.
+        /// </summary>
+        /// <returns></returns>
+        public bool WasShipUpgraded()
         {
-            throw new NotImplementedException();
+            if (shipUpgraded)
+            {
+                shipUpgraded = false;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Use to request ship upgrade synchronization over network
+        /// </summary>
+        public void ShipUpgraded()
+        {
+            shipUpgraded = true;
         }
     }
 }

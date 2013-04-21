@@ -729,7 +729,10 @@ namespace SpacePirates
                             {
                                 ship.SetArmorThreshold(packetReader.ReadDouble());
                                 ship.SetMaxThrust(packetReader.ReadDouble());
+                                ship.SetMaxTurnSpeed(packetReader.ReadDouble();
+
                                 ship.SetWeapons(packetReader.ReadString());
+                                ship.SetAbilities(packetReader.ReadString());
                             }
 
                             shipNextWep = packetReader.ReadBoolean();
@@ -874,7 +877,10 @@ namespace SpacePirates
                     ISpaceShip ship = me.GetShip();
                     packetWriter.Write(ship.GetArmorThreshold());
                     packetWriter.Write(ship.GetMaxThrust());
+                    packetWriter.Write(ship.GetMaxTurnSpeed());
+
                     packetWriter.Write(ship.GetWeapons());
+                    packetWriter.Write(ship.GetAbilities());
                 }
 
                 packetWriter.Write(me.GetNextWeaponChange());

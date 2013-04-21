@@ -349,18 +349,19 @@ namespace SpacePirates.spaceShips
 
 
             shopString["armor"] = "Armor\nZ - Buy Armor " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit";
-
+            GetOwner().ShipUpgraded();
         }
         public void BuyTurnSpeed()
         {
             maxTurnSpeed += 0.1;
             shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
-
+            GetOwner().ShipUpgraded();
         }
         public void BuyThrust()
         {
             maxThrust += 1000;
             shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
+            GetOwner().ShipUpgraded();
         }
         public void BuyWeapon(String weapon)
         {
@@ -370,6 +371,7 @@ namespace SpacePirates.spaceShips
                 weapons.Add(ConcreteWeaponFactory.CreateWeapon(weapon));
                 shopString["weapons1"] = "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "") + "\nV - \nB - Next Page\nN - Exit";
                 shopString["weapons2"] = "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
+                GetOwner().ShipUpgraded();
             }
         }
         public void BuyAbility(String ability)
@@ -380,7 +382,7 @@ namespace SpacePirates.spaceShips
 
                 shopString["abilities1"] = "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit";
                 shopString["abilities2"] = "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
-
+                GetOwner().ShipUpgraded();
             }
         }
      
@@ -461,7 +463,50 @@ namespace SpacePirates.spaceShips
         public virtual void SetWeapons(string weaponTypes)
         {
             string[] weaponTypeArr = weaponTypes.Split('|');
-            //Clear weapons and add again
+
+            weapons = new List<IWeapon>();
+            foreach (string type in weaponTypeArr)
+            {
+                if (!String.IsNullOrEmpty(type))
+                {
+                    weapons.Add(ConcreteWeaponFactory.CreateWeapon(type));
+                }
+            }
+        }
+
+        public virtual string GetAbilities()
+        {
+            string abilities = "";
+            foreach (IAbility ability in this.abilities)
+            {
+
+                abilities += "|" + ability.GetType();
+            }
+            return abilities;
+        }
+
+        public virtual void SetAbilities(string abilityTypes)
+        {
+            string[] abilityTypeArr = abilityTypes.Split('|');
+
+            abilities = new List<IAbility>();
+            foreach (string type in abilityTypeArr)
+            {
+                if (!String.IsNullOrEmpty(type))
+                {
+                    abilities.Add(ConcreteAbilityFactory.CreateAbility(type));
+                }
+            }
+        }
+
+        public virtual double GetMaxTurnSpeed()
+        {
+            return maxTurnSpeed;
+        }
+
+        public virtual void SetMaxTurnSpeed(double speed)
+        {
+            this.maxTurnSpeed = speed;
         }
     }
 }

@@ -125,5 +125,13 @@ namespace SpacePirates.spaceShips
         /// </summary>
         /// <param name="weaponTypes">List of weapon type names separated by the '|' character</param>
         void SetWeapons(string weaponTypes);
+
+        string GetAbilities();
+
+        void SetAbilities(string types);
+
+        double GetMaxTurnSpeed();
+
+        void SetMaxTurnSpeed(double speed);
     }
 }

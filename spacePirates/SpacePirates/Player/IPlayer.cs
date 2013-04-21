@@ -27,7 +27,17 @@ namespace SpacePirates.Player
         /// <returns></returns>
         String GetName();
 
+        /// <summary>
+        /// Check if the ship has received an upgrade.
+        /// If yes, it's automatically reset to false after this check.
+        /// </summary>
+        /// <returns></returns>
+        bool WasShipUpgraded();
 
+        /// <summary>
+        /// Use to request ship upgrade synchronization over network
+        /// </summary>
+        void ShipUpgraded();
         
 
 
