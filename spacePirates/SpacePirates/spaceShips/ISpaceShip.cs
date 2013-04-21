@@ -105,5 +105,33 @@ namespace SpacePirates.spaceShips
         int GetNumAbilitySlots();
 
         IAbility GetCurrentAbility();
+
+        double GetArmorThreshold();
+
+        void SetArmorThreshold(double threshold);
+
+        double GetMaxThrust();
+
+        void SetMaxThrust(double thrust);
+
+        /// <summary>
+        /// Get weapon types as a string separated by the pipe '|' character
+        /// </summary>
+        /// <returns></returns>
+        string GetWeapons();
+
+        /// <summary>
+        /// Set weapons of the ship.
+        /// </summary>
+        /// <param name="weaponTypes">List of weapon type names separated by the '|' character</param>
+        void SetWeapons(string weaponTypes);
+
+        string GetAbilities();
+
+        void SetAbilities(string types);
+
+        double GetMaxTurnSpeed();
+
+        void SetMaxTurnSpeed(double speed);
     }
 }

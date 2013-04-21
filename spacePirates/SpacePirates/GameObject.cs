@@ -680,6 +680,7 @@ namespace SpacePirates
                         double rot;
                         Vector2 vel;
                         double hp;
+                        double armorEffectiveness;
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
@@ -688,6 +689,8 @@ namespace SpacePirates
 
                         bool destroyed;
                         bool rewardOpposition;
+
+                        bool shipUpgraded;
 
                         bool shipNextWep;
                         bool shipPreviousWep;
@@ -708,6 +711,7 @@ namespace SpacePirates
                             rot = packetReader.ReadDouble();
                             vel = packetReader.ReadVector2();
                             hp = packetReader.ReadDouble();
+                            armorEffectiveness = packetReader.ReadDouble();
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
@@ -718,6 +722,18 @@ namespace SpacePirates
 
                             destroyed = packetReader.ReadBoolean();
                             rewardOpposition = packetReader.ReadBoolean();
+
+                            //ship upgrades
+                            shipUpgraded = packetReader.ReadBoolean();
+                            if (shipUpgraded)
+                            {
+                                ship.SetArmorThreshold(packetReader.ReadDouble());
+                                ship.SetMaxThrust(packetReader.ReadDouble());
+                                ship.SetMaxTurnSpeed(packetReader.ReadDouble();
+
+                                ship.SetWeapons(packetReader.ReadString());
+                                ship.SetAbilities(packetReader.ReadString());
+                            }
 
                             shipNextWep = packetReader.ReadBoolean();
                             shipPreviousWep = packetReader.ReadBoolean();
@@ -736,6 +752,7 @@ namespace SpacePirates
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
                             (ship as Unit).SetHealth(hp);
+                            (ship as Unit).SetArmorEffectiveness(armorEffectiveness);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
@@ -812,6 +829,7 @@ namespace SpacePirates
                 packetWriter.Write(unit.GetRotation());
                 packetWriter.Write(unit.getVelocity());
                 packetWriter.Write(unit.getHealth());
+                packetWriter.Write(unit.getArmorEffectiveness());
 
                 Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));
@@ -849,6 +867,20 @@ namespace SpacePirates
                         blueScored();
                     else
                         redScored();
+                }
+
+                //deal with ship upgrades
+                bool sendShipUpdates = me.WasShipUpgraded();
+                packetWriter.Write(sendShipUpdates);
+                if (sendShipUpdates)
+                {
+                    ISpaceShip ship = me.GetShip();
+                    packetWriter.Write(ship.GetArmorThreshold());
+                    packetWriter.Write(ship.GetMaxThrust());
+                    packetWriter.Write(ship.GetMaxTurnSpeed());
+
+                    packetWriter.Write(ship.GetWeapons());
+                    packetWriter.Write(ship.GetAbilities());
                 }
 
                 packetWriter.Write(me.GetNextWeaponChange());

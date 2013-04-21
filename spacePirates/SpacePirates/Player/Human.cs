@@ -27,6 +27,7 @@ namespace SpacePirates.Player
         private double timeDied = 0;
 
         //Changes for weapons and abilities.
+        private bool shipUpgraded = false;
         private bool shipNextAbility = false;
         private bool shipPrevAbility = false;
         private bool shipNextWep = false;
@@ -197,12 +198,13 @@ namespace SpacePirates.Player
                 spawn = GameObject.Instance().getRedSpawn();
             else
                 spawn = GameObject.Instance().getBlueSpawn();
+            Unit unit = (Unit)ship;
+            unit.addCd(new Utilities.CollisionCd(unit));
+            unit.setPosition(spawn);
+            unit.RestoreHealth(unit.getMaxHealth());
+            unit.SetArmorEffectiveness(unit.getMaxHealth());
 
-            (ship as Unit).addCd(new Utilities.CollisionCd((ship as Unit)));
-            (ship as SpaceShip).setPosition(spawn);
-            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());            
-
-            GameObject.Instance().addToGame(ship as Unit);
+            GameObject.Instance().addToGame(unit);
         }
 
         public void HostAsteroidGeneration(IObstacle astro)
@@ -583,6 +585,29 @@ namespace SpacePirates.Player
         {
             return new Human("nobody");
             //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Check if the ship has received an upgrade.
+        /// If yes, it's automatically reset to false after this check.
+        /// </summary>
+        /// <returns></returns>
+        public bool WasShipUpgraded()
+        {
+            if (shipUpgraded)
+            {
+                shipUpgraded = false;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Use to request ship upgrade synchronization over network
+        /// </summary>
+        public void ShipUpgraded()
+        {
+            shipUpgraded = true;
         }
     }
 }
