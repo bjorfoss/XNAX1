@@ -26,7 +26,7 @@ namespace SpacePirates
         private bool networkEnabled = true;
         private string networkDebug = "";
 
-        private Human player;
+        //private Human player;
 
         public NetworkObject()
         {
@@ -111,8 +111,8 @@ namespace SpacePirates
         void SignedInGamer_SignedIn(object sender, SignedInEventArgs e)
         {
             e.Gamer.Tag = new Human(e.Gamer.Gamertag);
-            player = e.Gamer.Tag as Human;
         }
+
 
         void networkSession_GamerJoined(object sender, GamerJoinedEventArgs e)
         {
@@ -160,11 +160,6 @@ namespace SpacePirates
         public bool getNetworked()
         {
             return networkEnabled; 
-        }
-
-        public Human getPlayer()
-        {
-            return player;
         }
     }
 }

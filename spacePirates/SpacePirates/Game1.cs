@@ -112,7 +112,6 @@ namespace SpacePirates
             {
                 currentState = menuObject;
                 menuObject.active = true;
-                networkObject.testConnection();
             }
             else if (!currentState.isActive() && currentState.Equals(menuObject) || (NetworkObject.Instance().getNetworksession() != null && NetworkObject.Instance().getNetworksession().SessionState == NetworkSessionState.Playing))
             {

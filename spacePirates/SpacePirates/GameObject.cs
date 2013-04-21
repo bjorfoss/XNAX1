@@ -146,10 +146,11 @@ namespace SpacePirates
         /// <param name="Content"></param>
         /// <param name="defaultGoalLimit"></param>
         /// <returns></returns>
-        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=3)
+        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=1)
         {
             lock (padlock) {
-                if (instance == null) {
+                if (instance == null)
+                {
                     instance = new GameObject(w, h, Content, defaultGoalLimit, graphicsDevice);
                 }
                 return instance;
@@ -163,7 +164,7 @@ namespace SpacePirates
         public static GameObject Instance()
         {
             lock (padlock)
-            {
+            {              
                 return instance;
             }
         }
@@ -317,6 +318,8 @@ namespace SpacePirates
 
                 addToGame(spaceStations, new SpaceStation(blueSpaceStationPos, Color.Aqua));
 
+                victoryText = "";
+
 	   }
 
            
@@ -402,6 +405,28 @@ namespace SpacePirates
 
         }
 
+        private void EndgameCleanup()
+        {
+            redScore = 0;
+            blueScore = 0;
+            //victoryText = "";
+
+            obstacles = new List<IObstacle>();
+
+            objectsInGame = new List<Unit>();
+
+            spaceStations = new List<SpaceStation>();
+
+            explosions = new List<Explosion>();
+
+            redTeam = new List<ISpaceShip>();
+            blueTeam = new List<ISpaceShip>();
+
+            spaceStations = new List<SpaceStation>();
+
+            gameSetup = true;
+        }
+
         
 
         public void executeGameLogic(GameTime gameTime)
@@ -418,12 +443,18 @@ namespace SpacePirates
             {
                 //Show victory red team.
                 //Should perhaps show score screen of some manner before setting gameobject as false and going back to the menu?
-                victoryText = "Red Team Victorious!";
+                victoryText = "Red Team Victorious! (" + redScore.ToString() + " -- " + blueScore.ToString() + ")";
+                active = false;
+                MenuObject.Instance().SetVictoryLobby();
+                EndgameCleanup();
 
             } else if (blueScore >= goalLimit)
             {
                 //Show victory blue team.
-                victoryText = "Blue Team Victorious!";
+                victoryText = "Blue Team Victorious! (" + redScore.ToString() + " -- " + blueScore.ToString() + ")";
+                active = false;
+                MenuObject.Instance().SetVictoryLobby();
+                EndgameCleanup();
             }
 
             if (NetworkObject.Instance().getNetworked())

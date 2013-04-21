@@ -36,6 +36,11 @@ namespace SpacePirates.Player
 
         private bool awardPointToOpposition = false;
 
+        //Stats
+        private int kills = 0;
+        private int timesDied = 0;
+        private int timesDiedToAsteroid = 0;
+
         public Human(string name)
         {
             this.hud = new Hud(this);
@@ -161,6 +166,7 @@ namespace SpacePirates.Player
             }
             destroyed = destroy;
             timeDied = time;
+            timesDied++;
         }
 
         public bool ReadyToRespawn(double time)
@@ -223,6 +229,38 @@ namespace SpacePirates.Player
         public bool GetAwardOpposition()
         {
             return awardPointToOpposition;
+        }
+
+        public int GetTimesDied()
+        {
+            return timesDied;
+        }
+
+        public void IncreaseKills()
+        {
+            kills++;
+        }
+
+        public void IncreaseDeathsByAsteroid()
+        {
+            timesDiedToAsteroid++;
+        }
+
+        public string GetStats()
+        {
+            string teamN = "Red";
+            if (team == 2)
+                teamN = "Blue";
+            string essentials = name + " of team " + teamN;
+
+            string stats = "";
+
+            for (int i = 0; i < essentials.Length; i++)
+                stats += " ";
+
+            stats += " -- Starship: " + shipSelection + " Kills: " + kills.ToString() + " Deaths: " + timesDied.ToString() + " Deaths by Asteroid: " + timesDiedToAsteroid.ToString();
+
+            return essentials + "\n" + stats;
         }
 
         /// <summary>

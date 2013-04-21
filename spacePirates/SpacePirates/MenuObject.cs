@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Net;
@@ -28,6 +29,7 @@ namespace SpacePirates
         private int createdlobby = 1;
         private int joinedlobby = 2;
         private int searchLobbies = 3;
+        private int victoryLobby = 4;
 
         private int currentMenu = 0; //Main menu.
 
@@ -38,6 +40,8 @@ namespace SpacePirates
         private int selectedSessionIndex;
 
         private int selectedShipIndex = 0;
+
+        private List<string> victoryText;
 
         private PacketReader packetReader = new PacketReader();
         private PacketWriter packetWriter = new PacketWriter();
@@ -105,6 +109,14 @@ namespace SpacePirates
                 if (instance == null) {
                     instance = new MenuObject(w, h, Content);
                 }
+                return instance;
+            }
+        }
+
+        public static MenuObject Instance()
+        {
+            lock (padlock)
+            {
                 return instance;
             }
         }
@@ -352,6 +364,20 @@ namespace SpacePirates
                     }
                 }
             }
+            else if (currentMenu == victoryLobby)
+            {
+                if (newKeyState.IsKeyDown(Keys.B) && !oldKeyState.IsKeyDown(Keys.B))//Back to Main menu.
+                {
+
+                    foreach (SignedInGamer loc in SignedInGamer.SignedInGamers)
+                    {
+                        loc.Tag = new Human(loc.Gamertag);
+                    }
+
+                    currentMenu = mainmenu;
+                    NetworkObject.Instance().disposeNetworkSession();
+                }
+            }
 
             oldKeyState = newKeyState;
 
@@ -378,8 +404,8 @@ namespace SpacePirates
                 Color startCol = Color.Chocolate;
                 Vector2 lastPos = startGamePos + new Vector2(startGame.Width + 40, 0);
                 spriteBatch.Draw(banner, bannerPosition, Color.White);
-                
-                spriteBatch.Draw(readyButton, startGamePos + new Vector2(0, readyButton.Height  + 10), Color.White);
+
+                spriteBatch.Draw(readyButton, startGamePos + new Vector2(0, readyButton.Height + 10), Color.White);
                 spriteBatch.DrawString(text, "Lobby", lastPos, Color.White);
 
                 if (NetworkObject.Instance().getNetworked())
@@ -456,7 +482,7 @@ namespace SpacePirates
                 spriteBatch.Draw(backButton, backButtonPos, Color.White);
                 spriteBatch.DrawString(text, "Available games (J to join): " + availableSessions.Count.ToString(), lastPos, Color.White);
 
-                for (int sessionIndex = 0; sessionIndex < availableSessions.Count; sessionIndex++)  
+                for (int sessionIndex = 0; sessionIndex < availableSessions.Count; sessionIndex++)
                 {
                     Color color = Color.Blue;
 
@@ -465,6 +491,21 @@ namespace SpacePirates
 
                     spriteBatch.DrawString(text, availableSessions[sessionIndex].HostGamertag, lastPos + new Vector2(0, 30), color);
                     lastPos.Y += 30;
+                }
+            }
+            else if (currentMenu == victoryLobby)
+            {
+                spriteBatch.Draw(banner, bannerPosition, Color.White);
+                spriteBatch.Draw(backButton, backButtonPos, Color.White);
+
+                Vector2 pos = bannerPosition + new Vector2(50, banner.Height + 10);
+                for (int i = 0; i < victoryText.Count; i++)
+                {
+                    spriteBatch.DrawString(text, victoryText[i], pos, Color.White);
+                    if (i < 2)
+                        pos.Y += 20;
+                    else
+                        pos.Y += 40;
                 }
             }
         }
@@ -476,6 +517,23 @@ namespace SpacePirates
                 availableSessions.Dispose();
                 availableSessions = null;
             }
+        }
+
+        public void SetVictoryLobby()
+        {
+            victoryText = new List<string>();
+
+            victoryText.Add(GameObject.Instance().getVictoryText());
+
+            foreach (NetworkGamer ng in NetworkObject.Instance().getNetworksession().AllGamers)
+            {
+                victoryText.Add("");
+                victoryText.Add((ng.Tag as Human).GetStats());               
+            }
+
+            currentMenu = victoryLobby;
+            active = true;
+            NetworkObject.Instance().getNetworksession().EndGame();
         }
 
         //Receive network data for the lobby screen. Shows player choices and readiness.
