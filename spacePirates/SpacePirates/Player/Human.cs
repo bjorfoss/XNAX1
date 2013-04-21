@@ -401,9 +401,9 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "abilities1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Shield
                     {
-
+                        ship.BuyAbility("shield");
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
@@ -453,17 +453,17 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "weapons1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Standard Gun
                     {
-
+                        ship.BuyWeapon("gun");
                     }
-                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Rapid gun
                     {
-
+                        ship.BuyWeapon("rapidgun");
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Laser
                     {
-
+                        ship.BuyWeapon("laser");
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {
@@ -531,17 +531,17 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "engine":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Thrust
                     {
-
+                        ship.BuyThrust();
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
-
+                        
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Turn speed
                     {
-
+                        ship.BuyTurnSpeed();
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {

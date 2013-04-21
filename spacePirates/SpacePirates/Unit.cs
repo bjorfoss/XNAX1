@@ -68,17 +68,7 @@ namespace SpacePirates
 
             this.graphics = graphics;
             docked = false;
-
-            shopString = new Dictionary<String, String>();
-
-            shopString.Add("main", "Spaceshop\nZ - Repair\nX - Engine\nC - Abilities\nV - Weapons\nB - Armor\n");
-            shopString.Add("abilities1", "Abilities 1\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("abilities2", "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("weapons1", "Weapons 1\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("weapons2", "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("armor", "Armor\nZ - Buy Armor\nX - \nC - \nV - \nB - \nN - Exit");
-            shopString.Add("engine", "Engine\nZ - More Thrust\nX - Max Speed\nC - Turn Speed\nV - \nB - \nN - Exit");
-            shopWindow = "main";
+           
 
             cooldowns = new List<CollisionCd>();
         }
@@ -89,7 +79,7 @@ namespace SpacePirates
         /// </summary>
         public void CalculateDirectionAndSpeed(GameTime gameTime)
         {
-            double max = GameObject.Instance().getMaxSpeed();
+            double max = GameObject.Instance().getMaxSpeed(); 
             Vector2 newVelocity = new Vector2(
                 velocity.X + (acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds), 
                 velocity.Y + (acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds));
@@ -509,54 +499,10 @@ namespace SpacePirates
         }
 
 
-        public String GetShopWindow()
-        {
-            return shopWindow;
-        }
-        public void SetShopWindow(String nextWindow)
-        {
+      
 
-            shopWindow = nextWindow;
-        }
-
-
-        /// <summary>
-        /// Repair health first, then armor
-        /// </summary>
-        /// <param name="gameTime"></param>
-        public void Repair(GameTime gameTime)
-        {
-            if (health != maxHealth)
-            {
-
-                if (20 + health > maxHealth)
-                {
-                    health = maxHealth;
-                    return;
-                }
-
-                health += 20;
-                return;
-            }
-
-            if (armorEffectiveness < 100)
-            {
-                double inc = 10 * gameTime.ElapsedGameTime.TotalSeconds;
-
-                if(armorEffectiveness + inc > 100){
-                    armorEffectiveness = 100;
-                    return;
-                }
-                armorEffectiveness += inc;
-                
-            }
-        }
-
-        public void BuyArmor()
-        {
-            armorThreshold *= 1.1;
-            
-        }
+     
+      
 
         public void RestoreHealth(double heal)
         {
@@ -619,15 +565,11 @@ namespace SpacePirates
                 if (docktime >= 20)
                 {
                     docked = false;
-                    SetShopWindow("main");
+                    shopWindow = "main";
                 }
             }
         }
-        public void docking(GameTime gameTime)
-        {
-            docked = true;
-            docktime = 0;
-        }
+        
         public static Vector2 WorldPosToScreenPos(Vector2 position)
         {
             Rectangle screen = GameObject.GetScreenArea();

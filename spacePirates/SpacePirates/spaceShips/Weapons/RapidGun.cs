@@ -24,6 +24,10 @@ namespace SpacePirates.spaceShips.Weapons
         {
             return name;
         }
+        public string GetType()
+        {
+            return "rapidgun";
+        }
 
 
         public void Fire(GameTime gameTime, Unit ship)

@@ -15,16 +15,16 @@ namespace SpacePirates.spaceShips
     public class SpaceShip : Unit, ISpaceShip
     {
         protected double maxTurnSpeed = MathHelper.Pi; //the maximum turn speed the ship itself can generate (degrees per second)
-        protected double maxThrust = 50000; //maximum force in Newtons output by the ship's engine(s)
+        protected double maxThrust = 30000; //maximum force in Newtons output by the ship's engine(s)
         protected double currentThrust; //The current thrust, in percent, of the maximum thrust
 
         protected double animationTime; //The time, in milliseconds, since the last time the animation frame was changed
 
         protected IWeapon currentWeapon; //the currently selected weapon used by fire()
-        protected IWeapon[] weapons; //the weapons installed on the ship
+        protected List<IWeapon> weapons; //the weapons installed on the ship
 
         protected IAbility currentAbility; //the ability used by useAbility()
-        protected IAbility[] abilities; //the abilities installed on the ship
+        protected List<IAbility> abilities; //the abilities installed on the ship
 
         protected Ownership registration; //vehicle registration. The player can be retrieved from this
 
@@ -49,15 +49,32 @@ namespace SpacePirates.spaceShips
             currentThrust = 0;
 
             this.registration = registration;
-            weapons = new IWeapon[3];
-            weapons[0] = ConcreteWeaponFactory.CreateWeapon("gun");
-            weapons[1] = ConcreteWeaponFactory.CreateWeapon("rapidgun");
-            weapons[2] = ConcreteWeaponFactory.CreateWeapon("laser");
+            weapons = new List<IWeapon>();
+            weapons.Add(ConcreteWeaponFactory.CreateWeapon("gun"));
+            
             currentWeapon = weapons[0];
 
-            abilities = new IAbility[1];
-            abilities[0] = ConcreteAbilityFactory.CreateAbility("shield");
+            abilities = new List<IAbility>();
+            abilities.Add(ConcreteAbilityFactory.CreateAbility("shield"));
             currentAbility = abilities[0];
+
+
+            
+            shopString = new Dictionary<String, String>();
+            shopWindow = "main";
+            CreateShop();
+        }
+
+        private void CreateShop()
+        {
+            shopString.Add("main", "Spaceshop\nZ - Repair\nX - Engine\nC - Abilities\nV - Weapons\nB - Armor\n");
+            shopString.Add("abilities1", "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("abilities2", "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("weapons1", "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "") + "\nV - \nB - Next Page\nN - Exit");
+            shopString.Add("weapons2", "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("armor", "Armor\nZ - Buy Armor " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit");
+            shopString.Add("engine", "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit");
+            
         }
 
         /// <summary>
@@ -106,9 +123,9 @@ namespace SpacePirates.spaceShips
 
         public virtual void NextWeapon()
         {
-            int index = Array.IndexOf(weapons, currentWeapon);
+            int index = weapons.IndexOf(currentWeapon);
             //increment weapon or go to start of weapons array
-            if (index + 1 < weapons.Length)
+            if (index + 1 < weapons.Count)
             {
                 currentWeapon = weapons[index + 1];
             }
@@ -120,7 +137,7 @@ namespace SpacePirates.spaceShips
 
         public virtual void PreviousWeapon()
         {
-            int index = Array.IndexOf(weapons, currentWeapon);
+            int index = weapons.IndexOf(currentWeapon);
             //decrement weapon or go to end of weapons array
             if (index != 0)
             {
@@ -128,7 +145,7 @@ namespace SpacePirates.spaceShips
             }
             else
             {
-                currentWeapon = weapons[weapons.Length - 1];
+                currentWeapon = weapons[weapons.Count - 1];
             }
         }
 
@@ -139,9 +156,9 @@ namespace SpacePirates.spaceShips
 
         public virtual void NextAbility()
         {
-            int index = Array.IndexOf(abilities, currentAbility);
+            int index = abilities.IndexOf(currentAbility);
             //increment ability or go to start of abilities array
-            if (index + 1 < abilities.Length)
+            if (index + 1 < abilities.Count)
             {
                 currentAbility = abilities[index + 1];
             }
@@ -153,7 +170,7 @@ namespace SpacePirates.spaceShips
 
         public virtual void PreviousAbility()
         {
-            int index = Array.IndexOf(abilities, currentAbility);
+            int index = abilities.IndexOf(currentAbility);
             //decrement ability or go to end of abilities array
             if (index != 0)
             {
@@ -161,7 +178,7 @@ namespace SpacePirates.spaceShips
             }
             else
             {
-                currentAbility = abilities[abilities.Length - 1];
+                currentAbility = abilities[abilities.Count - 1];
             }
         }
 
@@ -216,10 +233,124 @@ namespace SpacePirates.spaceShips
         {
             animationFrame = anim;
         }
+        public String GetShopWindow()
+        {
+            return shopWindow;
+        }
+        public void SetShopWindow(String nextWindow)
+        {
+
+            shopWindow = nextWindow;
+        }
+
 
         public bool GetDocked()
         {
             return docked;
         }
+        public void docking(GameTime gameTime)
+        {
+            docked = true;
+            docktime = 0;
+        }
+        private bool BoughtWeapon(String weapon)
+        {
+            foreach (IWeapon w in weapons)
+            {
+                if (w.GetType() == weapon)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+        private bool BoughtAbility(String ability)
+        {
+            foreach (IAbility a in abilities)
+            {
+                if (a.GetType() == ability)
+                {
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+        public void BuyArmor()
+        {
+            armorThreshold *= 1.1;
+
+
+            shopString["armor"] = "Armor\nZ - Buy Armor " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit";
+
+        }
+        public void BuyTurnSpeed()
+        {
+            maxTurnSpeed += 0.1;
+            shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
+
+        }
+        public void BuyThrust()
+        {
+            maxThrust += 1000;
+            shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
+        }
+        public void BuyWeapon(String weapon)
+        {
+            if (!BoughtWeapon(weapon))
+            {
+
+                weapons.Add(ConcreteWeaponFactory.CreateWeapon(weapon));
+                shopString["weapons1"] = "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "") + "\nV - \nB - Next Page\nN - Exit";
+                shopString["weapons2"] = "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
+            }
+        }
+        public void BuyAbility(String ability)
+        {
+            if (!BoughtAbility(ability))
+            {
+                abilities.Add(ConcreteAbilityFactory.CreateAbility(ability));
+
+                shopString["abilities1"] = "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit";
+                shopString["abilities2"] = "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
+
+            }
+        }
+     
+        /// <summary>
+        /// Repair health first, then armor
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void Repair(GameTime gameTime)
+        {
+            if (health != maxHealth)
+            {
+
+                if (20 + health > maxHealth)
+                {
+                    health = maxHealth;
+                    return;
+                }
+
+                health += 20;
+                return;
+            }
+
+            if (armorEffectiveness < 100)
+            {
+                double inc = 10 * gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (armorEffectiveness + inc > 100)
+                {
+                    armorEffectiveness = 100;
+                    return;
+                }
+                armorEffectiveness += inc;
+
+            }
+        }
+
     }
 }

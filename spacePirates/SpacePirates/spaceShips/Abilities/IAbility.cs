@@ -12,5 +12,7 @@ namespace SpacePirates.spaceShips
         void Update();
 
         string GetName();
+
+        string GetType();
     }
 }
