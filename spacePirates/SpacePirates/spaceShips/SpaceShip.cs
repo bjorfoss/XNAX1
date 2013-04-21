@@ -200,12 +200,12 @@ namespace SpacePirates.spaceShips
         }
 
 
-        public string GetWeaponName()
+        public string GetSelWeaponName()
         {
             return currentWeapon.GetName();
         }
 
-        public string GetAbilityName()
+        public string GetSelAbilityName()
         {
             return currentAbility.GetName();
         }
@@ -261,9 +261,22 @@ namespace SpacePirates.spaceShips
             animationFrame = anim;
         }
 
-        public bool GetDocked()
+        /// <summary>
+        /// If the ship is docked at a space station
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsDocked()
         {
             return docked;
+        }
+
+        public virtual int GetNumWeaponSlots() {
+            return 4;
+        }
+
+        public virtual int GetNumAbilitySlots()
+        {
+            return 2;
         }
     }
 }

@@ -390,6 +390,14 @@ namespace SpacePirates
             bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
         }
 
+
+        /// <summary>
+        /// Scale a vector down in size. Used for collision detection with
+        /// bounding boxes.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="scale"></param>
+        /// <returns></returns>
         public Vector2 downSize(Vector2 vector, Vector2 scale)
         {
             Vector2 edge = new Vector2(vector.X, vector.Y);
@@ -565,6 +573,10 @@ namespace SpacePirates
             
         }
 
+        /// <summary>
+        /// Restore health up to the maximum amount
+        /// </summary>
+        /// <param name="heal"></param>
         public void RestoreHealth(double heal)
         {
             if (heal + health > maxHealth)
@@ -576,6 +588,11 @@ namespace SpacePirates
             health += heal;
 
         }
+
+        /// <summary>
+        /// Get the rectangle for a unit for collision detection
+        /// </summary>
+        /// <returns></returns>
         public Rectangle getUnitRectangle()
         {
             return new Rectangle((int)(position.X - (double)animationFrame.Width / 2), 
@@ -613,6 +630,10 @@ namespace SpacePirates
             }
         }
 
+        /// <summary>
+        /// Handle physics and other unit specific checks
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void UpdateUnit(GameTime gameTime)
         {
             updateCooldowns(gameTime);
@@ -630,11 +651,22 @@ namespace SpacePirates
                 }
             }
         }
+
+        /// <summary>
+        /// Dock at a space station
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void docking(GameTime gameTime)
         {
             docked = true;
             docktime = 0;
         }
+
+        /// <summary>
+        /// Turn a world position into screen space coordinates
+        /// </summary>
+        /// <param name="position">The position to transform</param>
+        /// <returns>A new Vector with the screen coordinates</returns>
         public static Vector2 WorldPosToScreenPos(Vector2 position)
         {
             Rectangle screen = GameObject.GetScreenArea();
@@ -686,6 +718,7 @@ namespace SpacePirates
                 }
             }
 
+            //only draw the unit if it is alive
             if (health > 0)
             {
                 batch.Draw(graphics, screenPos, animationFrame, unitColor, (float)rotation,
