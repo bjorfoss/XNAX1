@@ -43,10 +43,36 @@ namespace SpacePirates.spaceShips.Weapons
                 vel.X += ship.getVelocity().X;
                 vel.Y += ship.getVelocity().Y;
 
-                IObstacle  bullet = ConcreteObstacleFactory.CreateObstacle("bullet", pos, vel);
 
-                GameObject.Instance().addToGame(bullet);
+                if (ship is ConcreteShip_Eightwing)
+                {
+                    Vector2 pos1;
+                    Vector2 pos2;
 
+                    int divide = 3;
+
+                    Vector2 var1 = new Vector2((float)(Math.Sin(ship.rotation + (Math.PI / divide)) * 1), (float)(Math.Cos(ship.rotation + (Math.PI / divide)) * 1));
+                    Vector2 var2 = new Vector2((float)(Math.Sin(ship.rotation - (Math.PI / divide)) * 1), (float)(Math.Cos(ship.rotation - (Math.PI / divide)) * 1));
+
+                    float s1 = (float)(Math.Sqrt((Math.Pow(offset, 2) + Math.Pow(44, 2)) / (Math.Pow(var1.X, 2) + Math.Pow(var1.Y, 2))));
+                    float s2 = (float)(Math.Sqrt((Math.Pow(offset, 2) + Math.Pow(44, 2)) / (Math.Pow(var2.X, 2) + Math.Pow(var2.Y, 2))));
+
+                    pos1 = new Vector2(ship.GetPosition().X + (var1.X * s1), ship.GetPosition().Y + (var1.Y * s1));
+                    pos2 = new Vector2(ship.GetPosition().X + (var2.X * s2), ship.GetPosition().Y + (var2.Y * s2));
+
+                    IObstacle laser = ConcreteObstacleFactory.CreateObstacle("bullet", pos1, vel, (float)ship.rotation);
+                    IObstacle laser2 = ConcreteObstacleFactory.CreateObstacle("bullet", pos2, vel, (float)ship.rotation);
+
+                    GameObject.Instance().addToGame(laser);
+                    GameObject.Instance().addToGame(laser2);
+
+                }
+                else
+                {
+                    IObstacle bullet = ConcreteObstacleFactory.CreateObstacle("bullet", pos, vel);
+
+                    GameObject.Instance().addToGame(bullet);
+                }
                 time = 0;
             }
         }
