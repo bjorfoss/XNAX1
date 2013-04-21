@@ -680,6 +680,7 @@ namespace SpacePirates
                         double rot;
                         Vector2 vel;
                         double hp;
+                        double armorEffectiveness;
                         Vector2 xy;
                         Vector2 wh;
                         bool firing;
@@ -708,6 +709,7 @@ namespace SpacePirates
                             rot = packetReader.ReadDouble();
                             vel = packetReader.ReadVector2();
                             hp = packetReader.ReadDouble();
+                            armorEffectiveness = packetReader.ReadDouble();
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
@@ -736,6 +738,7 @@ namespace SpacePirates
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
                             (ship as Unit).SetHealth(hp);
+                            (ship as Unit).SetArmorEffectiveness(armorEffectiveness);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
 
@@ -812,6 +815,7 @@ namespace SpacePirates
                 packetWriter.Write(unit.GetRotation());
                 packetWriter.Write(unit.getVelocity());
                 packetWriter.Write(unit.getHealth());
+                packetWriter.Write(unit.getArmorEffectiveness());
 
                 Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));

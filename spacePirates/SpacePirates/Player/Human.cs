@@ -197,12 +197,13 @@ namespace SpacePirates.Player
                 spawn = GameObject.Instance().getRedSpawn();
             else
                 spawn = GameObject.Instance().getBlueSpawn();
+            Unit unit = (Unit)ship;
+            unit.addCd(new Utilities.CollisionCd(unit));
+            unit.setPosition(spawn);
+            unit.RestoreHealth(unit.getMaxHealth());
+            unit.SetArmorEffectiveness(unit.getMaxHealth());
 
-            (ship as Unit).addCd(new Utilities.CollisionCd((ship as Unit)));
-            (ship as SpaceShip).setPosition(spawn);
-            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());            
-
-            GameObject.Instance().addToGame(ship as Unit);
+            GameObject.Instance().addToGame(unit);
         }
 
         public void HostAsteroidGeneration(IObstacle astro)

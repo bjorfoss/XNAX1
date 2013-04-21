@@ -676,5 +676,21 @@ namespace SpacePirates
             }
         }
 
+        /// <summary>
+        /// Set the armor effectiveness percentage.
+        /// </summary>
+        /// <param name="armorEffectiveness">0 - 100</param>
+        public void SetArmorEffectiveness(double armorEffectiveness)
+        {
+            if (armorEffectiveness > 100)
+            {
+                armorEffectiveness = 100;
+            }
+            else if (armorEffectiveness < 0)
+            {
+                armorEffectiveness = 0;
+            }
+            this.armorEffectiveness = armorEffectiveness;
+        }
     }
 }
