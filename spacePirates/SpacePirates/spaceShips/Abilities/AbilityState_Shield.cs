@@ -42,6 +42,11 @@ namespace SpacePirates.spaceShips
             time = 0; //Set the time to negative cooldown, so the shield can be activated immediately
         }
 
+        public string GetType()
+        {
+
+            return "shield";
+        }
         /// <summary>
         /// Activates the shield, given that the cooldown has expired.
         /// This gives the shield health, and sets active to true.
@@ -143,6 +148,25 @@ namespace SpacePirates.spaceShips
         public string GetName()
         {
             return name;
+        }
+
+        public double getHealth()
+        {
+            return health;
+        }
+
+        public void setHealth(double health)
+        {
+            if (health > 0)
+            {
+                this.health = health;
+            }
+            else if (health == 0 && active)
+            {
+                this.health = health;
+                active = false;
+                time = cooldown;
+            }
         }
     }
 }

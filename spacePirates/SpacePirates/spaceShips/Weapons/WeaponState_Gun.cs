@@ -24,6 +24,10 @@ namespace SpacePirates.spaceShips
         {
             return name;
         }
+        public string GetType()
+        {
+            return "gun";
+        }
 
 
         public void Fire(GameTime gameTime, Unit ship)
@@ -46,7 +50,7 @@ namespace SpacePirates.spaceShips
                 {
                     Vector2 pos1;
                     Vector2 pos2;
-                    double offset = 20;
+                    double offset = 30;
 
                     int divide = 3;
 

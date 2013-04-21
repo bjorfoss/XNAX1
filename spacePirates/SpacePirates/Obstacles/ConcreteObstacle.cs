@@ -17,21 +17,16 @@ namespace SpacePirates.Obstacles
         public ConcreteObstacle_Bullet(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 10, 0, 1, 1, 0, 0, 32, 500, GraphicBank.getInstance().GetGraphic("bullet"))
         {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
-            safeTime = 0;
+            safeTime = 200;
         }
 
         public override bool readyToCollide(GameTime gameTime)
         {
-            double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (safeTime + temp > 400)
+            if (safeTime <= 0)
             {
                 return true;
             }
-            else
-            {
-                safeTime += temp;
-                return false;
-            }
+            return false;
         }
 
         public bool GetLifetimeExpired(double millis)
@@ -43,6 +38,15 @@ namespace SpacePirates.Obstacles
                 return true;
             }
             return false;
+        }
+
+
+        public void updateSafeTime(GameTime gameTime)
+        {
+            if (safeTime > 0)
+            {
+                safeTime -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
         }
     }
 
@@ -63,6 +67,12 @@ namespace SpacePirates.Obstacles
         {
             return false;
         }
+
+
+        public void updateSafeTime(GameTime gameTime)
+        {
+            //No safe time for asteriods
+        }
     }
 
     class ConcreteObstacle_Laser : Unit, IObstacle
@@ -75,21 +85,16 @@ namespace SpacePirates.Obstacles
         {
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);
             rotation = laserRot;
-            safeTime = 0;
+            safeTime = 100;
         }
 
         public override bool readyToCollide(GameTime gameTime)
         {
-            double temp = gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (safeTime + temp > 400)
+            if (safeTime <= 0)
             {
                 return true;
             }
-            else
-            {
-                safeTime += temp;
-                return false;
-            }
+            return false;
         }
 
         public bool GetLifetimeExpired(double millis)
@@ -100,6 +105,15 @@ namespace SpacePirates.Obstacles
                 return true;
             }
             return false;
+        }
+
+
+        public void updateSafeTime(GameTime gameTime)
+        {
+            if (safeTime > 0)
+            {
+                safeTime -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
         }
     }
 

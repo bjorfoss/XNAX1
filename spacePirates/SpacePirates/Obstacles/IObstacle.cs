@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace SpacePirates.Obstacles
 {
@@ -12,5 +13,7 @@ namespace SpacePirates.Obstacles
         /// <param name="updateMillis">Milliseconds since last update</param>
         /// </summary>
         bool GetLifetimeExpired(double updateMillis);
+
+        void updateSafeTime(GameTime gameTime);
     }
 }

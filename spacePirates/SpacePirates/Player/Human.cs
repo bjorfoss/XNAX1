@@ -19,6 +19,7 @@ namespace SpacePirates.Player
         bool pickedTeam = false;
         private string shipSelection = "fighter";
         bool shipFires = false;
+        bool activateAbility = false;
         Hud hud;
         
 
@@ -26,6 +27,7 @@ namespace SpacePirates.Player
         private double timeDied = 0;
 
         //Changes for weapons and abilities.
+        private bool shipUpgraded = false;
         private bool shipNextAbility = false;
         private bool shipPrevAbility = false;
         private bool shipNextWep = false;
@@ -113,6 +115,16 @@ namespace SpacePirates.Player
             shipFires = false;
         }
 
+        public bool GetAbilityActivated()
+        {
+            return activateAbility;
+        }
+
+        public void setAbilityActivated()
+        {
+            activateAbility = false;
+        }
+
         //Getter for network. Just set the bool to false at the end anyway.
         public bool GetNextWeaponChange()
         {
@@ -192,12 +204,13 @@ namespace SpacePirates.Player
                 spawn = GameObject.Instance().getRedSpawn();
             else
                 spawn = GameObject.Instance().getBlueSpawn();
+            Unit unit = (Unit)ship;
+            unit.addCd(new Utilities.CollisionCd(unit));
+            unit.setPosition(spawn);
+            unit.RestoreHealth(unit.getMaxHealth());
+            unit.SetArmorEffectiveness(unit.getMaxHealth());
 
-            (ship as Unit).addCd(new Utilities.CollisionCd((ship as Unit)));
-            (ship as SpaceShip).setPosition(spawn);
-            (ship as Unit).RestoreHealth((ship as Unit).getMaxHealth());            
-
-            GameObject.Instance().addToGame(ship as Unit);
+            GameObject.Instance().addToGame(unit);
         }
 
         public void HostAsteroidGeneration(IObstacle astro)
@@ -357,12 +370,12 @@ namespace SpacePirates.Player
             }
 
             // Browse features
-            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I))
+            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I) && !ship.GetCurrentAbility().getActive())
             {
                 shipNextAbility = true;
                 ship.NextAbility();
             }
-            else if (newState.IsKeyDown(Keys.J) && oldState.IsKeyUp(Keys.J))
+            else if (newState.IsKeyDown(Keys.J) && oldState.IsKeyUp(Keys.J) && !ship.GetCurrentAbility().getActive())
             {
                 shipPrevAbility = true;
                 ship.PreviousAbility();
@@ -383,6 +396,7 @@ namespace SpacePirates.Player
             // Execute feature
             if (newState.IsKeyDown(Keys.E))
             {
+                activateAbility = true;
                 ship.UseAbility(gameTime);
             }
 
@@ -439,9 +453,9 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "abilities1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Shield
                     {
-
+                        ship.BuyAbility("shield");
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
@@ -491,17 +505,17 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "weapons1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Standard Gun
                     {
-
+                        ship.BuyWeapon("gun");
                     }
-                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Rapid gun
                     {
-
+                        ship.BuyWeapon("rapidgun");
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Laser
                     {
-
+                        ship.BuyWeapon("laser");
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {
@@ -569,17 +583,17 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "engine":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // 
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Thrust
                     {
-
+                        ship.BuyThrust();
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
-
+                        
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // 
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Turn speed
                     {
-
+                        ship.BuyTurnSpeed();
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {
@@ -609,6 +623,29 @@ namespace SpacePirates.Player
         {
             return new Human("nobody");
             //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Check if the ship has received an upgrade.
+        /// If yes, it's automatically reset to false after this check.
+        /// </summary>
+        /// <returns></returns>
+        public bool WasShipUpgraded()
+        {
+            if (shipUpgraded)
+            {
+                shipUpgraded = false;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Use to request ship upgrade synchronization over network
+        /// </summary>
+        public void ShipUpgraded()
+        {
+            shipUpgraded = true;
         }
     }
 }

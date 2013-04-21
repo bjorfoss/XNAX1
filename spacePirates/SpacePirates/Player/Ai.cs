@@ -100,5 +100,16 @@ namespace SpacePirates.Player
             names = (List<String>)tempNames.OrderBy(x => rnd.Next()).Take(10).ToList<String>();
             nameIndex = 0;
         }
+
+
+        public bool WasShipUpgraded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShipUpgraded()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

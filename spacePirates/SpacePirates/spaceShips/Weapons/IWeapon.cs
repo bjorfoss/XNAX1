@@ -11,5 +11,6 @@ namespace SpacePirates.spaceShips
         void Fire(GameTime gameTime, Unit ship);
 
         string GetName();
+        string GetType();
     }
 }
