@@ -568,6 +568,7 @@ namespace SpacePirates
         {
             if (this is IObstacle)
             {
+                (this as IObstacle).updateSafeTime(gameTime);
                 //destroy old obstacles
                 if ((this as IObstacle).GetLifetimeExpired(gameTime.ElapsedGameTime.Milliseconds))
                 {

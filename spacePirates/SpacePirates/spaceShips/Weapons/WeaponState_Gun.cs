@@ -50,7 +50,7 @@ namespace SpacePirates.spaceShips
                 {
                     Vector2 pos1;
                     Vector2 pos2;
-                    double offset = 20;
+                    double offset = 30;
 
                     int divide = 3;
 
