@@ -760,7 +760,7 @@ namespace SpacePirates
                             {
                                 ship.SetArmorThreshold(packetReader.ReadDouble());
                                 ship.SetMaxThrust(packetReader.ReadDouble());
-                                ship.SetMaxTurnSpeed(packetReader.ReadDouble();
+                                ship.SetMaxTurnSpeed(packetReader.ReadDouble());
 
                                 ship.SetWeapons(packetReader.ReadString());
                                 ship.SetAbilities(packetReader.ReadString());
