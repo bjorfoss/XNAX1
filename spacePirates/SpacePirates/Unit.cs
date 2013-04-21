@@ -598,9 +598,7 @@ namespace SpacePirates
                 }
             }
         }
-<<<<<<< HEAD
-        
-=======
+
 
         /// <summary>
         /// Dock at a space station
@@ -617,7 +615,7 @@ namespace SpacePirates
         /// </summary>
         /// <param name="position">The position to transform</param>
         /// <returns>A new Vector with the screen coordinates</returns>
->>>>>>> 7ce7a18626b68de95317e4fb7619845c179282d8
+
         public static Vector2 WorldPosToScreenPos(Vector2 position)
         {
             Rectangle screen = GameObject.GetScreenArea();
