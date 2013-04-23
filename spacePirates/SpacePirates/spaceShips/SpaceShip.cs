@@ -126,11 +126,15 @@ namespace SpacePirates.spaceShips
             int index = weapons.IndexOf(currentWeapon);
             //increment weapon or go to start of weapons list
             index = index + 1;
-            while (weapons[index] == null)
+            while (index <= weapons.Count)
             {
                 if (index >= weapons.Count)
                 {
                     index = 0;
+                    break;
+                }
+                if (weapons[index] != null)
+                {
                     break;
                 }
                 index++;
