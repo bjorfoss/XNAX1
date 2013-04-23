@@ -533,7 +533,12 @@ namespace SpacePirates
 
             currentMenu = victoryLobby;
             active = true;
-            NetworkObject.Instance().getNetworksession().EndGame();
+
+            foreach(LocalNetworkGamer loc in NetworkObject.Instance().getNetworksession().LocalGamers)
+            {
+                if(loc.IsHost)
+                    NetworkObject.Instance().getNetworksession().EndGame();
+            }
         }
 
         //Receive network data for the lobby screen. Shows player choices and readiness.
