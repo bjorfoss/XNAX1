@@ -54,6 +54,8 @@ namespace SpacePirates.spaceShips.Weapons
                     Vector2 pos1;
                     Vector2 pos2;
 
+                    offset = 50;
+
                     int divide = 3;
 
                     Vector2 var1 = new Vector2((float)(Math.Sin(ship.rotation + (Math.PI / divide)) * 1), (float)(Math.Cos(ship.rotation + (Math.PI / divide)) * 1));

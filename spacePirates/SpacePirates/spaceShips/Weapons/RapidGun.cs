@@ -38,8 +38,8 @@ namespace SpacePirates.spaceShips.Weapons
             if(time >= fireRate)
             {
                 System.Diagnostics.Debug.WriteLine(ship.rotation);
-                double speed = 150;
-                double offset = 20;
+                double speed = 250;
+                double offset = 30;
                 Vector2 vel = new Vector2((float)(Math.Sin(ship.rotation) * speed), (float)(Math.Cos(ship.rotation) * speed));
                 double edge = Math.Sqrt(Math.Pow(ship.getUnitRectangle().Width / 2, 2) + Math.Pow(ship.getUnitRectangle().Height / 2, 2));
                 float var = (float)Math.Sqrt(Math.Pow(((ship.getUnitRectangle().Height / 2) + offset), 2) / 
@@ -55,6 +55,7 @@ namespace SpacePirates.spaceShips.Weapons
                     Vector2 pos2;
 
                     int divide = 3;
+                    offset = 50;
 
                     Vector2 var1 = new Vector2((float)(Math.Sin(ship.rotation + (Math.PI / divide)) * 1), (float)(Math.Cos(ship.rotation + (Math.PI / divide)) * 1));
                     Vector2 var2 = new Vector2((float)(Math.Sin(ship.rotation - (Math.PI / divide)) * 1), (float)(Math.Cos(ship.rotation - (Math.PI / divide)) * 1));

@@ -38,7 +38,9 @@ namespace SpacePirates.spaceShips
             {
                 System.Diagnostics.Debug.WriteLine(ship.rotation);
 
-                Vector2 vel = new Vector2((float)(Math.Sin(ship.rotation) * 300), (float)(Math.Cos(ship.rotation) * 300));
+                int speed = 300;
+
+                Vector2 vel = new Vector2((float)(Math.Sin(ship.rotation) * speed), (float)(Math.Cos(ship.rotation) * speed));
                 double edge = Math.Sqrt(Math.Pow(ship.getUnitRectangle().Width / 2, 2) + Math.Pow(ship.getUnitRectangle().Height / 2, 2));
                 float var = (float)Math.Sqrt(Math.Pow(((ship.getUnitRectangle().Height / 2) + 8), 2) / 
                     (Math.Pow(vel.X, 2) + Math.Pow(vel.Y, 2)));
