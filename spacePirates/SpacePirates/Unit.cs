@@ -316,7 +316,8 @@ namespace SpacePirates
             Vector2 energyOther = new Vector2((float)unit.getMass()) * unit.getVelocity();
             Vector2 energySelf = new Vector2((float)getMass()) * getVelocity();
             Vector2 energyDiff = (energyOther + energySelf);
-            double _damage = Math.Min((energyDiff.X + energyDiff.Y ) / 1000, 1);
+            double _damage = Math.Max((energyDiff.X + energyDiff.Y ) / 1000, 1);
+            Console.WriteLine("Collision damage: " + _damage);
 
             damage(_damage);
             unit.damage(_damage);
