@@ -52,7 +52,7 @@ namespace SpacePirates.Obstacles
 
     class ConcreteObstacle_Asteroid : Unit, IObstacle
     {
-        public ConcreteObstacle_Asteroid(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 200, 0, 10000, 10000, 10, 10, 0, 0, GraphicBank.getInstance().GetGraphic("astroid"))
+        public ConcreteObstacle_Asteroid(Vector2 velocity, Vector2 position) : base(position, 0, velocity, Vector2.Zero, 20000, 0, 10000, 10000, 10, 10, 0, 0, GraphicBank.getInstance().GetGraphic("astroid"))
         {
           
             animationFrame = new Rectangle(0, 0, graphics.Width, graphics.Height);

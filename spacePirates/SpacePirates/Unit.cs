@@ -313,8 +313,13 @@ namespace SpacePirates
             double ratio = 1;
             double moveEnergy = 0.2; //The percentage of energy involved in movement
 
-            damage(500);
-            unit.damage(500);
+            Vector2 energyOther = new Vector2((float)unit.getMass()) * unit.getVelocity();
+            Vector2 energySelf = new Vector2((float)getMass()) * getVelocity();
+            Vector2 energyDiff = (energyOther + energySelf);
+            double _damage = Math.Min((energyDiff.X + energyDiff.Y ) / 1000, 1);
+
+            damage(_damage);
+            unit.damage(_damage);
 
             if (health <= 0)
             {

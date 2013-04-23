@@ -335,7 +335,7 @@ namespace SpacePirates
             
             chanceOfAstroidPerSecond += (float)gameTime.ElapsedGameTime.TotalSeconds;
             
-            if (chanceOfAstroidPerSecond > 10)
+            if (chanceOfAstroidPerSecond > 2)
             {
                 chanceOfAstroidPerSecond = 0;
                 // Generate outside level limit with a directional velocity that will make it go across the level
