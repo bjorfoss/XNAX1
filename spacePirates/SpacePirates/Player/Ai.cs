@@ -111,5 +111,9 @@ namespace SpacePirates.Player
         {
             throw new NotImplementedException();
         }
+        public int GetCurrency()
+        {
+            return 0;
+        }
     }
 }

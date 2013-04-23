@@ -38,6 +38,12 @@ namespace SpacePirates.Player
         /// Use to request ship upgrade synchronization over network
         /// </summary>
         void ShipUpgraded();
+
+        /// <summary>
+        /// Use to print money!
+        /// </summary>
+        /// <returns></returns>
+        int GetCurrency();
         
 
 
