@@ -68,12 +68,12 @@ namespace SpacePirates.spaceShips
         private void CreateShop()
         {
             shopString.Add("main", "Spaceshop\nZ - Repair\nX - Engine\nC - Abilities\nV - Weapons\nB - Armor\n");
-            shopString.Add("abilities1", "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit");
+            shopString.Add("abilities1", "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "$500") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit");
             shopString.Add("abilities2", "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("weapons1", "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "") + "\nV - \nB - Next Page\nN - Exit");
+            shopString.Add("weapons1", "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "$200") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "$600") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "$1000") + "\nV - \nB - Next Page\nN - Exit");
             shopString.Add("weapons2", "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit");
-            shopString.Add("armor", "Armor\nZ - Buy Armor " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit");
-            shopString.Add("engine", "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit");
+            shopString.Add("armor", "Armor\nZ - Buy Armor " + "$100 " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit");
+            shopString.Add("engine", "Engine\nZ - Thrust $150 " + (int)maxThrust + "\nX - \nC - Turn Speed $150 " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit");
             
         }
 
@@ -348,75 +348,80 @@ namespace SpacePirates.spaceShips
             armorThreshold *= 1.1;
 
 
-            shopString["armor"] = "Armor\nZ - Buy Armor " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit";
+            shopString["armor"] = "Armor\nZ - Buy Armor " + "$100 " + (int)armorThreshold + "\nX - \nC - \nV - \nB - \nN - Exit";
             GetOwner().ShipUpgraded();
         }
         public void BuyTurnSpeed()
         {
             maxTurnSpeed += 0.1;
-            shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
+            shopString["engine"] = "Engine\nZ - Thrust $150 " + (int)maxThrust + "\nX - \nC - Turn Speed $150 " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
             GetOwner().ShipUpgraded();
         }
         public void BuyThrust()
         {
             maxThrust += 1000;
-            shopString["engine"] = "Engine\nZ - Thrust " + (int)maxThrust + "\nX - \nC - Turn Speed " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
+            shopString["engine"] = "Engine\nZ - Thrust $150 " + (int)maxThrust + "\nX - \nC - Turn Speed $150 " + Math.Round(maxTurnSpeed, 2) + "\nV - \nB - \nN - Exit";
             GetOwner().ShipUpgraded();
         }
-        public void BuyWeapon(String weapon)
+        public bool BuyWeapon(String weapon)
         {
             if (!BoughtWeapon(weapon))
             {
 
                 weapons.Add(ConcreteWeaponFactory.CreateWeapon(weapon));
-                shopString["weapons1"] = "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "") + "\nV - \nB - Next Page\nN - Exit";
+                shopString["weapons1"] = "Weapons 1\nZ - Standard Gun " + (BoughtWeapon("gun") ? "- Bought" : "$200") + "\nX - Rapidgun " + (BoughtWeapon("rapidgun") ? "- Bought" : "$600") + "\nC - Laser " + (BoughtWeapon("laser") ? "- Bought" : "$1000") + "\nV - \nB - Next Page\nN - Exit";
                 shopString["weapons2"] = "Weapons 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
                 GetOwner().ShipUpgraded();
+                return true;
             }
+            return false;
         }
-        public void BuyAbility(String ability)
+        public bool BuyAbility(String ability)
         {
             if (!BoughtAbility(ability))
             {
                 abilities.Add(ConcreteAbilityFactory.CreateAbility(ability));
 
-                shopString["abilities1"] = "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit";
+                shopString["abilities1"] = "Abilities 1\nZ - Shield " + (BoughtAbility("shield") ? " - Bought" : "$500") + "\nX - \nC - \nV - \nB - Next Page\nN - Exit";
                 shopString["abilities2"] = "Abilities 2\nZ - \nX - \nC - \nV - \nB - Next Page\nN - Exit";
                 GetOwner().ShipUpgraded();
+                return true;
             }
+            return false;
         }
      
         /// <summary>
         /// Repair health first, then armor
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Repair(GameTime gameTime)
+        public bool Repair(GameTime gameTime)
         {
             if (health != maxHealth)
             {
 
-                if (20 + health > maxHealth)
+                if (30 + health > maxHealth)
                 {
                     health = maxHealth;
-                    return;
+                    return true;
                 }
 
-                health += 20;
-                return;
+                health += 30;
+                return true;
             }
 
             if (armorEffectiveness < 100)
             {
-                double inc = 10 * gameTime.ElapsedGameTime.TotalSeconds;
+                double inc = 20 * gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (armorEffectiveness + inc > 100)
                 {
                     armorEffectiveness = 100;
-                    return;
+                    return true;
                 }
                 armorEffectiveness += inc;
 
             }
+            return false;
         }
 
 

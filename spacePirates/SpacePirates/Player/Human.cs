@@ -43,6 +43,9 @@ namespace SpacePirates.Player
         private int timesDied = 0;
         private int timesDiedToAsteroid = 0;
 
+        private int currency = 1500;
+        private int generateCurrencytimer;
+
         public Human(string name)
         {
             this.hud = new Hud(this);
@@ -282,6 +285,13 @@ namespace SpacePirates.Player
 
         public void HandleInput(KeyboardState newState, GameTime gameTime)
         {
+            // generate currency over time
+            generateCurrencytimer += gameTime.ElapsedGameTime.Milliseconds;
+            if (generateCurrencytimer >= 200)
+            {
+                generateCurrencytimer = 0;
+                currency += 1;
+            }
             //allow ship control only if ship still alive
             if ((ownerLink.GetShip() as Unit).getHealth() > 0)
             {
@@ -429,7 +439,7 @@ namespace SpacePirates.Player
 
                     if (newState.IsKeyDown(Keys.Z)) // Repair
                     {
-                        ship.Repair(gameTime);
+                        if (currency >= 1 && ship.Repair(gameTime)) currency -= 1; 
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Engine window
                     {
@@ -453,9 +463,10 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "abilities1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Shield
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Shield 500
                     {
-                        ship.BuyAbility("shield");
+                        int price = 500;
+                        if (currency >= price && ship.BuyAbility("shield")) Purchase(price);
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
@@ -505,17 +516,20 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "weapons1":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Standard Gun
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Standard Gun 200
                     {
-                        ship.BuyWeapon("gun");
+                        int price = 200;
+                        if (currency >= price && ship.BuyWeapon("gun")) Purchase(price);
                     }
-                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Rapid gun
+                    else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // Rapid gun 600
                     {
-                        ship.BuyWeapon("rapidgun");
+                        int price = 600;
+                        if (currency >= price && ship.BuyWeapon("rapidgun")) Purchase(price);
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Laser
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Laser 1000
                     {
-                        ship.BuyWeapon("laser");
+                        int price = 1000;
+                        if (currency >= price && ship.BuyWeapon("laser")) Purchase(price);
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {
@@ -557,9 +571,9 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "armor":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Buy Armor
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Buy Armor 100
                     {
-                        ship.BuyArmor();
+                        if (Purchase(100)) ship.BuyArmor();
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
@@ -583,17 +597,17 @@ namespace SpacePirates.Player
                     }
                     break;
                 case "engine":
-                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Thrust
+                    if (newState.IsKeyDown(Keys.Z) && !oldState.IsKeyDown(Keys.Z)) // Thrust 150
                     {
-                        ship.BuyThrust();
+                        if (Purchase(150)) ship.BuyThrust();
                     }
                     else if (newState.IsKeyDown(Keys.X) && !oldState.IsKeyDown(Keys.X)) // 
                     {
                         
                     }
-                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Turn speed
+                    else if (newState.IsKeyDown(Keys.C) && !oldState.IsKeyDown(Keys.C)) // Turn speed 150
                     {
-                        ship.BuyTurnSpeed();
+                        if(Purchase(150)) ship.BuyTurnSpeed();
                     }
                     else if (newState.IsKeyDown(Keys.V) && !oldState.IsKeyDown(Keys.V)) // 
                     {
@@ -613,12 +627,31 @@ namespace SpacePirates.Player
 
         }
 
+        private bool Purchase(int price){
+
+            if(price <= currency){
+
+                currency -= price;
+                return true;
+            }
+
+
+            return false;
+        }
+
         void HandleGamepadInput()
         {
         }
 
+        public int GetCurrency()
+        {
+            return currency;
+        }
+        public void RecieveAwardCurrency()
+        {
 
-
+            currency += 500;
+        }
         public static IPlayer createController()
         {
             return new Human("nobody");
