@@ -82,7 +82,7 @@ namespace SpacePirates.Player
             
             batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Red: " + GameObject.Instance().getRedScore().ToString() + " -- Blue: " + GameObject.Instance().getBlueScore().ToString(), new Vector2(0.0f, 150.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
-           
+            batch.DrawString(GraphicBank.getInstance().GetFont("Armor"), "Deaths: " + (playerObject as Human).GetTimesDied(), new Vector2(0.0f, 180.0f), Color.LightGreen, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
         }
 
         

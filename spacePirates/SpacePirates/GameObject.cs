@@ -507,7 +507,8 @@ namespace SpacePirates
                     {
                             if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
                             {
-                                unit.damage(ex.getDamage());
+                                if(unit.getHealth() > 0)
+                                    unit.damage(ex.getDamage(), gameTime);
                             }
                         }
                     }
@@ -539,9 +540,12 @@ namespace SpacePirates
                 }
                 if ((ship as Unit).getUnitRectangle().Intersects(new Rectangle(spaceStations.ElementAt(1).getRectangle().X - 300, spaceStations.ElementAt(1).getRectangle().Y - 300, spaceStations.ElementAt(1).getRectangle().Width + 600, spaceStations.ElementAt(1).getRectangle().Height + 600)) && (int)gameTime.TotalGameTime.TotalMilliseconds % 1000 == 0)
                 {
-                    //Enemy ship! Get it!
-                    (ship as Unit).damage(1500);
-                    addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Blue));
+                    //Enemy ship! Get it! If it's not dead.
+                    if (!(ship.GetOwner() as Human).GetDestroyed())
+                    {
+                        (ship as Unit).damage(1500, gameTime);
+                        addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Blue));
+                    }
                 }
             }
             foreach (SpaceShip ship in blueTeam)
@@ -553,9 +557,12 @@ namespace SpacePirates
                 }
                 if ((ship as Unit).getUnitRectangle().Intersects(new Rectangle(spaceStations.ElementAt(0).getRectangle().X - 300, spaceStations.ElementAt(0).getRectangle().Y - 300, spaceStations.ElementAt(0).getRectangle().Width + 600, spaceStations.ElementAt(0).getRectangle().Height + 600)) && (int)gameTime.TotalGameTime.TotalMilliseconds % 1000 == 0)
                 {
-                    //Enemy ship! Get it!
-                    (ship as Unit).damage(1500);
-                    addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Red));
+                    //Enemy ship! Get it! If it's not dead.
+                    if (!(ship.GetOwner() as Human).GetDestroyed())
+                    {
+                        (ship as Unit).damage(1500, gameTime);
+                        addToGame(new Explosion((ship as Unit).GetPosition(), new Vector2((float)60, (float)60), 0, Color.Red));
+                    }
                 }
             }
 

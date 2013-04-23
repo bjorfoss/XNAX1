@@ -181,14 +181,14 @@ namespace SpacePirates.Player
                 GameObject.Instance().addToGame(GetShip() as Unit);
             }
 
-            destroyed = destroy;
-
             //If we're to be destroyed and we're not, increase death count and add to times died.
             if (destroy && !destroyed)
             {
                 timeDied = time;
                 timesDied++;
             }
+
+            destroyed = destroy;
         }
 
         public bool ReadyToRespawn(double time)
@@ -311,7 +311,7 @@ namespace SpacePirates.Player
             }
             else
             {
-                if (ReadyToRespawn(gameTime.TotalGameTime.TotalSeconds))
+                if (destroyed && ReadyToRespawn(gameTime.TotalGameTime.TotalSeconds))
                     Respawn();
             }
 

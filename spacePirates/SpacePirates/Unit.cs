@@ -265,7 +265,7 @@ namespace SpacePirates
         /// Calculate armor and health damage
         /// </summary>
         /// <param name="damage"></param>
-        public void damage(double damage)
+        public void damage(double damage, GameTime gameTime, bool checkDestroyed=true)
         {
             damage = getDamage(damage);
             if (damage <= 0) { return; }
@@ -299,6 +299,11 @@ namespace SpacePirates
                 damage *= 1.02;
                 health -= damage;
             }
+
+            if (health <= 0 && checkDestroyed)
+            {
+                OnDestroy(gameTime, true);
+            }
         }
 
         /// <summary>
@@ -308,6 +313,8 @@ namespace SpacePirates
         /// <param name="unit"></param>
         protected void HandleCollision(Unit unit, GameTime gameTime)
         {
+            if (health <= 0 && unit.getHealth() <= 0)
+                return;
 
             // TODO: calulate ratio based on a fixed number and armor:
             double ratio = 1;
@@ -319,9 +326,9 @@ namespace SpacePirates
             double _damage = Math.Max((energyDiff.X + energyDiff.Y ) / 1000, 1);
             Console.WriteLine("Collision damage: " + _damage);
 
-            damage(_damage);
-            unit.damage(_damage);
-
+            damage(_damage, gameTime, false);
+            unit.damage(_damage, gameTime, false);
+            
             if (health <= 0)
             {
                 OnDestroy(gameTime, true);
@@ -497,11 +504,12 @@ namespace SpacePirates
 
                     velocity = Vector2.Zero;
                     acceleration = Vector2.Zero;
-
-                    GameObject.Instance().removeFromObjects(this);
+                    blastDamage = 0;
 
                     if (!dead.GetDestroyed())
                     {
+                        GameObject.Instance().removeFromObjects(this);
+
                         dead.SetDestroyed(true, gameTime.TotalGameTime.TotalSeconds);
                         if (awardPoint)
                         {
