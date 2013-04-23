@@ -647,7 +647,11 @@ namespace SpacePirates.Player
         {
             return currency;
         }
+        public void RecieveAwardCurrency()
+        {
 
+            currency += 500;
+        }
         public static IPlayer createController()
         {
             return new Human("nobody");

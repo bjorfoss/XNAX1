@@ -674,6 +674,10 @@ namespace SpacePirates
         //Get the GameObject instance and call this when red team destroys an enemy ship.
         public void redScored()
         {
+            foreach (ISpaceShip ship in redTeam)
+            {
+                (ship.GetOwner() as Human).RecieveAwardCurrency();
+            }
             redScore++;
         }
 
@@ -685,6 +689,10 @@ namespace SpacePirates
         //Get the GameObject instance and call this when blue team destroys an enemy ship.
         public void blueScored()
         {
+            foreach (ISpaceShip ship in blueTeam)
+            {
+                (ship.GetOwner() as Human).RecieveAwardCurrency();
+            }
             blueScore++;
         }
 
