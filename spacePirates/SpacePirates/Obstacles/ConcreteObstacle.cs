@@ -10,7 +10,7 @@ namespace SpacePirates.Obstacles
 {
     class ConcreteObstacle_Bullet : Unit, IObstacle
     {
-        double safeTime;
+        protected double safeTime;
         double timeToLive = 15000;
         double check = 0;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using SpacePirates.spaceShips.Weapons;
 
 namespace SpacePirates.Obstacles
 {
@@ -18,6 +19,7 @@ namespace SpacePirates.Obstacles
             factories.Add("asteroid", new Factory_Asteroid());
             factories.Add("bullet", new Factory_Bullet());
             factories.Add("laser", new Factory_Laser());
+            factories.Add("rapidGunBullet", new Factory_RapidGunBullet());
         }
 
         /// <summary>
@@ -72,6 +74,14 @@ namespace SpacePirates.Obstacles
             public IObstacle CreateObstacle(Vector2 position, Vector2 velocity, float obstRotation)
             {
                 return new ConcreteObstacle_Bullet(velocity, position);
+            }
+        }
+
+        class Factory_RapidGunBullet : IObstacleFactory
+        {
+            public IObstacle CreateObstacle(Vector2 position, Vector2 velocity, float obstRotation)
+            {
+                return new RapidGunBullet(velocity, position);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using SpacePirates.Obstacles;
+using SpacePirates.Utilities;
 
 namespace SpacePirates.spaceShips.Weapons
 {
@@ -73,12 +74,20 @@ namespace SpacePirates.spaceShips.Weapons
                 }
                 else
                 {
-                    IObstacle bullet = ConcreteObstacleFactory.CreateObstacle("bullet", pos, vel);
+                    IObstacle bullet = ConcreteObstacleFactory.CreateObstacle("rapidGunBullet", pos, vel);
 
                     GameObject.Instance().addToGame(bullet);
                 }
                 time = 0;
             }
+        }
+    }
+
+    class RapidGunBullet : ConcreteObstacle_Bullet, IObstacle
+    {
+        public RapidGunBullet(Vector2 velocity, Vector2 position) : base(velocity, position)
+        {
+            safeTime = 300;
         }
     }
 }
