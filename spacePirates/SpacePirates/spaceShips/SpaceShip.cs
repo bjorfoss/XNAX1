@@ -125,7 +125,7 @@ namespace SpacePirates.spaceShips
         {
             int index = weapons.IndexOf(currentWeapon);
             //increment weapon or go to start of weapons array
-            if (index + 1 < weapons.Count)
+            if (index + 1 < weapons.Count && weapons[index + 1] != null)
             {
                 currentWeapon = weapons[index + 1];
             }
@@ -208,7 +208,7 @@ namespace SpacePirates.spaceShips
             //decrement ability or go to end of abilities array
             if (index != 0)
             {
-                currentAbility = abilities[index - 1];
+                //currentAbility = abilities[index - 1];
             }
             else
             {
