@@ -327,6 +327,8 @@ namespace SpacePirates
 
         private void generateAstroids(GameTime gameTime, Human host)
         {
+            if (obstacles.Count > 120)
+                return;
 
             String obstacleType = "asteroid";
 
