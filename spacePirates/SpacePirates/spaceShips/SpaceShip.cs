@@ -208,7 +208,7 @@ namespace SpacePirates.spaceShips
             //decrement ability or go to end of abilities array
             if (index != 0)
             {
-                //currentAbility = abilities[index - 1];
+                currentAbility = abilities[index - 1];
             }
             else
             {

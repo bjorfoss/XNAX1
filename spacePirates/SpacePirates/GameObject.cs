@@ -716,7 +716,7 @@ namespace SpacePirates
                         Vector2 wh;
                         bool firing;
                         bool abilityActivated;
-                        double shieldHealth;
+                        double shieldHealth = 0.0;
 
                         bool destroyed;
                         bool rewardOpposition;
@@ -749,7 +749,11 @@ namespace SpacePirates
 
                             firing = packetReader.ReadBoolean();
                             abilityActivated = packetReader.ReadBoolean();
-                            shieldHealth = packetReader.ReadDouble();
+
+                            if (abilityActivated && ship.GetCurrentAbility() is AbilityState_Shield)
+                            {
+                                shieldHealth = packetReader.ReadDouble();
+                            }
 
                             destroyed = packetReader.ReadBoolean();
                             rewardOpposition = packetReader.ReadBoolean();
@@ -871,16 +875,17 @@ namespace SpacePirates
                 me.ShipFired();
 
                 packetWriter.Write(me.GetAbilityActivated());
+
+                if (me.GetAbilityActivated())
+                {
+                    if (me.GetShip().GetCurrentAbility() is AbilityState_Shield)
+                    {
+                        packetWriter.Write((me.GetShip().GetCurrentAbility() as AbilityState_Shield).getHealth());
+                    }
+                }
+
                 //Regardless of whether we activated or not, set the bool to false.
                 me.setAbilityActivated();
-                if (me.GetShip().GetCurrentAbility() is AbilityState_Shield)
-                {
-                    packetWriter.Write((me.GetShip().GetCurrentAbility() as AbilityState_Shield).getHealth());
-                }
-                else
-                {
-                    packetWriter.Write(-1);
-                }
 
                 packetWriter.Write(me.GetDestroyed());
 
