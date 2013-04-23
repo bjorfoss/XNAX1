@@ -481,6 +481,7 @@ namespace SpacePirates.spaceShips
 
         public virtual void SetWeapons(string weaponTypes)
         {
+            Log.getLog().addEvent("Received weapons string for " + this.GetOwner().GetName() + ": " + weaponTypes);
             string[] weaponTypeArr = weaponTypes.Split('|');
 
             weapons = new List<IWeapon>();
@@ -488,6 +489,7 @@ namespace SpacePirates.spaceShips
             {
                 if (!String.IsNullOrEmpty(type))
                 {
+                    Log.getLog().addEvent("Weapon added: " + type);
                     weapons.Add(ConcreteWeaponFactory.CreateWeapon(type));
                 }
             }
