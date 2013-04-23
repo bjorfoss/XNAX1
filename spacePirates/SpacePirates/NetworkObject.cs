@@ -74,7 +74,13 @@ namespace SpacePirates
             catch (NetworkNotAvailableException)
             {
                 //networkEnabled = false;
-                networkDebug = "Could not create session. No connection to Windows Live.";
+                networkDebug = "Could not create session through Windows Live. Ensure you are on a network.";
+                return false;
+            }
+            catch (InvalidOperationException)
+            {
+                disposeNetworkSession();
+                networkDebug = "Old session still exists. Disposing. please try again.";
                 return false;
             }
 

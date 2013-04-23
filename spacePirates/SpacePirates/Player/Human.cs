@@ -175,13 +175,16 @@ namespace SpacePirates.Player
 
         public void SetDestroyed(bool destroy, double time)
         {
+            //If we're destroyed and we shouldn't be, add the unit to the game.
             if (destroyed && !destroy)
             {
                 GameObject.Instance().addToGame(GetShip() as Unit);
             }
+
             destroyed = destroy;
 
-            if (destroy)
+            //If we're to be destroyed and we're not, increase death count and add to times died.
+            if (destroy && !destroyed)
             {
                 timeDied = time;
                 timesDied++;

@@ -319,10 +319,32 @@ namespace SpacePirates
             if (health <= 0)
             {
                 OnDestroy(gameTime, true);
+                if (unit is ConcreteObstacle_Asteroid && this is SpaceShip)
+                {
+                    if ((this as SpaceShip).GetOwner() != null)
+                    {
+                        IPlayer pl = (this as SpaceShip).GetOwner();
+
+                        (pl as Human).IncreaseDeathsByAsteroid();
+                    }
+
+                }
             }
             if (unit.getHealth() <= 0)
             {
                 unit.OnDestroy(gameTime, true);
+
+                if (this is ConcreteObstacle_Asteroid && unit is SpaceShip)
+                {
+                    if ((unit as SpaceShip).GetOwner() != null)
+                    {
+                        IPlayer pl = (unit as SpaceShip).GetOwner();
+
+                        (pl as Human).IncreaseDeathsByAsteroid();
+                    }
+
+                }
+
             }
 
             Vector2 velocityUnit = unit.getVelocity();

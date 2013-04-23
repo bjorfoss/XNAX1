@@ -260,6 +260,7 @@ namespace SpacePirates
                 {
                     currentMenu = mainmenu;
                     cleanAvailableSessions();
+                    NetworkObject.Instance().disposeNetworkSession();
                 }
                 else if (newKeyState.IsKeyDown(Keys.R) && !oldKeyState.IsKeyDown(Keys.R))//Indicate ready.
                 {
