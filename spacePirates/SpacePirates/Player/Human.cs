@@ -180,8 +180,12 @@ namespace SpacePirates.Player
                 GameObject.Instance().addToGame(GetShip() as Unit);
             }
             destroyed = destroy;
-            timeDied = time;
-            timesDied++;
+
+            if (destroy)
+            {
+                timeDied = time;
+                timesDied++;
+            }
         }
 
         public bool ReadyToRespawn(double time)
@@ -250,6 +254,11 @@ namespace SpacePirates.Player
         public int GetTimesDied()
         {
             return timesDied;
+        }
+
+        public void SetTimesDied(int deaths)
+        {
+            timesDied = deaths;
         }
 
         public void IncreaseKills()

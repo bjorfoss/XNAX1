@@ -146,7 +146,7 @@ namespace SpacePirates
         /// <param name="Content"></param>
         /// <param name="defaultGoalLimit"></param>
         /// <returns></returns>
-        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=1)
+        public static GameObject Instance(int w, int h, ContentManager Content,GraphicsDevice graphicsDevice, int defaultGoalLimit=2)
         {
             lock (padlock) {
                 if (instance == null)
@@ -811,7 +811,9 @@ namespace SpacePirates
                                 (ship.GetCurrentAbility() as AbilityState_Shield).setHealth(shieldHealth);
                             }
 
+                            
                             senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
+
                             if (rewardOpposition)
                             {
                                 int team = senderHuman.GetTeam();
