@@ -124,15 +124,19 @@ namespace SpacePirates.spaceShips
         public virtual void NextWeapon()
         {
             int index = weapons.IndexOf(currentWeapon);
-            //increment weapon or go to start of weapons array
-            if (index + 1 < weapons.Count && weapons[index + 1] != null)
+            //increment weapon or go to start of weapons list
+            index = index + 1;
+            while (weapons[index] == null)
             {
-                currentWeapon = weapons[index + 1];
+                if (index >= weapons.Count)
+                {
+                    index = 0;
+                    break;
+                }
+                index++;
+                    
             }
-            else
-            {
-                currentWeapon = weapons[0];
-            }
+            currentWeapon = weapons[index];
         }
 
         public virtual void PreviousWeapon()
@@ -145,7 +149,13 @@ namespace SpacePirates.spaceShips
             }
             else
             {
-                currentWeapon = weapons[weapons.Count - 1];
+                index = weapons.Count - 1;
+                //don't select null weapons
+                while (weapons[index] == null)
+                {
+                    index--;
+                }
+                currentWeapon = weapons[index];
             }
         }
 
