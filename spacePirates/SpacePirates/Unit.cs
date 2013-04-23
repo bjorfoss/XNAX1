@@ -320,15 +320,16 @@ namespace SpacePirates
             double ratio = 1;
             double moveEnergy = 0.2; //The percentage of energy involved in movement
 
-            Vector2 energyOther = new Vector2((float)unit.getMass()) * unit.getVelocity();
-            Vector2 energySelf = new Vector2((float)getMass()) * getVelocity();
-            Vector2 energyDiff = (energyOther + energySelf);
-            double _damage = Math.Max((energyDiff.X + energyDiff.Y ) / 1000, 1);
-            Console.WriteLine("Collision damage: " + _damage);
+            double energyOther = (float)unit.getMass() * Math.Sqrt(Math.Pow(unit.getVelocity().X,2) + Math.Pow(unit.getVelocity().Y,2));
+            double energySelf = (float)getMass() * Math.Sqrt(Math.Pow(getVelocity().X,2) + Math.Pow(getVelocity().Y,2));
+            double _damageSelf = Math.Max(energyOther / 1000, 1);
+            double _damageOther = Math.Max(energySelf / 1000, 1);
+            Log.getLog().addEvent("Collision damage " + this.GetType() + ": " + _damageSelf);
+            Log.getLog().addEvent("Collision damage " + unit.GetType() + ": " + _damageOther);
 
-            damage(_damage, gameTime, false);
-            unit.damage(_damage, gameTime, false);
-            
+            damage(_damageSelf, gameTime, false);
+            unit.damage(_damageOther, gameTime, false);
+
             if (health <= 0)
             {
                 OnDestroy(gameTime, true);
