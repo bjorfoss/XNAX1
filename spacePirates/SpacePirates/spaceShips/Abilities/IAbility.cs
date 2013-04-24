@@ -17,7 +17,7 @@ namespace SpacePirates.spaceShips
 
         string GetName();
 
-        string GetType();
+        string GetTypeOf();
 
         bool getActive();
 

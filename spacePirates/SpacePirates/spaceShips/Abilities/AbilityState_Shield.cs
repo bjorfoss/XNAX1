@@ -42,7 +42,7 @@ namespace SpacePirates.spaceShips
             time = 0; //Set the time to negative cooldown, so the shield can be activated immediately
         }
 
-        public string GetType()
+        public string GetTypeOf()
         {
 
             return "shield";

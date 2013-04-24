@@ -25,7 +25,7 @@ namespace SpacePirates.spaceShips.Weapons
         {
             return name;
         }
-        public string GetType()
+        public string GetTypeOf()
         {
             return "rapidgun";
         }

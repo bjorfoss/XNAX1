@@ -336,7 +336,7 @@ namespace SpacePirates.spaceShips
         {
             foreach (IWeapon w in weapons)
             {
-                if (w.GetType() == weapon)
+                if (w.GetTypeOf() == weapon)
                 {
                     return true;
                 }
@@ -348,7 +348,7 @@ namespace SpacePirates.spaceShips
         {
             foreach (IAbility a in abilities)
             {
-                if (a.GetType() == ability)
+                if (a.GetTypeOf() == ability)
                 {
                     return true;
                 }
@@ -474,7 +474,7 @@ namespace SpacePirates.spaceShips
             foreach (IWeapon weapon in this.weapons)
             {
                 
-                weapons += "|" + weapon.GetType();
+                weapons += "|" + weapon.GetTypeOf();
             }
             return weapons;
         }
@@ -501,7 +501,7 @@ namespace SpacePirates.spaceShips
             foreach (IAbility ability in this.abilities)
             {
 
-                abilities += "|" + ability.GetType();
+                abilities += "|" + ability.GetTypeOf();
             }
             return abilities;
         }
