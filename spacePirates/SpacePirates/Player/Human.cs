@@ -178,7 +178,7 @@ namespace SpacePirates.Player
             //If we're destroyed and we shouldn't be, add the unit to the game.
             if (destroyed && !destroy)
             {
-                GameObject.Instance().addToGame(GetShip() as Unit);
+                //GameObject.Instance().addToGame(GetShip() as Unit);
             }
 
             //If we're to be destroyed and we're not, increase death count and add to times died.

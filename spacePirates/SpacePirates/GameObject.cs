@@ -830,7 +830,7 @@ namespace SpacePirates
                             }
 
                             
-                            senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
+                            //senderHuman.SetDestroyed(destroyed, gameTime.TotalGameTime.TotalSeconds);
 
                             if (rewardOpposition)
                             {
