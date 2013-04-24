@@ -30,6 +30,7 @@ namespace SpacePirates.Player
         private bool shipUpgraded = false;
         private bool shipNextAbility = false;
         private bool shipPrevAbility = false;
+        private bool shipChangedWeapon = false;
         private bool shipNextWep = false;
         private bool shipPreviousWep = false;
 
@@ -90,6 +91,29 @@ namespace SpacePirates.Player
         public int GetTeam()
         {
             return team;
+        }
+
+        /// <summary>
+        /// Notify of a weapon change
+        /// </summary>
+        public void WeaponChanged()
+        {
+            shipChangedWeapon = true;
+        }
+
+        /// <summary>
+        /// Check if the ship has changed weapon.
+        /// Automatically resets back to false after checking.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasWeaponChanged()
+        {
+            if (shipChangedWeapon)
+            {
+                shipChangedWeapon = false;
+                return true;
+            }
+            return false;
         }
 
         public void SetSelectedShip(string selection)
@@ -409,11 +433,13 @@ namespace SpacePirates.Player
             {
                 shipNextWep = true;
                 ship.NextWeapon();
+                WeaponChanged();
             }
             else if (newState.IsKeyDown(Keys.K) && oldState.IsKeyUp(Keys.K))
             {
                 shipPreviousWep = true;
                 ship.PreviousWeapon();
+                WeaponChanged();
             }
 
             // Execute feature

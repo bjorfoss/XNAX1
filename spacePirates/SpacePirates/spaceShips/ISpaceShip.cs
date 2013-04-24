@@ -126,6 +126,14 @@ namespace SpacePirates.spaceShips
         /// <param name="weaponTypes">List of weapon type names separated by the '|' character</param>
         void SetWeapons(string weaponTypes);
 
+        /// <summary>
+        /// Set selected weapon
+        /// </summary>
+        /// <param name="type">The weapon type</param>
+        void SetWeapon(string type);
+
+        IWeapon GetSelectedWeapon();
+
         string GetAbilities();
 
         void SetAbilities(string types);

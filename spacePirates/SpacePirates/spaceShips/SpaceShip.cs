@@ -121,6 +121,38 @@ namespace SpacePirates.spaceShips
             currentWeapon.Fire(gameTime, this);
         }
 
+        public virtual void SetWeapon(string type)
+        {
+            try
+            {
+                //find the weapon matching the type
+                IWeapon wpn = weapons.Find((e) => { return (e.GetTypeOf() == type); });
+                currentWeapon = wpn;
+            }
+            catch (ArgumentNullException e)
+            {
+                //No match was found
+                Log.getLog().addEvent("Weapon of type " + type + " was not found on " + (this.GetOwner().GetName()) + "'s " + this.GetType());
+                //check for further issues
+                if (weapons == null || weapons[0] == null)
+                {
+                    Log.getLog().addEvent("Corrupted record of weapons on ship " + this.getUnitID());
+                    throw new Exception("Corrupted record of weapons on ship " + this.getUnitID(), e);
+                }
+                else
+                {
+                    currentWeapon = weapons[0];
+                }
+            }
+            //log if a remote player switched weapons
+            if (this != GameObject.GetCameraTarget())
+            {
+                string otherName = this.GetOwner().GetName();
+                string weapType = currentWeapon.GetTypeOf();
+                Log.getLog().addEvent(otherName + " switched to weapon of type " + weapType);
+            }
+        }
+
         public virtual void NextWeapon()
         {
             int index = weapons.IndexOf(currentWeapon);
@@ -141,6 +173,14 @@ namespace SpacePirates.spaceShips
                     
             }
             currentWeapon = weapons[index];
+            
+            //log if a remote player switched weapons
+            if (this != GameObject.GetCameraTarget())
+            {
+                string otherName = this.GetOwner().GetName();
+                string weapType = currentWeapon.GetTypeOf();
+                Log.getLog().addEvent(otherName + " switched to weapon of type " + weapType);
+            }
         }
 
         public virtual void PreviousWeapon()
@@ -160,6 +200,13 @@ namespace SpacePirates.spaceShips
                     index--;
                 }
                 currentWeapon = weapons[index];
+            }
+            //log if a remote player switched weapons
+            if (this != GameObject.GetCameraTarget())
+            {
+                string otherName = this.GetOwner().GetName();
+                string weapType = currentWeapon.GetTypeOf();
+                Log.getLog().addEvent(otherName + " switched to weapon of type " + weapType);
             }
         }
 
@@ -230,6 +277,10 @@ namespace SpacePirates.spaceShips
             }
         }
 
+        public virtual IWeapon GetSelectedWeapon()
+        {
+            return currentWeapon;
+        }
 
         public string GetSelWeaponName()
         {

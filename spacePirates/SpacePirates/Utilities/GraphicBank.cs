@@ -113,7 +113,7 @@ namespace SpacePirates.Utilities
                 loadedSounds = true;
                 return true;
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 if (tries < 40)
                 {

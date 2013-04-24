@@ -744,8 +744,8 @@ namespace SpacePirates
 
                         bool shipUpgraded;
 
-                        bool shipNextWep;
-                        bool shipPreviousWep;
+                       // bool shipNextWep;
+                       // bool shipPreviousWep;
                         bool shipNextAbility;
                         bool shipPrevAbility;
 
@@ -767,6 +767,13 @@ namespace SpacePirates
 
                             xy = packetReader.ReadVector2();
                             wh = packetReader.ReadVector2();
+
+                            //weapon changed
+                            if (packetReader.ReadBoolean())
+                            {
+                                string weapType = packetReader.ReadString();
+                                ship.SetWeapon(weapType);
+                            }
 
                             firing = packetReader.ReadBoolean();
                             abilityActivated = packetReader.ReadBoolean();
@@ -791,8 +798,8 @@ namespace SpacePirates
                                 ship.SetAbilities(packetReader.ReadString());
                             }
 
-                            shipNextWep = packetReader.ReadBoolean();
-                            shipPreviousWep = packetReader.ReadBoolean();
+                            //shipNextWep = packetReader.ReadBoolean();
+                            //shipPreviousWep = packetReader.ReadBoolean();
                             shipNextAbility = packetReader.ReadBoolean();
                             shipPrevAbility = packetReader.ReadBoolean();
 
@@ -843,13 +850,13 @@ namespace SpacePirates
                             }
 
 
-                            if (shipNextWep)
+                            /*if (shipNextWep)
                                 ship.NextWeapon();
                             if (shipPreviousWep)
-                                ship.PreviousWeapon();
+                                ship.PreviousWeapon();*/
                             if (shipNextAbility)
                                 ship.NextAbility();
-                            if (shipPreviousWep)
+                            if (shipPrevAbility)
                                 ship.PreviousAbility();
 
                             if (sender.IsHost)
@@ -897,6 +904,14 @@ namespace SpacePirates
                 Rectangle anim = unit.GetAnimationFrame();
                 packetWriter.Write(new Vector2(anim.X, anim.Y));
                 packetWriter.Write(new Vector2(anim.Width, anim.Height));
+
+                //weapon changed?
+                bool weapChanged = me.HasWeaponChanged();
+                packetWriter.Write(weapChanged);
+                if (weapChanged)
+                {
+                    packetWriter.Write((unit as ISpaceShip).GetSelectedWeapon().GetTypeOf());
+                }
 
                 packetWriter.Write(me.GetFiring());
                 //Regardless of whether we fired or not, set the bool to false.
@@ -947,8 +962,8 @@ namespace SpacePirates
                     packetWriter.Write(ship.GetAbilities());
                 }
 
-                packetWriter.Write(me.GetNextWeaponChange());
-                packetWriter.Write(me.GetPrevWeaponChange());
+                //packetWriter.Write(me.GetNextWeaponChange());
+                //packetWriter.Write(me.GetPrevWeaponChange());
                 packetWriter.Write(me.GetNextAbilityChange());
                 packetWriter.Write(me.GetPrevAbilityChange());
 
