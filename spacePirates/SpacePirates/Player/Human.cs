@@ -185,7 +185,7 @@ namespace SpacePirates.Player
             if (destroy && !destroyed)
             {
                 timeDied = time;
-                //timesDied++;
+                timesDied++;
             }
 
             destroyed = destroy;
@@ -247,10 +247,7 @@ namespace SpacePirates.Player
         public void SetAwardOpposition(bool award)
         {
             awardPointToOpposition = award;
-            if (award)
-            {
-                timeDied++;
-            }
+            
         }
 
         public bool GetAwardOpposition()
