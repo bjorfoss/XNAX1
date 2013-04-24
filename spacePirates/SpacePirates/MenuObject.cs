@@ -128,6 +128,11 @@ namespace SpacePirates
 
             if(currentMenu == mainmenu)
             {
+                //don't handle input if the LIVE overlay is active
+                if (Guide.IsVisible)
+                {
+                    return;
+                }
                 if (newKeyState.IsKeyDown(Keys.N) && !oldKeyState.IsKeyDown(Keys.N))//New Session.
                 {
                     currentMenu = createdlobby;
