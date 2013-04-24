@@ -974,5 +974,6 @@ namespace SpacePirates
             Dictionary<String, IObstacleFactory> f = ConcreteObstacleFactory.GetFactories();
             return f[name];
         }
+
     }
 }

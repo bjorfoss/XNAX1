@@ -14,6 +14,9 @@ namespace SpacePirates
 {
     public class Unit
     {
+        private static double unitIDnr = 0;
+        private String unitID;
+
         //todo make protected
         protected Vector2 velocity;
         protected Vector2 acceleration;
@@ -68,11 +71,18 @@ namespace SpacePirates
 
             this.graphics = graphics;
             docked = false;
-           
+
+            unitID = Unit.getID();
 
             cooldowns = new List<CollisionCd>();
         }
-        
+
+         public static String getID()
+         {
+             String id = "Unit" + unitIDnr;
+             unitIDnr++;
+             return id;
+         }
 
         /// <summary>
         /// Same as UpdatePosition()
@@ -271,14 +281,14 @@ namespace SpacePirates
             if (damage <= 0) { return; }
             double currentThreshold = ((armorEffectiveness / 100) * armorThreshold);
             double blockedDamage = damage - currentThreshold;
-            Console.WriteLine("Unit.damage: Damage: " + damage + " -- Effectiveness: " + armorEffectiveness + " -- CurrentThreshold: " + currentThreshold);
+            Log.getLog().addEvent(unitID + ".damage: Damage: " + damage + " -- Effectiveness: " + armorEffectiveness + " -- CurrentThreshold: " + currentThreshold);
 
             //cannot penetrate armor
             if (damage < currentThreshold)
             {
                 //just reduce armor effectiveness a bit
                 armorEffectiveness -= 1;
-                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+                Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
             }
             //some damage is blocked still
             else if (currentThreshold != 0)
@@ -290,7 +300,7 @@ namespace SpacePirates
                 {
                     armorEffectiveness = 0;
                 }
-                Console.WriteLine("Unit.damage: new effectiveness: " + armorEffectiveness);
+                Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
             }
             //no armor left to block damage
             else
@@ -324,8 +334,8 @@ namespace SpacePirates
             double energySelf = (float)getMass() * Math.Sqrt(Math.Pow(getVelocity().X,2) + Math.Pow(getVelocity().Y,2));
             double _damageSelf = Math.Max(energyOther / 1000, 1);
             double _damageOther = Math.Max(energySelf / 1000, 1);
-            Log.getLog().addEvent("Collision damage " + this.GetType() + ": " + _damageSelf);
-            Log.getLog().addEvent("Collision damage " + unit.GetType() + ": " + _damageOther);
+            Log.getLog().addEvent(unitID + " collision damage " + this.GetType() + ": " + _damageSelf);
+            Log.getLog().addEvent(unit.getUnitID() + " collision damage " + unit.GetType() + ": " + _damageOther);
 
             damage(_damageSelf, gameTime, false);
             unit.damage(_damageOther, gameTime, false);
@@ -365,6 +375,8 @@ namespace SpacePirates
             Vector2 positionUnit = unit.GetPosition();
             Rectangle unitRec = unit.getUnitRectangle();
             double unitMass = unit.getMass();
+
+            Log.getLog().addEvent(unitID + " at (" + position.X + ", " + position.Y + ") collided with " + unit.getUnitID() + " at (" + positionUnit.X + ", " + positionUnit.Y + ")");
 
             //From here starts calculations that will move the lightest unit out of the other unit's hitbox
             Vector2 difference = new Vector2(position.X - positionUnit.X, position.Y - positionUnit.Y);
@@ -413,7 +425,6 @@ namespace SpacePirates
             setVelocity(new Vector2((float)velx, (float)vely));
             unit.setVelocity(new Vector2((float)velx, (float)vely));
 
-            Log.getLog().addEvent("Unit at (" + position.X + ", " + position.Y + ") collided with unit at (" + positionUnit.X + ", " + positionUnit.Y + ")");
             bool test = getUnitRectangle().Intersects(unit.getUnitRectangle());
         }
 
@@ -550,7 +561,10 @@ namespace SpacePirates
         {
             return armorEffectiveness;
         }
-
+        public String getUnitID()
+        {
+            return unitID;
+        }
 
       
 
