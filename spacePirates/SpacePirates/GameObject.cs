@@ -309,6 +309,8 @@ namespace SpacePirates
                         addToGame(blueTeam, ship);
                     }
 
+                    (ship as SpaceShip).setUnitID(player.Gamertag);
+
                     if (player.IsLocal)
                         cameraTarget = ship;
                 }

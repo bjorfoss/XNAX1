@@ -612,9 +612,11 @@ namespace SpacePirates
         {
             unitColor = col;
         }
+        public void setUnitID(String id)
+        {
+            unitID = id;
+        }
        
-
-
         public virtual void Update(GameTime gameTime)
         {
             if (this is IObstacle)
