@@ -17,6 +17,16 @@ namespace SpacePirates.Utilities
             return ts;
         }
 
+        public static List<Unit> CloneUnits(List<Unit> listToClone)
+        {
+            List<Unit> ts = new List<Unit>();
+            foreach (Unit t in listToClone)
+            {
+                ts.Add(t);
+            }
+            return ts;
+        }
+
         public static double round(double value, int places)
         {
             if (places < 0) throw new ArgumentOutOfRangeException();

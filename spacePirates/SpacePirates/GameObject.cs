@@ -503,7 +503,8 @@ namespace SpacePirates
                 if (ex.update(gameTime))
                 {
                     ex.playSound();
-                    foreach (Unit unit in objectsInGame)
+                    List<Unit> objectClone = Extensions.CloneUnits(objectsInGame); 
+                    foreach (Unit unit in objectClone)
                     {
                             if (ex.getExplosionRectangle().Intersects(unit.getUnitRectangle()))
                             {
@@ -571,6 +572,7 @@ namespace SpacePirates
                 NetworkObject.Instance().getNetworksession().Update();
             }            
 
+            //Collision check
             for (int i = 0; i < objectsInGame.Count; i++)
             {
                 for (int j = i + 1; j < objectsInGame.Count; j++)

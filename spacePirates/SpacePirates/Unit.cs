@@ -55,7 +55,7 @@ namespace SpacePirates
             this.velocity = velocity;
             this.acceleration = acceleration;
             this.mass = mass;
-            Console.WriteLine("Created something at:"  + position.X + "," + position.Y);
+            Log.getLog().addEvent("Created something at:"  + position.X + "," + position.Y);
             this.position = position;
             this.rotation = rotation;
             this.rotationSpeed = rotationSpeed;
