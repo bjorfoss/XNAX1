@@ -58,7 +58,6 @@ namespace SpacePirates
             this.velocity = velocity;
             this.acceleration = acceleration;
             this.mass = mass;
-            Log.getLog().addEvent("Created something at:"  + position.X + "," + position.Y);
             this.position = position;
             this.rotation = rotation;
             this.rotationSpeed = rotationSpeed;
@@ -73,6 +72,7 @@ namespace SpacePirates
             docked = false;
 
             unitID = Unit.getID();
+            Log.getLog().addEvent("Created " + unitID +" at:" + position.X + "," + position.Y);
 
             cooldowns = new List<CollisionCd>();
         }
@@ -615,6 +615,7 @@ namespace SpacePirates
         }
         public void setUnitID(String id)
         {
+            Log.getLog().addEvent(unitID + " changed name to " + id);
             unitID = id;
         }
        
