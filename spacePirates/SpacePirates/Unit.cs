@@ -288,7 +288,7 @@ namespace SpacePirates
             {
                 //just reduce armor effectiveness a bit
                 armorEffectiveness -= 1;
-                Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
+                //Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
             }
             //some damage is blocked still
             else if (currentThreshold != 0)
@@ -300,7 +300,7 @@ namespace SpacePirates
                 {
                     armorEffectiveness = 0;
                 }
-                Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
+                //Log.getLog().addEvent(unitID + ".damage: new effectiveness: " + armorEffectiveness);
             }
             //no armor left to block damage
             else
@@ -500,8 +500,9 @@ namespace SpacePirates
         /// TODO: create a blast if there should be one
         /// TODO: position the blast according to blastradius, shipsize and shipposition.
         /// </summary>
-        void OnDestroy(GameTime gameTime, bool awardPoint=false) 
+        public void OnDestroy(GameTime gameTime, bool awardPoint=false) 
         {
+            Log.getLog().addEvent(unitID + " was destroyed.");
             if (blastDamage > 0)
             {
                 GameObject.Instance().addToGame(new Explosion(position, new Vector2((float)blastRadius, (float)blastRadius), blastDamage, Color.White));

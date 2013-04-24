@@ -807,7 +807,12 @@ namespace SpacePirates
                             }
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
-                            (ship as Unit).SetHealth(hp);
+                            if ((ship as Unit).getHealth() > 0)
+                            {
+                                (ship as Unit).SetHealth(hp);
+                                (ship as Unit).OnDestroy(gameTime);
+                            }
+                            else { (ship as Unit).SetHealth(hp); }
                             (ship as Unit).SetArmorEffectiveness(armorEffectiveness);
 
                             (ship as Unit).SetAnimationFrame(new Rectangle((int)xy.X, (int)xy.Y, (int)wh.X, (int)wh.Y));
