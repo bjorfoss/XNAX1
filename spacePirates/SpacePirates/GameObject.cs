@@ -807,7 +807,7 @@ namespace SpacePirates
                             }
                             (ship as Unit).SetRotation(rot);
                             (ship as Unit).setVelocity(vel);
-                            if ((ship as Unit).getHealth() > 0)
+                            if ((ship as Unit).getHealth() > 0 && hp <= 0)
                             {
                                 (ship as Unit).SetHealth(hp);
                                 (ship as Unit).OnDestroy(gameTime);
