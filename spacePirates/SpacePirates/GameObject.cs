@@ -777,11 +777,7 @@ namespace SpacePirates
 
                             firing = packetReader.ReadBoolean();
                             abilityActivated = packetReader.ReadBoolean();
-
-                            if (abilityActivated && ship.GetCurrentAbility() is AbilityState_Shield)
-                            {
-                                shieldHealth = packetReader.ReadDouble();
-                            }
+                            shieldHealth = packetReader.ReadDouble();
 
                             destroyed = packetReader.ReadBoolean();
                             rewardOpposition = packetReader.ReadBoolean();
@@ -831,7 +827,7 @@ namespace SpacePirates
                             if (abilityActivated)
                                 ship.UseAbility(gameTime);
 
-                            if (ship.GetCurrentAbility() is AbilityState_Shield)
+                            if (ship.GetCurrentAbility().getActive() && ship.GetCurrentAbility() is AbilityState_Shield)
                             {
                                 (ship.GetCurrentAbility() as AbilityState_Shield).setHealth(shieldHealth);
                             }
@@ -918,14 +914,12 @@ namespace SpacePirates
                 me.ShipFired();
 
                 packetWriter.Write(me.GetAbilityActivated());
-
-                if (me.GetAbilityActivated())
+                double shieldHp = -1;
+                if (me.GetAbilityActivated() && me.GetShip().GetCurrentAbility() is AbilityState_Shield)
                 {
-                    if (me.GetShip().GetCurrentAbility() is AbilityState_Shield)
-                    {
-                        packetWriter.Write((me.GetShip().GetCurrentAbility() as AbilityState_Shield).getHealth());
-                    }
+                    shieldHp = (me.GetShip().GetCurrentAbility() as AbilityState_Shield).getHealth();
                 }
+                packetWriter.Write(shieldHp);
 
                 //Regardless of whether we activated or not, set the bool to false.
                 me.setAbilityActivated();
