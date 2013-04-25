@@ -144,6 +144,7 @@ namespace SpacePirates.Utilities
             graphics.Add("eightwing", content.Load<Texture2D>("Graphics/Ships/Eightwing"));
             graphics.Add("explosion", content.Load<Texture2D>("Graphics/explosion01"));
             graphics.Add("barrier", content.Load<Texture2D>("Graphics/Barrier"));
+            graphics.Add("lol", content.Load<Texture2D>("Graphics/Ships/helicopter"));
 
 
 

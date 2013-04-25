@@ -62,6 +62,32 @@ namespace SpacePirates.spaceShips
         }
     }
 
+    class ConcreteShip_LolFighter : SpaceShip, ISpaceShip
+    {
+        public ConcreteShip_LolFighter(Ownership registration, Vector2 position, double rotation)
+            : base(20, 100000, 100000, 5000, 15000, registration, position, rotation, GraphicBank.getInstance().GetGraphic("lol"))
+        {
+            animationFrame = new Rectangle(0, 0, 128, 52);
+            unitColor = Color.DimGray;
+            maxThrust = 60;
+            weapons.Add(Weapons.ConcreteWeaponFactory.CreateWeapon("lolcannon"));
+        }
+
+        public override void Thrust(double thrust)
+        {
+            //ensure the ship doesn't thrust more than its capabilities
+            thrust = Math.Min(thrust, 100);
+            thrust = thrust * maxThrust;
+            this.currentThrust = thrust;
+            //we regard thrust as Force when passed, divide by mass to get acceleration
+            double acceleration = thrust / mass;
+
+            //decompose acceleration into vectors:
+            this.acceleration.X = (float)(Math.Sin(rotation+MathHelper.PiOver2) * acceleration);
+            this.acceleration.Y = (float)(Math.Cos(rotation+MathHelper.PiOver2) * acceleration);
+        }
+    }
+
     class ConcreteShip_Eightwing : SpaceShip, ISpaceShip
     {
 

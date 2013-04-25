@@ -17,6 +17,7 @@ namespace SpacePirates.spaceShips.Weapons
             factories.Add("gun", new Factory_Gun());
             factories.Add("rapidgun", new Factory_RapidGun());
             factories.Add("laser", new Factory_Laser());
+            factories.Add("lolcannon", new Factory_Lolcannon());
         }
 
         /// <summary>
@@ -39,8 +40,18 @@ namespace SpacePirates.spaceShips.Weapons
             return Instance().factories[weapon].CreateWeapon();
         }
 
+        public class Factory_Lolcannon : WeaponFactory
+        {
+            public Factory_Lolcannon() { }
+
+            IWeapon WeaponFactory.CreateWeapon()
+            {
+                return new WeaponState_LolCannon();
+            }
+        }
+
         public class Factory_Gun : WeaponFactory
-        { // Executes third if OS:OSX
+        {
             public Factory_Gun() { }
 
             IWeapon WeaponFactory.CreateWeapon()

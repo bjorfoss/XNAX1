@@ -18,6 +18,7 @@ namespace SpacePirates.spaceShips
             factories = new Dictionary<string, IShipFactory>();
             factories.Add("fighter", new Factory_Fighter());
             factories.Add("eigthwing", new Factory_Eightwing());
+            factories.Add("lolfighter", new Factory_LolFighter());
         }
 
         /// <summary>
@@ -83,6 +84,15 @@ namespace SpacePirates.spaceShips
             public ISpaceShip BuildSpaceship(Ownership ownership, Vector2 position, double rotation)
             {
                 return new ConcreteShip_Eightwing(ownership, position, rotation);
+            }
+        }
+
+        class Factory_LolFighter : IShipFactory
+        {
+
+            public ISpaceShip BuildSpaceship(Ownership registration, Vector2 position, double rotation)
+            {
+                return new ConcreteShip_LolFighter(registration, position, rotation);
             }
         }
 
